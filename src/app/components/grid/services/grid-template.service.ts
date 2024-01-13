@@ -19,9 +19,10 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
   
   constructor(private GLOBAL_OBJECT_ID: GlobalObjectIdService) {
     super(INITIAL_GRID_TEMPLATE)
-    // this.select(state => state.rows).pipe(map(i => i.map(k => { return { id: k.id, type: k.type, index: k.index } }))).subscribe(console.log) // for test 
   }
-  
+  /**
+   * Вызывается когда дропнули элемент в колонку
+   */  
   appendElementById(
     drop_element_id: number, 
     parent_id: number | null = null, 
@@ -44,31 +45,43 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
       elements: [...this.state.elements, newElement]
     })
   }
-
+  /**
+   * Вызываеся когда дропнули колонку в строку
+   */
   appendColumnById(
     row_id: number, 
     parent_id: number | null = null, 
     parent_type: GridObjectType | null
   ): void {
+    if(!this.canInsertNewColumn(parent_id)) {
+      return; // show error message
+    }
+
     const columnIndex = this.state.cols.findIndex(item => item.id === row_id)
 
     if(columnIndex === -1) return
 
-    const nextIndex = this.getMaxIndex('cols', parent_id) + 1;
+    const oldParentId = this.state.cols[columnIndex].parent_id;
+    const oldIndex = this.state.cols[columnIndex].index;
 
+    const nextIndex = this.getMaxIndex('cols', parent_id) + 1;
     this.state.cols[columnIndex].parent_id = parent_id;
     this.state.cols[columnIndex].parent_type = parent_type;
     this.state.cols[columnIndex].index = nextIndex;
 
-    let colsToUpdate = this.state.cols.filter(item => item.parent_id === parent_id);
-    
-    this.updateIndex(0, colsToUpdate, 'remove');
+    let listToUpdate = this.state.cols.filter(item => item.parent_id === oldParentId && item.index >= oldIndex);
+
+    if(listToUpdate.length > 0) {
+      this.updateIndex(0, listToUpdate, 'remove');
+    }
 
     this.setState({
       cols: [...this.state.cols]
     })
   }
-
+  /**
+   * Вызываеся когда дропнули строку в колонку
+   */
   appendRowById(
     row_id: number, 
     parent_id: number | null = null, 
@@ -81,91 +94,100 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
       return;
     }
 
-    
+    const oldParentId = this.state.rows[rowIndex].parent_id;
+    const oldIndex = this.state.rows[rowIndex].index;
 
-    const parentIdWhereRemoveRow = this.state.rows[rowIndex].parent_id;
-
+    let row: IGridRow = this.state.rows[rowIndex];
+    // Получим следующий индекс строки, куда этот объект вставили
+    // Пока что так, потом нужно будет сделать директиву для определения вставляемой позиции
     const nextIndex = this.getMaxIndex('rows', parent_id) + 1;
     
-    this.state.rows[rowIndex].parent_id = parent_id;
-    this.state.rows[rowIndex].parent_type = parent_type;
-    this.state.rows[rowIndex].index = nextIndex; // Пока что буду кидать в конец, в дальнейшем нужно сделать еще sortableDirective которая будет определять позицию и вставлять в позицию
+    row.parent_id = parent_id;
+    row.parent_type = parent_type;
+    // Пока что буду кидать в конец, в дальнейшем нужно сделать еще 
+    // sortableDirective которая будет определять позицию и вставлять в позицию
+    row.index = nextIndex; 
+    
+    // Определим массив объектов у которых необходимо обновить индексы
+    let listToUpdate = this.state.rows.filter(item => item.parent_id === oldParentId && item.index >= oldIndex);
 
-    let rowsToUpdate = this.state.rows.filter(item => item.parent_id === parentIdWhereRemoveRow);
-    console.log(rowsToUpdate)
-    this.updateIndex(0, rowsToUpdate, 'remove'); // Берем его соседей и обновляем их индексы 
+    this.updateIndex(0, listToUpdate, 'remove'); // Берем его соседей и обновляем их индексы 
     
     this.setState({
       rows: [...this.state.rows]
     })
   }
-
-  insertFirstColumn(row: IGridRow): void {
-    const colFirstId = this.GLOBAL_OBJECT_ID.NEXT_ID();
-    const colFirstIdx = 0;
-    const newCol = this.createColumn(
-      colFirstId, 
-      colFirstIdx,
-      row.id,
-      row.type
-    );
-
-    this.setState({
-      cols: [...this.state.cols, newCol]
-    })
-  }
-
+  /**
+   * Вызывается пользователем для вставки новой колонки слева или справа
+   */
   insertColumn(column: IGridColumn, right: 0 | 1 = 0): void {
-    if(!this.canInsertNewColumn(column.parent_id)) 
-    return; // show error message
+    if(!this.canInsertNewColumn(column.parent_id)) {
+      return; // show error message
+    }
     
-    const colIdxInState = this.state.cols.indexOf(column);
-    const colIndex = column.index + right;
-    const colId = this.GLOBAL_OBJECT_ID.NEXT_ID();
-    const newCol = this.createColumn(
-      colId,
-      colIndex,
+    const columnNewIndex = column.index + right;
+    const columnId = this.GLOBAL_OBJECT_ID.NEXT_ID();
+    const newColumn = this.createColumn(
+      columnId,
+      columnNewIndex,
       column.parent_id,
       column.parent_type
     );
 
     const cols = insertItemByIndex<IGridColumn>(
       this.state.cols, 
-      colIdxInState + right, 
-      newCol
+      columnNewIndex + right, 
+      newColumn
     )
     
-    this.updateIndex(-colIndex, cols, 'insert');
-
+    let listToUpdate = cols.filter(item => item.parent_id === column.parent_id && item.id !== columnId && item.index >= columnNewIndex);
+    
+    if(listToUpdate.length > 0) {
+      this.updateIndex(0, listToUpdate, 'insert');
+    }
+    
     this.setState({
       cols: cols
     })
   }
-
+  /**
+   * Вызывается пользователем для вставки новой строки сверху или снизу
+   */
   insertRow(row: IGridRow, bottom: 0 | 1 = 0): void {
-    const rowIdxInState = this.state.rows.indexOf(row);
-    const rowIndex = row.index + bottom;
+    // Индекс нового объекта (если сверху то остается такой же как и опорного объекта иначе +1)
+    const rowIndexNew = row.index + bottom;
+    // Создаем новый объект
     const rowId = this.GLOBAL_OBJECT_ID.NEXT_ID();
     const newRow = this.createRow(
       rowId, 
-      rowIndex,
+      rowIndexNew,
       row.parent_id,
       row.parent_type
     );
-
+    // Уже устарело, нужно убрать, потому-что используем сортировку по индексам (но пока что оставлю так) !!!
+    // const rows = [...this.state.rows, newRow];
     const rows = insertItemByIndex<IGridRow>(
       this.state.rows, 
-      rowIdxInState + bottom, 
+      rowIndexNew, 
       newRow
     )
-    
-    this.updateIndex(rowIndex, rows, 'insert');
+    // Итак, для того что бы обновить индексы нужно:
+    // 1. Определить массив объектов которым нужно обновить индексы
+    // 2. Операция тут insert, то есть индекс + 1
+    // Пока что так попробуем
+    let listToUpdate = rows.filter(item => item.parent_id === row.parent_id && item.id !== rowId && item.index >= rowIndexNew);
+
+    if(listToUpdate.length > 0) {
+      this.updateIndex(0, listToUpdate, 'insert');
+    }
 
     this.setState({
       rows: rows
     })
   }
-
+  /**
+   * Обновить индексы у списка объектов
+   */
   updateIndex(
     startIndex: number = 0, 
     list: IGridRows | IGridColumns | IGridElements, 
@@ -184,20 +206,22 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
       list[i].index += inc;
     }
   }
-
+  /**
+   * Удалить пустую строку
+   */
   removeRow(row: IGridRow): void {
-    const newRows = this.state.rows
-      .filter(item => item.id !== row.id /* && item.parent_id !== row.parent_id*/);
-    
+    const newRows = this.state.rows.filter(item => item.id !== row.id /* && item.parent_id !== row.parent_id*/);
+    let colsToUpdate = this.state.rows.filter(item => item.parent_id === row.parent_id && item.index > row.index);
     // Если есть что обновлять, то обновим
     // Вроде работает, но пока что так
-    this.updateIndex(row.index - 1, newRows, 'remove'); 
+    if(colsToUpdate.length > 0) {
+      this.updateIndex(0, colsToUpdate, 'remove'); 
+    }
 
     this.setState({
       rows: newRows
     })
   }
-
   removeColumn(col: IGridColumn): void {
     const newColumns = this.state.cols
       .filter(item => item.id !== col.id /* && item.parent_id !== col.parent_id*/);
@@ -240,11 +264,15 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     this.removeColumns(row.id);
     this.removeRow(row);
   }
-
+  /**
+   * Обновить значение класса у колонки 
+   */
   setColumnClass(column: IGridColumn, className: string, append: boolean): void {
     append === true ? this.appendColumnClass(column, className) : this.removeColumnClass(column, className)
   }
-
+  /**
+   * Добавить класс к колонке
+   */
   appendColumnClass(column: IGridColumn, className: string): void {
     // Находим индекс колонки в текущем состоянии
     const columnIndex = this.state.cols.findIndex(item => item.id === column.id);
@@ -255,8 +283,6 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     // Фильтруем колонки, исключая текущую по идентификатору
     const colsFiltered = this.state.cols.filter(item => item.id !== column.id);
 
-    // console.log(column)
-
     // Объединяем существующие и новые классы, удаляем повторения
     const classList = `${column.class} ${className}`
       .split(' ')
@@ -265,16 +291,11 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
         const splitted = item.split('-');
         const classSplitted = className.split('-');
 
-        // col, xs | col, xs, 1 || col, xs, offset, 1
-        // console.log(splitted, classSplitted)
+        // [col, xs] | [col, xs, 1] || [col, xs, offset, 1]
         return !(
           (classSplitted.length === 3 || classSplitted.length === 5) && 
           (splitted.length === classSplitted.length && splitted[1] === classSplitted[1] && splitted[2] !== classSplitted[2]))
-      })
-      .join(' ');
-
-    // console.log(classList)  
-
+      }).join(' ');
 
     // Присваиваем новый список классов к скопированной колонке
     cpColumn.class = classList;
@@ -283,7 +304,9 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
       cols: insertItemByIndex(colsFiltered, columnIndex, cpColumn)
     })
   }
-
+  /**
+   * Удалить класс у колонки
+   */
   removeColumnClass(column: IGridColumn, className: string): void {
     // Находим индекс колонки в текущем состоянии
     const columnIndex = this.state.cols.findIndex(item => item.id === column.id);
@@ -308,7 +331,6 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
       cols: insertItemByIndex(colsFiltered, columnIndex, cpColumn)
     })
   }
-
   /**
    * Получить последнюю позицию индекса по свойству
    */
@@ -317,12 +339,14 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
       // .filter(item => item.parent_id === parent_id)
       .map(item => item.parent_id === parent_id ? item.index : -1);
 
+    if(indexList.length === 0) return indexList.length;
+
     const maxIndex = Math.max(...indexList);
     return maxIndex// > 0 ? maxIndex : 0;
   }
   /**
-   * Жестко обновить весть список индексов
    * Пока что не используется !!! 
+   * Жестко обновить весть список индексов
    */
   updateIndexListHard(property: keyof IGridTemplate, parent_id: number | null): void {
     const indexList = this.state[property]
@@ -331,15 +355,15 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     
   }
   /**
-   * Признак дочернего элемента
    * Пока что не используется !!!
+   * Признак дочернего элемента
    */
   isRowContainsChildren(row: IGridRow): boolean {
     return this.state.cols.some((column) => column.parent_id === row.id);
   }
   /**
-   * Признак дочернего элемента
    * Пока что не используется !!!
+   * Признак дочернего элемента
    */
   isColumnContainsChildren(column: IGridColumn): boolean {
     const rowsParentIds = this.state.rows.map(i => i.parent_id);
@@ -347,8 +371,8 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     return [...rowsParentIds, ...elementsParentIds].some((i) => i === column.id);
   }
   /**
-   * Признак дочернего элемента
    * Пока что не используется !!!
+   * Признак дочернего элемента
    */
   hasChildren(source: IGridRow | IGridColumn, target: IGridRow | IGridColumn) {
     const rowsIds = this.state.rows.map(i => { 
@@ -370,7 +394,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     return childrens.length > 0 ? null : null;
   }
   /**
-   * Проверка. Возможео ли добавить еще колонку в строку, максимум 12 колонок, 12 - думаю это не поменяется
+   * Проверка на возможность добавить еще колонку в строку, максимум 12 колонок, 12 - думаю это не поменяется
    */
   canInsertNewColumn(column_parent_id: number | null): boolean {
     const objectLenght: number = this.state.cols.filter(col => col.parent_id === column_parent_id).length;
@@ -378,11 +402,28 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     return (objectLenght < MAX_GRID_COLUMNS);
   }
   /**
+   * Вызывается пользователем, если в пустой строке нажать добавить колонку
+   */
+  insertFirstColumn(row: IGridRow): void {
+    const colFirstId = this.GLOBAL_OBJECT_ID.NEXT_ID();
+    const colFirstIdx = 0;
+    const newCol = this.createColumn(
+      colFirstId, 
+      colFirstIdx,
+      row.id,
+      row.type
+    );
+
+    this.setState({
+      cols: [...this.state.cols, newCol]
+    })
+  }
+  /**
    * Стартовый набор строк и колонок
    */
-  insertFirstTemplate(): void {
+  insertFirstTemplate(rows: number, cols: number): void {
     // const row_cols: IRowColumns = this.createRowColumns(4);
-    const row_cols: IRowColumns = this.createRowsCols(12, 1);
+    const row_cols: IRowColumns = this.createRowsCols(rows, cols);
 
     this.setState({
       rows: [ ...this.state.rows, ...row_cols.rows ],
@@ -404,8 +445,9 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     };
     
     for(let i = 0; i < rows; i++) {
-      let row: IGridRow = this.createRow(this.GLOBAL_OBJECT_ID.NEXT_ID(), i, parent_id, parent_type);
-      let col: IGridColumns = this.createColumns(cols, row.id, row.type);
+      const nextId: number = this.GLOBAL_OBJECT_ID.NEXT_ID();
+      const row: IGridRow = this.createRow(nextId, i, parent_id, parent_type);
+      const col: IGridColumns = this.createColumns(cols, row.id, row.type);
       
       rowsCols.rows.push(row)
       rowsCols.columns.push(...col)
@@ -423,9 +465,10 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     parent_type: GridObjectType | null
   ): IRowColumns {
     if(cols > MAX_GRID_COLUMNS) cols = 12;
-
+    
+    const nextId: number = this.GLOBAL_OBJECT_ID.NEXT_ID();
     const row: IGridRow = this.createRow(
-      this.GLOBAL_OBJECT_ID.NEXT_ID(), 
+      nextId,
       index,
       parent_id,
       parent_type
@@ -448,8 +491,9 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     let columns: IGridColumns = [];
     
     for(let i = 0; i < count; i++) {
+      const nextId: number = this.GLOBAL_OBJECT_ID.NEXT_ID();
       columns.push(this.createColumn(
-        this.GLOBAL_OBJECT_ID.NEXT_ID(), 
+        nextId, 
         i,
         parent_id,
         parent_type

@@ -40,6 +40,7 @@
     align-items: center;
     box-sizing: border-box;
     overflow-x: auto;
+    
     background-color: rgb(238, 238, 238);
 
     padding: 20px;
@@ -126,10 +127,27 @@
     border: 1px #dadada solid;
   }
   
-  #checkboxes label {
-    display: block;
-  }
-  
-  #checkboxes label:hover {
-    background-color: #1e90ff;
-  }
+#checkboxes {
+    
+    label {
+        display: block;
+    }
+
+    label, input {
+        cursor: pointer;
+    }
+}
+
+#checkboxes[data-theme=light] {
+
+    label:hover {
+        background-color: #1e90ff;
+    }
+}
+
+#checkboxes[data-theme=dark] {
+
+    label:hover {
+        background-color: #ff1e69;
+    }
+}

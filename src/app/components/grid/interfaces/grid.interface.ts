@@ -9,4 +9,4 @@ export interface IGridBase {
     index: number;
 }
 
-export type IGrids = Array<IGridBase>;
+export type IGridBaseList = Array<IGridBase>;

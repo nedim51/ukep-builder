@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, HostBinding, HostListener } from '@angular/core';
 import { GridTemplateService } from '../services/grid-template.service';
-import { Observable, fromEvent } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IGridRow, IGridRows } from '../interfaces/grid-row.interface';
 import { IGridColumn, INITIAL_GRID_COLUMN } from '../interfaces/grid-column.interface';
 import { GridSelectionService } from '../services/grid-selection.service';
@@ -35,7 +35,7 @@ export class GridContainerComponent {
   }
 
   createFirstColumns(): void {
-    this.gridTemplate.insertFirstTemplate();
+    this.gridTemplate.insertFirstTemplate(10, 1);
   }
 
   handleDroppedItem(item: IGridColumn, target: IGridRow): void {
@@ -53,5 +53,4 @@ export class GridContainerComponent {
   redo(): void {
     this.gridTemplate.redo();
   }
-
 }

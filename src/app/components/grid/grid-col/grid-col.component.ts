@@ -75,35 +75,3 @@ export class GridColComponent implements OnChanges {
     console.log(`[GridColComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
   }
 }
-
-
-
-
-
-      // console.log(changes['column'].currentValue.class)
-      // const uniqueValues = (changes['column'].currentValue as IGridColumn).class.split(' ').filter((value, index, array) => array.indexOf(value) === index);
-//uniqueValues.join(' ')// console.log(this.col_class)
-  
-  // @HostBinding('class.drag-here') dragHereBinding: boolean = false;
-  
-  // @HostBinding('attr.dropzone') dropzone: boolean = true;
-
-  // @HostListener('dragover', ['$event'])
-  // onDragOver(event: any) {
-  //   this.dragHereBinding = true
-  //   event.preventDefault();
-  // }
-
-  // @HostListener('dragleave', ['$event'])
-  // onDragLeave(event: any) {
-  //   this.dragHereBinding = false
-  // }
-
-  // @HostListener('drop', ['$event'])
-  // public onDrop(event: any) {
-  //   this.dragHereBinding = false;
-  //   if (event && event.dataTransfer) {
-  //     const dropElementId: number = Number(event.dataTransfer.getData('text/plain'));
-  //     this.gridTemplate.appendElementById(dropElementId, this.column.id, this.column.type)
-  //   }
-  // }

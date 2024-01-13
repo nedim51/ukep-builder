@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, Renderer2, TemplateRef, ViewContainerRef } from '@angular/core';
 
 @Directive({
   selector: '[appDraggable]',
@@ -9,17 +9,20 @@ export class DraggableDirective {
   @Input() 
   dragData: any;
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) {
-    this.renderer.setAttribute(this.elementRef.nativeElement, 'draggable', 'true');
+  constructor(
+    private elementRef: ElementRef, 
+    private renderer2: Renderer2) {
+    this.renderer2.setAttribute(this.elementRef.nativeElement, 'draggable', 'true');
   }
 
   @HostListener('dragstart', ['$event']) onDragStart(event: DragEvent) {
-    event.stopPropagation()
-    
+    event.stopPropagation();
+
     if(event.dataTransfer) {
-      event.dataTransfer?.setData('text/plain', JSON.stringify(this.dragData));
+      event.dataTransfer.setData('text/plain', JSON.stringify(this.dragData));
+      // event.dataTransfer.setDragImage(new Image(), 0, 0);
     }
 
-    this.renderer.addClass(this.elementRef.nativeElement, 'dragging');
+    this.renderer2.addClass(this.elementRef.nativeElement, 'dragging');
   }
 }

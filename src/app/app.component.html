@@ -32,7 +32,7 @@
             </div>
 
            @if (expanded() === true) {
-              <div id="checkboxes">
+              <div id="checkboxes" data-theme="dark">
                 @for (item of sizes$ | async; track item.id) {
                   <!-- <span>XL</span> -->
               <label for="checkbox-{{item.id}}">

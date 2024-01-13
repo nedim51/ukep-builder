@@ -156,6 +156,126 @@ export function quickSort(sortArray: number[], low: number, high: number): void 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// map(selected => {
+//     let selectedItem;
+
+//     switch (type) {
+//         case 'row':
+//             // selectedItem = selected.row;
+//             break;
+//         case 'column':
+//             // selectedItem = selected.col;
+//             break;
+//         case 'element':
+//             // selectedItem = selected.element;
+//             break;
+//     }
+
+//     return selectedItem// && selectedItem.id === selected_id ? selectedItem : undefined;
+// })
+
+
+// initialSelection
+
+
+    // private grid$: Observable<IGridTemplate>
+    // private selected$: Subject<IGridSelectedTemplate> = new Subject();
+
+
+    // selectTarget(): Observable<IGridRow | IGridColumn | IGridElement | undefined> {
+    //     return this.selected().pipe(map(state => state.target ? state[state.target] : undefined))
+    // }
+
+    // clearSelected(): void {
+    //     this.selected$.next({});
+    // }
+
+
+
+        // if(selected) {
+        // }
+        // const findOperator = (i: IGridRow | IGridColumn | IGridElement) => i.id === selected!.parent_id;
+
+        // this.grid$.pipe(
+        //     filter(state => selected != undefined),
+        //     map(state => {
+        //         let result: IGridSelectedTemplate | undefined = undefined;
+
+        //         switch (selected!.type) {
+        //             case 'row': result = { 
+        //                     target: 'row',
+        //                     row: selected as IGridRow, 
+        //                     col: state.cols.find(findOperator),
+        //                 }; break;
+        //             case 'column': result = { 
+        //                     target: 'col',
+        //                     col: selected as IGridColumn, 
+        //                     row: state.rows.find(findOperator),
+        //                 }; break;
+        //                 case 'element': result = { 
+        //                     target: 'element',
+        //                     element: selected as IGridElement, 
+        //                     col: state.cols.find(findOperator),
+        //                 }; break;
+        //         }
+
+        //         return result
+        //     }),
+        //     takeUntil(this.destroy$)
+        // ).subscribe(result => this.selected$.next(result))
+    
+
+
+
+      // console.log(changes['column'].currentValue.class)
+      // const uniqueValues = (changes['column'].currentValue as IGridColumn).class.split(' ').filter((value, index, array) => array.indexOf(value) === index);
+//uniqueValues.join(' ')// console.log(this.col_class)
+  
+  // @HostBinding('class.drag-here') dragHereBinding: boolean = false;
+  
+  // @HostBinding('attr.dropzone') dropzone: boolean = true;
+
+  // @HostListener('dragover', ['$event'])
+  // onDragOver(event: any) {
+  //   this.dragHereBinding = true
+  //   event.preventDefault();
+  // }
+
+  // @HostListener('dragleave', ['$event'])
+  // onDragLeave(event: any) {
+  //   this.dragHereBinding = false
+  // }
+
+  // @HostListener('drop', ['$event'])
+  // public onDrop(event: any) {
+  //   this.dragHereBinding = false;
+  //   if (event && event.dataTransfer) {
+  //     const dropElementId: number = Number(event.dataTransfer.getData('text/plain'));
+  //     this.gridTemplate.appendElementById(dropElementId, this.column.id, this.column.type)
+  //   }
+  // }
+
+
 // Draggable ******************
 
 // private isDragging = false;
