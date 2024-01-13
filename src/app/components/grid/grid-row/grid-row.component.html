@@ -1,0 +1,27 @@
+@for(column of columns$ | async; track column.id) {
+    <app-grid-col [column]="column" appDraggable [dragData]="column" draggableDropzone (itemDropped)="handleDroppedItem($event, column)"></app-grid-col>
+}
+@empty {
+    <ng-container *ngTemplateOutlet="startTemplate"></ng-container>
+}
+
+@if (selectedRow$ | async; as selectedRow) {
+    <div class="test-selected-label test-selected-row user-draggable" tabindex="0">
+        <img ngSrc="../../../../assets/svg/drag.svg" width="16" height="16"/>
+        <span>{{ selectedRow.type }}-{{ selectedRow.id }}[{{selectedRow.index}}]</span>
+    </div>
+    
+    <button class="selected selected-btn selected-btn--danger selected-btn-drop-left-bottom" type="button" (click)="onRemoveRow(selectedRow)">dr</button>
+
+    <button class="selected selected-btn selected-btn--primary selected-btn-plus-top" type="button" (click)="onAppendRowTop(selectedRow)">+</button>
+    <button class="selected selected-btn selected-btn--primary selected-btn-plus-bottom" type="button" (click)="onAppendRowBottom(selectedRow)">+</button>
+}
+
+<ng-template #startTemplate>
+    <div class="col-xs col-sm col-md col-lg d-flex flex-column align-items-center justify-content-center empty-template-bordered">
+        <div>
+            <button type="button" (click)="appendColumn(row)">Drop or click here to append grid column element</button>   
+            <button type="button" (click)="removeSelf(row)">Remove</button>   
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,75 @@
+<div class="root-container">
+  <nav class="sidebar">
+    @for (item of componentList; track item.id) {
+    <div class="sidebar-item" appDraggable [dragData]="item">
+      <span class="item-title">{{ item.title }}</span>
+    </div>
+    }
+  </nav>
+
+  <main class="root">
+    <div class="board" [ngClass]="container$ | async" resizable (resize)="onResizeContainer($event)" [minWidth]="512" [minHeight]="512" [maxWidth]="1200" [maxHeight]="1200">
+      <div class="container-fluid">
+        <app-grid-container draggableDropzone (itemDropped)="handleDroppedItem($event)"></app-grid-container>
+      </div>
+    </div>
+  </main>
+
+  <nav class="sidebar">
+    @if( targetSelection$ | async; as targetSelection) {
+
+      <!-- @if (targetSelection.type === 'column') { -->
+       <span>selected is: <pre>{{ targetClassList$ | async | json }}</pre></span>
+      <!-- } -->
+        <form>
+          <div class="multiselect">
+            <label for="columns-select">Select an columns</label>
+            <div class="selectBox" (click)="showCheckboxes()">
+              <select id="columns-select">
+                <option>{{ 'xs, sm, md, xl' }}</option>
+              </select>
+              <div class="overSelect"></div>
+            </div>
+
+           @if (expanded() === true) {
+              <div id="checkboxes">
+                @for (item of sizes$ | async; track item.id) {
+                  <!-- <span>XL</span> -->
+              <label for="checkbox-{{item.id}}">
+                  <input type="checkbox" id="checkbox-{{item.id}}" (change)="onCheckboxChange($event, item.code, targetSelection)"/>{{ item.name }}</label>
+                }
+                @empty {
+                  <span>No records</span>
+                }
+              </div>
+            }
+          </div>
+        </form>
+
+        <form>
+          <div class="multiselect">
+            <label for="columns-select">Select an offset columns</label>
+            <div class="selectBox" (click)="showCheckboxes()">
+              <select id="columns-select">
+                <option>{{ 'xs, sm, md, xl' }}</option>
+              </select>
+              <div class="overSelect"></div>
+            </div>
+
+           @if (expanded() === true) {
+              <div id="checkboxes">
+                @for (item of offsets$ | async; track item.id) {
+                  <!-- <span>XL</span> -->
+              <label for="checkbox-{{item.id}}">
+                  <input type="checkbox" id="checkbox-{{item.id}}" (change)="onCheckboxChange($event, item.code, targetSelection)"/>{{ item.name }}</label>
+                }
+                @empty {
+                  <span>No records</span>
+                }
+              </div>
+            }
+          </div>
+        </form>
+    }
+  </nav>
+</div>

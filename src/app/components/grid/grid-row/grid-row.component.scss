@@ -1,0 +1,19 @@
+@import '_variables.scss';
+
+:host {
+    position: relative;
+    padding: $row-padding;
+    transition: border-color .3s ease-in-out;
+
+    border-color: $border-color-white;
+    border-width: $border-width;
+    border-style: $border-style;
+
+    .empty-template-bordered {
+        padding: $row-empty-padding;
+
+        border-color: $border-color-primary;
+        border-width: $border-width;
+        border-style: $border-style;
+    }
+}

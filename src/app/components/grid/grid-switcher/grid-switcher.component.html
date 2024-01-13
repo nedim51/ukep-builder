@@ -1,0 +1,8 @@
+<label for="containers">Current container size: </label>
+<select name="containers" id="containers" (change)="onSelectionChange($event)">
+  @for (container of containers$ | async; track $index) {
+    @if (currentDisplay$ | async; as currentContainer) {
+      <option value="{{container}}" [selected]="currentContainer === container ? true : false">{{ container | uppercase }}</option>
+    }
+  }
+</select>

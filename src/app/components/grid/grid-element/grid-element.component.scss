@@ -1,0 +1,6 @@
+@import '_variables.scss';
+
+:host {
+    width: 100%;
+    padding: $element-padding;
+}

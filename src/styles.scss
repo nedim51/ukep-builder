@@ -1,0 +1,38 @@
+@import '_variables.scss';
+
+* {
+  font-family: math;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+// Other global styles
+
+.placeholder-color {
+  color: $color-secondary;
+}
+
+.drag-over {
+  background-color: $drag-bg-color !important;
+  border-color: $border-color-warning !important;
+  border-width: $border-width !important;
+  border-style: $border-style !important;
+}
+
+.user-draggable {
+  display: flex;
+  align-items: flex-end;
+  padding-right: 4px;
+  user-select: none;
+  cursor: grab;
+}

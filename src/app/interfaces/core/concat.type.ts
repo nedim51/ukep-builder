@@ -1,0 +1,1 @@
+export type ConcatType<T extends any[]> = T["length"] extends 0 ? "" : T extends [infer Head, ...infer Tail] ? `${Head & string}${ConcatType<Tail>}` : never;

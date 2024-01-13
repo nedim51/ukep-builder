@@ -1,0 +1,1 @@
+export type GridObjectType = 'row' | 'column' | 'element';

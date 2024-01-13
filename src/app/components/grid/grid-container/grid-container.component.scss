@@ -1,0 +1,13 @@
+@import '_variables.scss';
+
+:host {
+    height: 100%;
+    display: block;
+    position: relative;
+
+    padding: $container-padding;
+
+    border-color: $border-color-white;
+    border-width: $border-width !important;
+    border-style: $border-style !important;
+}

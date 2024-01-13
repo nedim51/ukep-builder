@@ -1,0 +1,8 @@
+<div style="width: 100%;">
+    <label for="inpyt">{{element.title}}</label><br>
+    <input type="text" name="inpyt" style="width: 100%;">
+</div>
+
+@if (selectedElement$ | async; as selectedElement) {
+    <div class="test-selected-label test-selected-element" tabindex="0">{{ selectedElement.type }}-{{ selectedElement.id }}[{{selectedElement.index}}]</div>
+}

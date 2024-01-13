@@ -1,0 +1,31 @@
+@for (row of rows$ | async; track row.id) {
+    <app-grid-row [row]="row" appDraggable [dragData]="row" draggableDropzone (itemDropped)="handleDroppedItem($event, row)"></app-grid-row>
+}
+@empty {
+    @for (element of elements$ | async; track element.id) {
+        <app-grid-element [element]="element" appDraggable [dragData]="element"></app-grid-element>
+    }
+    @empty {
+        <span class="placeholder-color"><small>Drop an element here (row-id-{{ column.parent_id }}, self-col-id-{{ column.id }})</small></span>
+    }
+
+    @if (column$ | async; as selectedColumn) {
+        <div class="test-selected-label test-selected-column user-draggable" tabindex="0">
+            <img ngSrc="../../../../assets/svg/drag.svg" width="16" height="16"/>
+            <span style="margin-right: 3px;">{{ selectedColumn.type }}-{{ selectedColumn.id }}[{{selectedColumn.index}}]</span>
+            <span class="mark-container">
+                <span class="mark--xs">{{ 'xs' }}<sup>+</sup></span>
+                <span class="mark--sm">{{ 'sm' }}<sup>+</sup></span>
+                <span class="mark--md">{{ 'md' }}</span>
+                <span class="mark--lg">{{ 'lg' }}<sup>+</sup></span>
+            </span>
+        </div>
+    
+        <button class="selected selected-btn selected-btn-drop-right-bottom selected-btn--danger" type="button" (click)="onRemoveColumn(selectedColumn)">dc</button>
+    
+        @if (canInsertNewColumn$ | async; as selectCanInsertNewColumn) {
+            <button class="selected selected-btn selected-btn-plus-left selected-btn--primary" type="button" (click)="onAppendColumnLeft(selectedColumn)">+</button>
+            <button class="selected selected-btn selected-btn-plus-right selected-btn--primary" type="button" (click)="onAppendColumnRight(selectedColumn)">+</button>
+        }
+    }
+}
