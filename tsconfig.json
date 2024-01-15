@@ -10,6 +10,14 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
+    "paths": {
+      "ng-ukep-icons": [
+        "./dist/ng-ukep-icons"
+      ],
+      "ng-ukep-icons-builder": [
+        "./dist/ng-ukep-icons-builder"
+      ]
+    },
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,

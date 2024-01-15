@@ -20,6 +20,34 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
   constructor(private GLOBAL_OBJECT_ID: GlobalObjectIdService) {
     super(INITIAL_GRID_TEMPLATE)
   }
+
+  export() {
+    this.select(state => state).pipe(map(state => {
+      const keys = Object.keys(state);
+      let init: any = INITIAL_GRID_TEMPLATE;
+
+      for(let key of keys) {
+        init[key] = state[key as keyof IGridTemplate].map(item => {
+          switch(item.type) {
+            case 'row': case 'element': return {
+              id: item.id,
+              parent_id: item.parent_id,
+              index: item.index
+            }
+            case 'column': 
+              const _item = item as IGridColumn
+            return {
+              id: _item.id,
+              parent_id: _item.parent_id,
+              class: _item.class,
+              index: _item.index
+            }
+          }
+        })
+      } return init;
+    })).subscribe(result => console.log(JSON.stringify(result)))
+  }
+
   /**
    * Вызывается когда дропнули элемент в колонку
    */  
@@ -90,7 +118,6 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     const rowIndex = this.state.rows.findIndex(item => item.id === row_id)
 
     if(rowIndex === -1) {
-      console.error('[appendRowById] Row by row_id is not a found !!!', row_id);
       return;
     }
 
@@ -197,8 +224,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     const inc: number = method === 'remove' ? -1 : 1;
 
     // Пока что так, порешаю потом, сейчас времени на это нету
-    if(list.length === 0 || startIndex + k > list.length) { 
-      console.error('[updateIndex] Skip operation !!! startIndex', startIndex, 'list.length', list.length, method, list);
+    if(list.length === 0 || startIndex + k > list.length) {
       return; 
     }
 

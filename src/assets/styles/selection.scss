@@ -1,3 +1,5 @@
+@import '_variables.scss';
+
 $selected-row-btn-width: 16px;
 $selected-row-btn-half: calc($selected-row-btn-width / 2 - $selected-row-btn-width);
 $selected-row-btn-offset: calc($selected-row-btn-width / 2 - $selected-row-btn-width - 1px);
@@ -6,7 +8,7 @@ $selected-row-btn-offset: calc($selected-row-btn-width / 2 - $selected-row-btn-w
     position: absolute;
     padding: 0;
     cursor: pointer;
-    outline: 3px solid #FFF;
+    outline: 3px solid $color-white;
     z-index: 1;
 }
 
@@ -15,15 +17,19 @@ $selected-row-btn-offset: calc($selected-row-btn-width / 2 - $selected-row-btn-w
     height: $selected-row-btn-width;
 
     &--primary {
-        background-color: #FFFFFF;
-        border: 1px solid rgb(120, 169, 255);
-        color: rgb(120, 169, 255);
+        background-color: $color-white;
+        border-width: $border-width;
+        border-style: $border-solid;
+        border-color: $color-primary;
+        color: $color-primary;
     }
 
     &--danger {
-        background-color: #FFFFFF;
-        border: 1px solid rgb(255, 120, 120);
-        color: rgb(255, 120, 120);
+        background-color: $color-white;
+        border-width: $border-width;
+        border-style: $border-solid;
+        border-color: $color-warning-light;
+        color: $color-warning-light;
     }
 }
 

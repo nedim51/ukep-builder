@@ -1,0 +1,96 @@
+<a href="/" class="d-flex align-items-center p-3 link-body-emphasis text-decoration-none">
+  @if (applicationThemeName$ | async; as applicationThemeName) {
+    <span class="svg-icon svg-icon-3x" [ngClass]="applicationThemeName === 'dark' ? 'svg-icon-light' : 'svg-icon-dark'">
+      <ukep-icons name="rncb_ukep"></ukep-icons> 
+    </span>
+  }
+</a>
+
+<div class="mb-3"></div>
+
+<form [formGroup]="form" class="mb-3">
+  <div style="display: flex; gap: 5px;">
+    <input type="text" class="form-control form-control-sm" placeholder="Начните вводить текст..." formControlName="search">
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-outline btn-sm" type="button" (click)="expandAll()" ngbTooltip="Развернуть меню">
+        <span class="svg-icon svg-icon-primary svg-icon-sm svg-icon-rotate-180">
+          <ukep-icons name="left_3"></ukep-icons> 
+        </span>
+      </button>
+
+      <button type="button" class="btn btn-outline btn-sm" type="button" (click)="collapseAll()" ngbTooltip="Свернуть меню">
+        <span class="svg-icon svg-icon-primary svg-icon-sm">
+          <ukep-icons name="left_3"></ukep-icons> 
+        </span>
+      </button>
+    </div>
+  </div>
+</form>
+
+<div class="sidebar-body">
+  <ul class="root-level">
+    <ng-container *ngTemplateOutlet="levelList; context: { $implicit: 0 }"></ng-container>
+  </ul>
+
+  <ul class="mb-0 mt-1 p-0" style="height: fit-content; min-height: 40px;">
+    <li style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="d-flex gap-2 align-items-center">
+        <div class="photo">
+          <span class="svg-icon svg-icon-primary svg-icon-3x">
+            <ukep-icons name="user"></ukep-icons> 
+          </span>
+        </div>
+        
+        <div>
+            @if (user$ | async; as user) {
+              <p class="m-0">{{ user.firstName }} {{ user.lastName }}</p>   
+              <p class="blockquote-footer m-0">{{ user.right }}</p>
+            }
+          </div>
+      </div>
+
+      <button class="btn btn-outline-secondary btn-sign-out" ngbTooltip="Выйти?" type="button" (click)="logout()">  
+        @if (applicationThemeName$ | async; as applicationThemeName) {
+          <span class="svg-icon svg-icon-md" [ngClass]="applicationThemeName === 'dark' ? 'svg-icon-light' : 'svg-icon-dark'"> 
+            <ukep-icons name="sign_out"></ukep-icons> 
+          </span>
+        }
+      </button>
+    </li>
+  </ul>
+</div>
+
+<ng-template #levelList let-parent>
+  @for (item of selectItemsAtParent$(parent) | async; track item.id) {
+    <li class="sidebar-item" [class.found]="found().includes(item)" routerLinkActive="sidebar-item--active">
+      <div class="item-title badge1" [routerLink]="!(hasChildren$(item.id) | async) ? item.router_link : null" (click)="toggle(item.id)">
+        @if(item.icon_name) {
+          <span 
+            class="k-icon" 
+            ukep-icons 
+            [class]="item.icon_class_list" 
+            [name]="item.icon_name">
+          </span>
+        }
+
+        <span class="fw-500">{{ item.title }}</span>
+
+        @if (hasChildren$(item.id) | async; as hasChildren) {
+          <span 
+            class="svg-icon svg-icon-angle-down" 
+            [class.svg-icon-angle-down--expanded]="opened().has(item.id)"
+            ukep-icons 
+            name="angle_down">
+          </span>
+        }
+      </div>
+    </li>
+
+    @if (opened().has(item.id)) { 
+      <ul @collapseItems>
+        <ng-container *ngTemplateOutlet="levelList; context: { $implicit: item.id }"></ng-container>
+      </ul>
+    }
+  }
+</ng-template>

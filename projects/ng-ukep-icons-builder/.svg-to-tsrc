@@ -1,0 +1,20 @@
+{
+  "conversionType": "files",
+  "srcFiles": [
+    "./assets/**/*.svg"
+  ],
+  "outputDirectory": "../../dist/ng-ukep-icons-builder",
+  "interfaceName": "IUkepIcons",
+  "typeName": "ukepIcons",
+  "prefix": "ukepIcons",
+  "generateType": true,
+  "exportCompleteIconSet": true,
+  "optimizeForLazyLoading": true,
+  "modelFileName": "ukep-icons.model",
+  "compileSources": true,
+  "svgoConfig": {
+    "plugins": [
+      "cleanupAttrs"
+    ]
+  }
+}

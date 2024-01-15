@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { StateService } from "./core/state.service";
 import { Observable, of } from "rxjs";
 import { ColumnDisplayType, ColumnSeparatorType, ContainerPrefixType, ContainerType } from "../interfaces/column.type";
-import { container_lg, display_lg, display_md, display_sm, display_xs, displays } from "../data/class/class.data";
+import { container_lg, display_lg, display_md, display_sm, display_xs, displays } from "../data/class.data";
 
 interface IContainerWidht {
     min_width: number;

@@ -1,8 +1,37 @@
-@import '_variables.scss';
+// $primaryColor: #4fcada46;
+// $theme-colors: (
+//   primary: #4fcada,
+//   light: $primaryColor
+// );
 
-* {
-  font-family: math;
-}
+// $input-focus-color: #4fcada;
+// $input-focus-border-color: #4fcada;
+// $input-focus-box-shadow: none;
+
+// $tooltip-bg: rgb(255, 255, 255);
+// $tooltip-color: rgb(26, 22, 22);
+
+// $popover-max-width: 800px;
+// .tooltip[role=tooltip] {
+//   box-shadow: 0px 50px 0px rgba(82, 63, 105, 0.15);
+// }
+
+// Переменные bootstrap
+@import "bootstrap/scss/bootstrap";
+@import "bootstrap/scss/_variables";
+
+// Переменные проекта
+@import '_variables.scss'; 
+
+// :root {
+//   --theme-background: white;
+//   --theme-color: black;
+// }
+
+// :root[theme=dark] {
+//   --theme-background: #222226;
+//   --theme-color: rgba(255,255,255,.75);
+// }
 
 html,
 body {
@@ -14,9 +43,16 @@ body {
 body {
   display: flex;
   flex-direction: column;
+
+  // background-color: var(--theme-background);
+  // color: var(--theme-color);
+  // transition: all ease-in-out 400ms;
 }
 
-// Other global styles
+
+
+
+
 
 .placeholder-color {
   color: $color-secondary;

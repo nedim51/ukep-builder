@@ -1,5 +1,3 @@
-import { IGuideItem, IGuideItems } from "../interfaces/guide.interface";
-
 /**
  * Генерирует случайный идентификатор (UID) заданной длины.
  * @param uidLength Длина генерируемого UID (по умолчанию 8 символов).

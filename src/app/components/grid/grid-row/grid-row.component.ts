@@ -64,6 +64,6 @@ export class GridRowComponent implements OnChanges {
         break;
     }
     
-    console.log(`[GridRowComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item);
+    // console.log(`[GridRowComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item);
   }
 }

@@ -1,0 +1,53 @@
+<div class="row">
+    <div class="col-xs-12 col-md-6 col-xxl-4 offset-md-3 offset-xxl-4 mt-5">
+        <div class="alert alert-info">
+            <pre class="mb-0">{{ test() | json }}</pre>
+        </div>
+
+        <div class="card">
+            <h5 class="card-header">Конструктор WEB-интерфейсов</h5>
+            <div class="card-body">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <label for="username">Логин</label>
+                        <input type="text" formControlName="username" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && controls['username'].errors }" />
+
+                        <div *ngIf="submitted && controls['username'].errors" class="invalid-feedback">
+                            <div *ngIf="controls['username'].errors['required']">Необходимо заполнить поле</div>
+                        </div>
+                    </div>
+
+                    <br>
+                    
+                    <div class="form-group">
+                        <label for="password">Пароль</label>
+                        <input type="password" formControlName="password" class="form-control"
+                            [ngClass]="{ 'is-invalid': submitted && controls['password'].errors }" />
+
+                        <div *ngIf="submitted && controls['password'].errors" class="invalid-feedback">
+                            <div *ngIf="controls['password'].errors['required']">Необходимо заполнить поле</div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="text-center">
+                        <button [disabled]="(loadingIndicator$ | async) === true || ((isFormValid$ | async) === false)" class="btn btn-primary">
+                            @if ((loadingIndicator$ | async) === true) {
+                                <span class="spinner-border spinner-border-sm mr-1"></span>
+                            }
+                            @else {
+                                <span>Войти</span>
+                            }
+                        </button>
+                    </div>
+
+                    @if (errorMessage()) {
+                        <div class="alert alert-danger mt-3 mb-0">{{ errorMessage() }}</div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

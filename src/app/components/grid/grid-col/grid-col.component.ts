@@ -72,6 +72,6 @@ export class GridColComponent implements OnChanges {
       case 'column': this.gridTemplate.appendColumnById(item.id, target.id, target.type);
     }
 
-    console.log(`[GridColComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
+    // console.log(`[GridColComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
   }
 }

@@ -43,7 +43,7 @@ export class GridContainerComponent {
       case 'column': this.gridTemplate.appendColumnById(item.id, target.id, target.type);
     }
     
-    console.log(`[GridContainerComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
+    // console.log(`[GridContainerComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
   }
 
   undo(): void {

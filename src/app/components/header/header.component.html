@@ -1,0 +1,134 @@
+<nav class="navbar-nav me-auto mb-2 mb-lg-0 d-flex flex-column">
+  
+  @if (title) {
+    <div class="d-flex align-items-center">
+      @if (icon) {
+        <span class="svg-icon svg-icon-lg svg-icon-primary">
+          <ukep-icons [name]="icon || 'file'"></ukep-icons>
+        </span>
+      }
+      <span class="navbar-brand m-0 mx-2">{{ title }}</span>
+    </div>
+  }
+  
+  <ng-content select=".icon-header"></ng-content>
+</nav>
+
+<div class="d-flex gap-1">
+  <button type="button"
+    class="btn btn-outline-secondary"
+    [popoverClass]="'popoverThemeSwitcher'"
+    [ngbPopover]="popoverThemeSwitcherTemplate">
+    @if (currentTheme$ | async; as currentTheme) {
+      <span [ngClass]="currentTheme.icon_class_list">
+        <ukep-icons [name]="currentTheme.icon_name"></ukep-icons>
+      </span>
+    }
+  </button>
+
+  <!-- <button type="button"
+    class="btn btn-outline-secondary"
+    [ngbPopover]="popoverNotificationTemplate"
+    popoverTitle="Уведомления">
+    @if (currentThemeName$ | async; as currentThemeName) {
+      <span class="svg-icon svg-icon-md" [ngClass]="currentThemeName == 'light' ? 'svg-icon-warning' : 'sgv-icon-secondary'">
+        <ukep-icons name="mail"></ukep-icons>
+      </span>
+    }
+    <span class="label label-danger label-rounded">4</span>
+  </button> -->
+</div>
+
+<!-- <ng-template #popoverNotificationTemplate>
+  <ol class="list-group list-group-flush" style="min-width: 360px;">
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Сохранение документа</div>
+        Документ успешно сохранен
+      </div>
+      <span class="badge bg-success rounded-pill">201</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Пользователь Опекунов Д.В добавил комментарий</div>
+        <span>Типовая форма референс 9854334 <a href="javascript: void(0)">показать</a></span>
+      </div>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Редактирование записи</div>
+        Операция прошла успешно
+      </div>
+      <span class="badge bg-success rounded-pill">200</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+      <div class="ms-2 me-auto">
+        <div class="fw-bold">Редактирование документа</div>
+        Ошибка ...
+      </div>
+      <span class="badge bg-danger rounded-pill">501</span>
+    </li>
+  </ol>
+</ng-template> -->
+
+<ng-template #popoverThemeSwitcherTemplate>
+  <div class="list-group list-group-flush popoverThemeSwitcher">
+  @for (item of themeList$ | async; track item.code) {
+      <button class="list-group-item list-group-item-action" style="border-bottom: none;" (click)="onThemeChange(item)">
+        <span class="ms-1" [ngClass]="item.icon_class_list">
+          <ukep-icons [name]="item.icon_name"></ukep-icons> 
+        </span>
+        <span class="ms-2 me-5 text-muted fw-500">{{ item.title }}</span>
+      </button>
+    }
+  </div>
+</ng-template>
+
+
+  <!-- <div ngbDropdown class="d-inline-block" placement="bottom-end" display="dynamic">
+    <button type="button" class="btn btn-sm btn-outline-link" id="themeSwitcher" ngbDropdownToggle>
+      <span [class]="currentTheme().icon_class_list">
+        <ukep-icons [name]="currentTheme().icon_name"></ukep-icons> 
+      </span>
+    </button>
+
+    <div ngbDropdownMenu aria-labelledby="themeSwitcher">
+      @for (item of themeItems; track item.code) {
+      <button ngbDropdownItem (click)="onThemeChange(item)">
+        <span [class]="item.icon_class_list">
+          <ukep-icons [name]="item.icon_name"></ukep-icons> 
+        </span>
+        <span class="text-muted fw-100 ms-2">{{ item.title }}</span>
+      </button>
+      }
+    </div>
+  </div> -->
+
+
+<!-- <div class="container"> -->
+  <!-- <a class="navbar-brand" href="#">Navbar</a> -->
+      <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0"> -->
+        <!-- <li > -->
+          <!-- <a class="nav-link active" aria-current="page" href="#"> -->
+            
+
+          <!-- </a> -->
+        <!-- </li> -->
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Dropdown
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="#">Action</a></li>
+            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        </li> -->
+      <!-- </ul> -->

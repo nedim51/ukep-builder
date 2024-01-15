@@ -1,0 +1,273 @@
+$i-blue: #007bff;
+$i-indigo: #6610f2;
+$i-purple: #6f42c1;
+$i-pink: #e83e8c;
+$i-red: #dc3545;
+$i-orange: #fd7e14;
+$i-yellow: #ffc107;
+$i-green: #28a745;
+$i-teal: #20c997;
+$i-cyan: #17a2b8;
+$i-white: #ffffff;
+$i-gray: #7E8299;
+$i-gray-dark: #3F4254;
+$i-primary: #4fc9da;
+// $i-primary: #8950FC;
+$i-secondary: #E4E6EF;
+$i-success: #1BC5BD;
+$i-info: #6993FF;
+$i-warning: #FFA800;
+$i-danger: #F64E60;
+$i-light: #F3F6F9;
+$i-dark: #181C32;
+$i-white: #ffffff;
+
+
+.svg-icon svg {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+.svg-icon-rotate-180 svg  {
+  transform: rotate(180deg);
+}
+.svg-icon svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: #B5B5C3;
+}
+.svg-icon svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-icon-white svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: $i-white !important;
+}
+.svg-icon.svg-icon-white svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-white svg path {
+  fill: $i-white !important;
+}
+.svg-icon.svg-icon-primary svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: $i-primary !important;
+}
+.svg-icon.svg-icon-primary svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-primary svg path {
+  fill: $i-primary !important;
+}
+.svg-icon.svg-icon-secondary svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: $i-secondary !important;
+}
+.svg-icon.svg-icon-secondary svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-secondary svg path {
+  fill: $i-secondary !important;
+}
+.svg-icon.svg-icon-success svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: $i-success !important;
+}
+.svg-icon.svg-icon-success svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-success svg path {
+  fill: $i-success !important;
+}
+.svg-icon.svg-icon-info svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: $i-info !important;
+}
+.svg-icon.svg-icon-info svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-info svg path {
+  fill: $i-info !important;
+}
+.svg-icon.svg-icon-warning svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: $i-warning !important;
+}
+.svg-icon.svg-icon-warning svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-warning svg path {
+  fill: $i-warning !important;
+}
+.svg-icon.svg-icon-danger svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: #F64E60 !important;
+}
+.svg-icon.svg-icon-danger svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-danger svg path {
+  fill: #F64E60 !important;
+}
+.svg-icon.svg-icon-light svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: #F3F6F9 !important;
+}
+.svg-icon.svg-icon-light svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-light svg path {
+  fill: #F3F6F9 !important;
+}
+.svg-icon.svg-icon-dark svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: #181C32 !important;
+}
+.svg-icon.svg-icon-dark svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-dark svg path {
+  fill: #181C32 !important;
+}
+.svg-icon.svg-icon-dark-75 svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: #3F4254 !important;
+}
+.svg-icon.svg-icon-dark-75 svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-dark-75 svg path {
+  fill: #3F4254 !important;
+}
+.svg-icon.svg-icon-dark-65 svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: #5E6278 !important;
+}
+.svg-icon.svg-icon-dark-65 svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-dark-65 svg path {
+  fill: #5E6278 !important;
+}
+.svg-icon.svg-icon-dark-50 svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: #7E8299 !important;
+}
+.svg-icon.svg-icon-dark-50 svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-dark-50 svg path {
+  fill: #7E8299 !important;
+}
+.svg-icon.svg-icon-dark-25 svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: #D1D3E0 !important;
+}
+.svg-icon.svg-icon-dark-25 svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-dark-25 svg path {
+  fill: #D1D3E0 !important;
+}
+.svg-icon.svg-icon-muted svg g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+  fill: #B5B5C3 !important;
+}
+.svg-icon.svg-icon-muted svg:hover g [fill] {
+  -webkit-transition: fill 0.3s ease;
+  transition: fill 0.3s ease;
+}
+.svg-icon.svg-logo-muted svg path {
+  fill: #B5B5C3 !important;
+}
+.svg-icon.svg-icon-sm svg {
+  height: 1.25rem !important;
+  width: 1.25rem !important;
+}
+.svg-icon.svg-icon-md svg {
+  height: 1.5rem !important;
+  width: 1.5rem !important;
+}
+.svg-icon.svg-icon-lg svg {
+  height: 1.75rem !important;
+  width: 1.75rem !important;
+}
+.svg-icon.svg-icon-xl svg {
+  height: 2rem !important;
+  width: 2rem !important;
+}
+.svg-icon.svg-icon-xxl svg {
+  height: 2.25rem !important;
+  width: 2.25rem !important;
+}
+.svg-icon.svg-icon-1x svg {
+  height: 1rem !important;
+  width: 1rem !important;
+}
+.svg-icon.svg-icon-2x svg {
+  height: 2rem !important;
+  width: 2rem !important;
+}
+.svg-icon.svg-icon-3x svg {
+  height: 3rem !important;
+  width: 3rem !important;
+}
+.svg-icon.svg-icon-4x svg {
+  height: 4rem !important;
+  width: 4rem !important;
+}
+.svg-icon.svg-icon-5x svg {
+  height: 5rem !important;
+  width: 5rem !important;
+}
+.svg-icon.svg-icon-6x svg {
+  height: 6rem !important;
+  width: 6rem !important;
+}
+.svg-icon.svg-icon-7x svg {
+  height: 7rem !important;
+  width: 7rem !important;
+}
+.svg-icon.svg-icon-8x svg {
+  height: 8rem !important;
+  width: 8rem !important;
+}
+.svg-icon.svg-icon-9x svg {
+  height: 9rem !important;
+  width: 9rem !important;
+}
+.svg-icon.svg-icon-10x svg {
+  height: 10rem !important;
+  width: 10rem !important;
+}
+.svg-icon.svg-icon-full svg {
+  height: 100% !important;
+  width: 100% !important;
+}

@@ -1,0 +1,17 @@
+<router-outlet #homeOutlet="outlet"></router-outlet>
+
+@if (!homeOutlet.isActivated) {
+    <div>
+        Тут будет красивая картинка 
+    </div>
+
+    <ul>
+        @for (item of users$ | async; track $index) {
+            <li>
+                <pre>
+                    {{ item | json }}
+                </pre>
+            </li>
+        }
+    </ul>
+}
