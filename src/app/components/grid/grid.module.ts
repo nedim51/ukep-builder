@@ -11,6 +11,10 @@ import { GridSelectionService } from './services/grid-selection.service';
 import { BehaviorSubject } from 'rxjs';
 import { GLOBAL_OBJECT_ID, GlobalObjectIdService } from './services/grid-global-object-id.service';
 import { GridTemplateService } from './services/grid-template.service';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgUkepIconsModule } from 'ng-ukep-icons';
+import { GridRootComponent } from './grid-root/grid-root.component';
+import { ResizableDirective } from '../../directives/resizable/resizable.directive';
 
 
 
@@ -20,17 +24,23 @@ import { GridTemplateService } from './services/grid-template.service';
     GridRowComponent,
     GridColComponent,
     GridElementComponent,
-    GridSwitcherComponent
+    GridSwitcherComponent,
+    GridRootComponent
   ],
   imports: [
     CommonModule,
     NgOptimizedImage,
     
+    NgbDropdownModule,
+    NgUkepIconsModule,
     DraggableDirective,
+    ResizableDirective,
     DraggableDropzoneDirective
   ],
   exports: [
-    GridContainerComponent
+    GridRootComponent,
+    GridContainerComponent,
+    GridSwitcherComponent,
   ],
   providers: [
     { 

@@ -11,6 +11,7 @@ import { DraggableDropzoneDirective } from '../directives/draggable-dropzone/dra
 import { ResizableDirective } from '../directives/resizable/resizable.directive';
 import { DraggableDirective } from '../directives/draggable/draggable.directive';
 import { GridModule } from '../components/grid/grid.module';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { GridModule } from '../components/grid/grid.module';
     DraggableDropzoneDirective, 
     ResizableDirective, 
     DraggableDirective,
+    NgbDropdownModule,
     GridModule, 
   ],
   providers: [

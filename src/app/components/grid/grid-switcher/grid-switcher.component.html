@@ -1,8 +1,13 @@
-<label for="containers">Current container size: </label>
-<select name="containers" id="containers" (change)="onSelectionChange($event)">
-  @for (container of containers$ | async; track $index) {
-    @if (currentDisplay$ | async; as currentContainer) {
-      <option value="{{container}}" [selected]="currentContainer === container ? true : false">{{ container | uppercase }}</option>
+<div ngbDropdown class="d-inline-block h-100">
+  <button type="button" class="btn btn-md btn-outline-secondary" id="layoutSwitcher" ngbDropdownToggle>
+    {{ currentDisplay$ | async | uppercase }}
+  </button>
+
+  <div ngbDropdownMenu aria-labelledby="layoutSwitcher">
+    @for (container of containers$ | async; track $index) {
+      <button ngbDropdownItem type="button" (click)="onSelectionChange(container)">
+        <span class="text-muted fw-100 ms-2">{{ container | uppercase }}</span>
+      </button>
     }
-  }
-</select>
+  </div>
+</div>

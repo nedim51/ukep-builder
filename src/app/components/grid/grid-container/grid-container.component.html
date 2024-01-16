@@ -1,10 +1,3 @@
-<div style="position: absolute; top: -20px; left: 0px;">
-    <button type="button" [disabled]="(canUndo$ | async) === false" (click)="undo()">undo</button>
-    <button type="button" [disabled]="(canRedo$ | async) === false" (click)="redo()">redo</button>
-</div>
-
-<app-grid-switcher></app-grid-switcher>
-
 @for (row of rows$ | async; track row.id) {
     <app-grid-row [row]="row" appDraggable [dragData]="row" draggableDropzone (itemDropped)="handleDroppedItem($event, row)"></app-grid-row>
 }
@@ -18,7 +11,7 @@
             <div >Click the start button, to create grid rows and cols</div>
             <br>
             <div>
-                <button type="button" (click)="createFirstColumns()">Start <i>🚀</i></button>   
+                <button class="btn btn-sm btn-outline-secondary" type="button" (click)="createFirstColumns()">Start <i>🚀</i></button>   
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, WritableSignal, signal } from '@angular/core';
 import { AuthApiService } from '../services/auth/auth-api.service';
 import { Observable } from 'rxjs';
 import { IUsers } from '../interfaces/user/user.interface';
@@ -11,9 +11,19 @@ import { IUsers } from '../interfaces/user/user.interface';
 })
 export class HomeComponent {
 
+  showOutlet: WritableSignal<boolean> = signal(false);
+
   users$: Observable<IUsers>;
-  
+
   constructor(private api: AuthApiService) {
     this.users$ = this.api.getUsers()
+  }
+
+  onOutletActivate(event: any): void {
+    this.showOutlet.set(true);
+  }
+  
+  onOutletDeactivate(event: any): void {
+    this.showOutlet.set(false);
   }
 }

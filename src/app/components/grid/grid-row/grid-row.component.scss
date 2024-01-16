@@ -5,15 +5,15 @@
     padding: $row-padding;
     transition: border-color .3s ease-in-out;
 
-    border-color: $border-color-white;
+    border-color: $color-white;
     border-width: $border-width;
-    border-style: $border-style;
+    border-style: $border-dashed;
 
-    .empty-template-bordered {
+    .empty-template-bordered { 
         padding: $row-empty-padding;
 
-        border-color: $border-color-primary;
+        border-color: $color-white;
         border-width: $border-width;
-        border-style: $border-style;
+        border-style: $border-dashed;
     }
 }

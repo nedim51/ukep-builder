@@ -1,0 +1,10 @@
+@import 'selection.scss';
+@import 'flexbox-grid.scss';
+@import 'flexbox-grid-xs.scss';
+@import 'flexbox-grid-sm.scss';
+@import 'flexbox-grid-md.scss';
+@import 'flexbox-grid-lg.scss';
+
+:host {
+    display: block;
+}

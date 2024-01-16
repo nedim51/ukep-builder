@@ -14,6 +14,7 @@ import { GridSelectionService } from '../components/grid/services/grid-selection
 import { GridTemplateService } from '../components/grid/services/grid-template.service';
 import { GridContainerService } from '../services/grid-container.service';
 import { elements } from '../services/grid-element.data';
+import { IDropdownOpenItem } from '../home/components/register/register.component';
 
 @Component({
   selector: 'app-builder',
@@ -23,9 +24,32 @@ import { elements } from '../services/grid-element.data';
 })
 export class BuilderComponent {
   
-  public title: WritableSignal<string> = signal('Конструктор WEB-интерфейсов');
+  public title: WritableSignal<string> = signal('Анкета-заявка 115-ФЗ');
   public themeName$: Observable<IThemeColors>
 
+  appendThisDirectoryItems: Array<IDropdownOpenItem> = [
+    {
+      id: 1,
+      code: 'new_file',
+      title: 'Добавить файл',
+      icon_name: 'file_plus',
+      icon_class_list: 'svg-icon svg-icon-md',
+    },
+    {
+      id: 2,
+      code: 'new_directory',
+      title: 'Добавить папку',
+      icon_name: 'folder_plus',
+      icon_class_list: 'svg-icon svg-icon-md',
+    },
+    {
+      id: 3,
+      code: 'upload_file',
+      title: 'Загрузить файл',
+      icon_name: 'upload',
+      icon_class_list: 'svg-icon svg-icon-md',
+    }
+  ]
 
   public readonly componentList = elements;
 
@@ -42,10 +66,8 @@ export class BuilderComponent {
 
   selectContainerSize$ = this.containerSize$.asObservable()
   .pipe(throttleTime(200));
-  
 
   constructor(
-    
     private destroy$: Destroy,
     private classData: ClassDataService,
     private gridSelection: GridSelectionService,
@@ -106,7 +128,15 @@ export class BuilderComponent {
     this.containerSize$.next(size)
   }
 
-  export() {
+  export(): void {
     this.gridTemplate.export();
+  }
+
+  undo(): void {
+    this.gridTemplate.undo();
+  }
+
+  redo(): void {
+    this.gridTemplate.redo();
   }
 }

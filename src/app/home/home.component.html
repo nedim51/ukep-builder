@@ -1,6 +1,6 @@
-<router-outlet #homeOutlet="outlet"></router-outlet>
+<router-outlet (activate)="onOutletActivate($event)" (deactivate)="onOutletDeactivate($event)"></router-outlet>
 
-@if (!homeOutlet.isActivated) {
+@if (!showOutlet()) {
     <br>
 
     <div class="row">

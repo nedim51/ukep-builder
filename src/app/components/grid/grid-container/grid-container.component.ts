@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding, HostListener } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, HostListener, ViewEncapsulation } from '@angular/core';
 import { GridTemplateService } from '../services/grid-template.service';
 import { Observable } from 'rxjs';
 import { IGridRow, IGridRows } from '../interfaces/grid-row.interface';
@@ -44,13 +44,5 @@ export class GridContainerComponent {
     }
     
     // console.log(`[GridContainerComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
-  }
-
-  undo(): void {
-    this.gridTemplate.undo();
-  }
-
-  redo(): void {
-    this.gridTemplate.redo();
   }
 }

@@ -5,8 +5,8 @@
     padding: $column-padding;
     
     border-width: $border-width;
-    border-style: $border-style;
-    border-color: $border-color-primary;
+    border-style: $border-dashed;
+    border-color: $color-primary;
     
     transition: all background-color .3s ease-in-out;
 } 

@@ -1,22 +1,33 @@
 <div class="container">
 
-    <div class="mb-3"></div>
+    <div class="mb-5"></div>
   
-    <div class="row" @collapseItems>
-      <!-- <div class="col-auto">
-        <div class="card pt-2 mt-2">
-          <div class="mx-auto">
-            <span class="svg-icon svg-icon-primary svg-icon-5x">
-              <ukep-icons name="file_plus"></ukep-icons>
-            </span>
-          </div>
-          <div class="card-body">
-            <a href="#">
-              Новый документ
-            </a>
-          </div>
+    <div class="row" @collapseIn>
+      @for (item of createItems; track $index) {
+        <div class="col-auto">
+            <button class="btn btn-outline-secondary p-0" [routerLink]="item.routerLink">
+                <div class="card pt-2 w-btn">
+                    <div class="mx-auto">
+                        <span [class]="item.icon_class">
+                            <ukep-icons [name]="item.icon_name"></ukep-icons>
+                        </span>
+                    </div>
+
+                    <div class="card-body">
+                        <p class="card-text">{{ item.title }}</p>
+                    </div>
+                </div>
+            </button>
         </div>
-      </div> -->
+        <!-- @if (!$last) {
+          <hr class="mt-3">
+        } -->
+      }
+    </div>
+<!-- 
+
+
+    <div class="row" @collapseItems>
   
       <div class="col-auto">
         <button class="btn btn-outline-secondary p-0" [routerLink]="['/builder']">
@@ -82,25 +93,9 @@
           </div>
         </button>
       </div>
-  
-      <!-- <div class="col-auto">
-        <button class="btn btn-outline-secondary p-0">
-          <div class="card pt-2">
-            <div class="mx-auto">
-              <span class="svg-icon svg-icon-primary svg-icon-4x">
-                <ukep-icons name="file_plus"></ukep-icons>
-              </span>
-            </div>
-  
-            <div class="card-body">
-              <p class="card-text">Новый документ *.pdf</p>
-            </div>
-          </div>
-        </button>
-      </div> -->
     </div>
   </div>
-  
+   -->
   
   <!-- <div style="border: 2px solid red;">
   </div> -->

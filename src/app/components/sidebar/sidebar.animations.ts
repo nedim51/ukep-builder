@@ -42,6 +42,26 @@ export function collapseItems(
     ]),
   ]);
 }
+export function collapseIn(
+  duration: IAnimationDuration['duration'],
+  durationType: IAnimationDuration['durationType']
+): AnimationTriggerMetadata {
+  const animateIs: string = `${duration}${durationType}`;
+
+  return trigger('collapseIn', [
+    transition(':enter', [
+
+      query(':enter', [
+        style({ opacity: 0, height: 0 }),
+        stagger('100ms', animate(
+          animateIs + ' ease-in',
+          style({ opacity: 1, height: AUTO_STYLE })
+        )),
+      ], { optional: true }), // Фикс ошибки в консоли
+
+    ]),
+  ]);
+}
 
 export function collapseWidthItems(
   duration: IAnimationDuration['duration'],

@@ -31,28 +31,28 @@ export const createItems: IWellcomeItems = [
     title: 'Пустая форма',
     icon_class: 'svg-icon svg-icon-primary svg-icon-2x',
     icon_name: 'layout_top_panel_6',
-    routerLink: ['create'],
+    routerLink: ['/builder'],
     index: 0
   },
   {
     title: 'Шаблон 4 х 2',
     icon_class: 'svg-icon svg-icon-primary svg-icon-2x',
     icon_name: 'layout_4_blocks',
-    routerLink: ['create'],
+    routerLink: ['/builder'],
     index: 1
   },
   {
     title: 'Шаблон 8 х 2',
     icon_class: 'svg-icon svg-icon-primary svg-icon-2x',
     icon_name: 'layout_grid',
-    routerLink: ['create'],
+    routerLink: ['/builder'],
     index: 2
   },
   {
     title: 'Нарисовать',
     icon_class: 'svg-icon svg-icon-primary svg-icon-2x',
     icon_name: 'compass_1',
-    routerLink: ['create'],
+    routerLink: ['/builder'],
     index: 3
   },
 ];

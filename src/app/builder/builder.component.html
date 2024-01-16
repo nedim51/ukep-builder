@@ -1,26 +1,51 @@
-<header ukep-header>
-    <div class="icon-header d-flex align-items-center gap-2">
+<header ukep-header class="header-sticky">
+    <ng-container ngProjectAs="[natigation]">
         <button type="button" class="btn btn-outline-secondary" [routerLink]="['..']">
             <span class="svg-icon svg-icon-primary">
                 <ukep-icons name="angle_left"></ukep-icons>
             </span>
         </button>
 
-        <button type="button" class="btn btn-outline-secondary" [routerLink]="['/']">
+        <!-- <button type="button" class="btn btn-outline-secondary" [routerLink]="['/']">
             <span class="svg-icon svg-icon-primary">
                 <ukep-icons name="layout_top_panel_2"></ukep-icons>
             </span>
-        </button>
+        </button> -->
         
         <span class="h6 ms-3 mb-0">{{ title() }}</span>
-    </div>
+
+        <div class="ms-5 d-flex gap-2">
+          <button type="button" class="btn btn-outline-secondary" type="button" (click)="undo()">
+            <span class="svg-icon svg-icon-primary">
+                <ukep-icons name="undo"></ukep-icons>
+            </span>
+          </button>
+
+          <button type="button" class="btn btn-outline-secondary" type="button" (click)="redo()">
+            <span class="svg-icon svg-icon-primary">
+                <ukep-icons name="redo"></ukep-icons>
+            </span>
+          </button>
+        </div>
+    </ng-container>
+
+    <ng-container ngProjectAs="[actions]">
+      <app-grid-switcher></app-grid-switcher>
+
+      <button type="button" class="btn btn-outline-secondary me-5" [routerLink]="['/']">
+        <span class="svg-icon svg-icon-warning">
+          <ukep-icons name="export"></ukep-icons>
+        </span>
+      </button>
+        
+    </ng-container>
 </header>
 
-<main class="root">
-    <!-- <button type="button" (click)="export()">Export</button> -->
-      <div class="board" [ngClass]="container$ | async" resizable (resize)="onResizeContainer($event)" [minWidth]="512" [minHeight]="512" [maxWidth]="1200" [maxHeight]="1200">
-        <div class="container-fluid">
-          <app-grid-container draggableDropzone (itemDropped)="handleDroppedItem($event)"></app-grid-container>
-        </div>
-      </div>
-    </main>
+<main class="root"> 
+  <app-grid-root></app-grid-root>
+  <!-- <div class="board" [ngClass]="container$ | async" resizable (resize)="onResizeContainer($event)" [minWidth]="512" [minHeight]="512" [maxWidth]="1200" [maxHeight]="1200">
+    <div class="container-fluid1">
+      <app-grid-container draggableDropzone (itemDropped)="handleDroppedItem($event)"></app-grid-container>
+    </div>
+  </div> -->
+</main>

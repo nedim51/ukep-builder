@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { GridContainerService } from '../../../services/grid-container.service';
 import { Observable } from 'rxjs';
 import { ColumnDisplayType } from '../../../interfaces/column.type';
+import { ThemeService } from '../../../services/core/theme.service';
+import { IThemeColors } from '../../../interfaces/theme/theme.interface';
 
 @Component({
   selector: 'app-grid-switcher',
@@ -13,15 +15,16 @@ export class GridSwitcherComponent {
 
   containers$: Observable<Array<ColumnDisplayType>>
   currentDisplay$: Observable<ColumnDisplayType>
+  themeName$: Observable<IThemeColors>
 
-  constructor(private gridContainer: GridContainerService) {
+  constructor(private gridContainer: GridContainerService, 
+    private themeService: ThemeService) {
+    this.themeName$ = this.themeService.selectCurrentThemeName()
     this.containers$ = this.gridContainer.selectDisplays();
     this.currentDisplay$ = this.gridContainer.selectDisplay();
   }
 
-  onSelectionChange(event: any) {
-    if(event && event.target && event.target.value) {
-      this.gridContainer.setContainer(event.target.value)
-    }
+  onSelectionChange(container: ColumnDisplayType) {
+    this.gridContainer.setContainer(container)
   }
 }

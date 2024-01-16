@@ -50,7 +50,13 @@ body {
 }
 
 
-
+              
+// "src/assets/styles/flexbox-grid.scss",
+// "src/assets/styles/flexbox-grid-xs.scss",
+// "src/assets/styles/flexbox-grid-sm.scss",
+// "src/assets/styles/flexbox-grid-md.scss",
+// "src/assets/styles/flexbox-grid-lg.scss",
+// "src/assets/styles/selection.scss",
 
 
 
@@ -60,9 +66,9 @@ body {
 
 .drag-over {
   background-color: $drag-bg-color !important;
-  border-color: $border-color-warning !important;
+  border-color: $color-warning !important;
   border-width: $border-width !important;
-  border-style: $border-style !important;
+  border-style: $border-dashed !important;
 }
 
 .user-draggable {

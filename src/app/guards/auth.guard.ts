@@ -20,13 +20,13 @@ export class AuthGuard {
     ) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const isAuth = this.authService.userValue.id !== -1;
+        const isAuth = this.authService.userValue.id !== -1  && this.authService.userValue.authdata;
         
         if (isAuth) return true;
 
         this.router.navigate(['/auth/sign-in'], {
             queryParams: {
-                returnUrl: state.url // После авторизации продолжим с того же места
+                returnUrl: state.url // После авторизации продолжим работать с того же места
             }
         });
 

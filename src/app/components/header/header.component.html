@@ -1,21 +1,26 @@
 <nav class="navbar-nav me-auto mb-2 mb-lg-0 d-flex flex-column">
   
-  <ng-content select=".icon-header"></ng-content>
+  <div class="d-flex align-items-center gap-2">
 
-  @if (title) {
-    <div class="d-flex align-items-center">
-      @if (icon) {
-        <span class="svg-icon svg-icon-lg svg-icon-primary">
-          <ukep-icons [name]="icon || 'file'"></ukep-icons>
-        </span>
-      }
-      <span class="navbar-brand m-0 mx-2">{{ title }}</span>
-    </div>
-  }
-  
+    <ng-content select="[natigation]"></ng-content>
+
+    @if (title) {
+      <div class="d-flex align-items-center">
+        @if (icon) {
+          <span class="svg-icon svg-icon-lg svg-icon-primary">
+            <ukep-icons [name]="icon || 'file'"></ukep-icons>
+          </span>
+        }
+        <span class="navbar-brand m-0 mx-2">{{ title }}</span>
+      </div>
+    }
+  </div>
 </nav>
 
 <div class="d-flex gap-1">
+
+  <ng-content select="[actions]"></ng-content>
+
   <button type="button"
     class="btn btn-outline-secondary"
     [popoverClass]="'popoverThemeSwitcher'"

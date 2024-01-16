@@ -11,10 +11,10 @@
         <span>{{ selectedRow.type }}-{{ selectedRow.id }}[{{selectedRow.index}}]</span>
     </div>
     
-    <span class="selected selected-btn selected-btn--danger selected-btn-drop-left-bottom" (click)="onRemoveRow(selectedRow)">dr</span>
+    <button type="button" class="selected selected-btn selected-btn--danger selected-btn-drop-left-bottom" (click)="onRemoveRow(selectedRow)">dr</button>
 
-    <span class="selected selected-btn selected-btn--primary selected-btn-plus-top" (click)="onAppendRowTop(selectedRow)">+</span>
-    <span class="selected selected-btn selected-btn--primary selected-btn-plus-bottom" (click)="onAppendRowBottom(selectedRow)">+</span>
+    <button type="button" class="selected selected-btn selected-btn--primary selected-btn-plus-top" (click)="onAppendRowTop(selectedRow)">+</button>
+    <button type="button" class="selected selected-btn selected-btn--primary selected-btn-plus-bottom" (click)="onAppendRowBottom(selectedRow)">+</button>
 }
 
 <ng-template #startTemplate>

@@ -3,7 +3,7 @@ import { IThemeColors, IThemeSwitcherItem, IThemeSwitcherItems } from "../../int
 import { DOCUMENT } from "@angular/common";
 import { BehaviorSubject, Observable, distinctUntilChanged, map, of } from "rxjs";
 
-export const LOCAL_STORAGE_THEME_KEY: string = 'app_theme';
+export const LOCAL_STORAGE_THEME_KEY: string = 'UKEP-THEME';
 
 export const themeItems: IThemeSwitcherItems = [
   {
