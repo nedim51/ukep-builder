@@ -17,6 +17,9 @@ export class GridRowComponent implements OnChanges {
   @HostBinding('class.row') 
   row_class: boolean = true;
 
+  // @HostBinding('attr.tabindex') 
+  // tabindex: number = 0;
+
   @Input({ alias: 'row' }) 
   row: IGridRow = INITIAL_GRID_ROW;
 

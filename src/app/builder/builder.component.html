@@ -6,12 +6,14 @@
             </span>
         </button>
 
+        <!-- Может оставить ссылочку (иконка) на главную страницу -->
         <!-- <button type="button" class="btn btn-outline-secondary" [routerLink]="['/']">
             <span class="svg-icon svg-icon-primary">
                 <ukep-icons name="layout_top_panel_2"></ukep-icons>
             </span>
         </button> -->
         
+        <!-- Title документа открытого -->
         <span class="h6 ms-3 mb-0">{{ title() }}</span>
 
         <div class="ms-5 d-flex gap-2">
@@ -27,6 +29,12 @@
             </span>
           </button>
         </div>
+
+        @if (targetSelection$ | async; as targetSelection) {
+          <div class="ms-5">
+            <span>Выбран: {{ targetSelection.title }}, позиция: {{ targetSelection.index }}</span>
+          </div>
+        }
     </ng-container>
 
     <ng-container ngProjectAs="[actions]">
@@ -37,15 +45,7 @@
           <ukep-icons name="export"></ukep-icons>
         </span>
       </button>
-        
     </ng-container>
 </header>
 
-<main class="root"> 
   <app-grid-root></app-grid-root>
-  <!-- <div class="board" [ngClass]="container$ | async" resizable (resize)="onResizeContainer($event)" [minWidth]="512" [minHeight]="512" [maxWidth]="1200" [maxHeight]="1200">
-    <div class="container-fluid1">
-      <app-grid-container draggableDropzone (itemDropped)="handleDroppedItem($event)"></app-grid-container>
-    </div>
-  </div> -->
-</main>

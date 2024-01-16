@@ -3,9 +3,11 @@
 :host {
     position: relative;
     padding: $row-padding;
-    transition: border-color .3s ease-in-out;
 
-    border-color: $color-white;
+    transition: border-color .3s ease-in-out;
+    -webkit-transition: border-color .3s ease-in-out;
+    
+    border-color: transparent;
     border-width: $border-width;
     border-style: $border-dashed;
 

@@ -60,21 +60,3 @@ body {
 
 
 
-.placeholder-color {
-  color: $color-secondary;
-}
-
-.drag-over {
-  background-color: $drag-bg-color !important;
-  border-color: $color-warning !important;
-  border-width: $border-width !important;
-  border-style: $border-dashed !important;
-}
-
-.user-draggable {
-  display: flex;
-  align-items: flex-end;
-  padding-right: 4px;
-  user-select: none;
-  cursor: grab;
-}

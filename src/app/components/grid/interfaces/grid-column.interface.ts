@@ -1,4 +1,4 @@
-import { class_cols } from "../../../data/class.data";
+import { class_cols } from "../../../services/class.data";
 import { IGridBase } from "./grid.interface";
 
 export interface IGridColumn extends IGridBase {
@@ -15,4 +15,4 @@ export const INITIAL_GRID_COLUMN: IGridColumn = {
     title: '',
     class: class_cols,
     index: -1
-}; 
+};

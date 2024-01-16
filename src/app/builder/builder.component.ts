@@ -14,7 +14,6 @@ import { GridSelectionService } from '../components/grid/services/grid-selection
 import { GridTemplateService } from '../components/grid/services/grid-template.service';
 import { GridContainerService } from '../services/grid-container.service';
 import { elements } from '../services/grid-element.data';
-import { IDropdownOpenItem } from '../home/components/register/register.component';
 
 @Component({
   selector: 'app-builder',
@@ -26,30 +25,6 @@ export class BuilderComponent {
   
   public title: WritableSignal<string> = signal('Анкета-заявка 115-ФЗ');
   public themeName$: Observable<IThemeColors>
-
-  appendThisDirectoryItems: Array<IDropdownOpenItem> = [
-    {
-      id: 1,
-      code: 'new_file',
-      title: 'Добавить файл',
-      icon_name: 'file_plus',
-      icon_class_list: 'svg-icon svg-icon-md',
-    },
-    {
-      id: 2,
-      code: 'new_directory',
-      title: 'Добавить папку',
-      icon_name: 'folder_plus',
-      icon_class_list: 'svg-icon svg-icon-md',
-    },
-    {
-      id: 3,
-      code: 'upload_file',
-      title: 'Загрузить файл',
-      icon_name: 'upload',
-      icon_class_list: 'svg-icon svg-icon-md',
-    }
-  ]
 
   public readonly componentList = elements;
 
@@ -78,7 +53,7 @@ export class BuilderComponent {
 
     this.targetSelection$ = this.gridSelection.selectTarget()
     this.targetClassList$ = this.targetSelection$.pipe(
-      filter(selection => selection !== undefined && selection.type === 'column'), 
+      filter(selection => selection !== undefined /*&& selection.type === 'column'*/), 
       map(selection => (selection as IGridColumn).class)
     );
     this.container$ = this.gridContainer.selectContainer();

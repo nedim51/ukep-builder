@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { Observable, Subject, filter, map } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, ViewEncapsulation } from '@angular/core';
+import { Observable, Subject, filter, map, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
 import { IResize } from '../../../directives/resizable/resize.interface';
 import { ClassDataService } from '../../../services/class-data.service';
 import { Destroy } from '../../../services/core/destroy.service';
@@ -10,6 +10,7 @@ import { IGridRow } from '../interfaces/grid-row.interface';
 import { GridSelectionService } from '../services/grid-selection.service';
 import { GridTemplateService } from '../services/grid-template.service';
 import { ContainerType } from '../../../interfaces/column.type';
+import { IGuideItems } from '../../../interfaces/guide.interface';
 
 @Component({
   selector: 'app-grid-root',
@@ -18,11 +19,15 @@ import { ContainerType } from '../../../interfaces/column.type';
   encapsulation: ViewEncapsulation.ShadowDom,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GridRootComponent {
+export class GridRootComponent implements AfterViewInit {
 
+  sizes$: Observable<IGuideItems>
+  offsets$: Observable<IGuideItems>
   containerSize$: Subject<IResize> = new Subject();
+  container$: Observable<ContainerType>;
+  selectContainerSize$ = this.containerSize$.asObservable()
+    .pipe(throttleTime(200));
   
-  container$: Observable<ContainerType>
   constructor(
     private destroy$: Destroy,
     private classData: ClassDataService,
@@ -31,9 +36,25 @@ export class GridRootComponent {
     private gridContainer: GridContainerService,
     private themeService: ThemeService) {
       
+    this.sizes$ = this.classData.selectBySize('col-lg');
+    this.offsets$ = this.classData.selectByOffset('col-lg-offset');
     this.container$ = this.gridContainer.selectContainer();
   }
   
+  ngAfterViewInit(): void {
+    this.selectContainerSize$.pipe(
+      tap(({ width }) => this.gridContainer.setContainerByWidth(width)), 
+      switchMap(_ => this.gridContainer.selectDisplay()), 
+      takeUntil(this.destroy$)
+    ).subscribe((display) => {
+      const columnFilter = this.classData.createColumnSize('col', '-', display);
+      const columnOffsetFilter = this.classData.createColumnOffset('col', '-', display, 'offset')
+      
+      this.sizes$ = this.classData.selectBySize(columnFilter)
+      this.offsets$ = this.classData.selectByOffset(columnOffsetFilter)
+    })
+  }
+
   onDragStart(event: DragEvent, id: number) {
     if (event && event.dataTransfer) {
       event.dataTransfer.setData('text/plain', `${id}`);

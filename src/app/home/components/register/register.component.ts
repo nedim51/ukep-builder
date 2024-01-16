@@ -24,51 +24,13 @@ export interface IDropdownOpenItem {
 })
 export class RegisterComponent {
 
-  appendThisDirectoryItems: Array<IDropdownOpenItem> = [
-    {
-      id: 1,
-      code: 'new_file',
-      title: 'Добавить файл',
-      icon_name: 'file_plus',
-      icon_class_list: 'svg-icon svg-icon-md',
-    },
-    {
-      id: 2,
-      code: 'new_directory',
-      title: 'Добавить папку',
-      icon_name: 'folder_plus',
-      icon_class_list: 'svg-icon svg-icon-md',
-    },
-    {
-      id: 3,
-      code: 'upload_file',
-      title: 'Загрузить файл',
-      icon_name: 'upload',
-      icon_class_list: 'svg-icon svg-icon-md',
-    }
-  ]
-
-  downloadThisDirectoryItems: Array<IDropdownOpenItem> = [
-    {
-      id: 1,
-      code: 'new_file',
-      title: 'Скачать файл',
-      icon_name: 'download',
-      icon_class_list: 'svg-icon svg-icon-md',
-    },
-    {
-      id: 2,
-      code: 'new_file',
-      title: 'Скачать директорию архивом',
-      icon_name: 'downloads_folder',
-      icon_class_list: 'svg-icon svg-icon-md',
-    },
-  ];
-
   themeName$: Observable<IThemeColors>;
   treeListData$: Observable<ITreeListItems>
   public opened: WritableSignal<Set<number>> = signal(new Set<number>());
   public found: WritableSignal<ITreeListItems> = signal([]);
+
+  readonly appendThisDirectoryItems = appendThisDirectoryItems;
+  readonly downloadThisDirectoryItems = downloadThisDirectoryItems;
 
   constructor(
     private router: Router,
@@ -128,3 +90,44 @@ export class RegisterComponent {
     this.rootId.set(id);
   }
 }
+
+const appendThisDirectoryItems: Array<IDropdownOpenItem> = [
+  {
+    id: 1,
+    code: 'new_form',
+    title: 'Добавить форму',
+    icon_name: 'file_plus',
+    icon_class_list: 'svg-icon svg-icon-md',
+  },
+  {
+    id: 2,
+    code: 'new_directory',
+    title: 'Добавить папку',
+    icon_name: 'folder_plus',
+    icon_class_list: 'svg-icon svg-icon-md',
+  },
+  {
+    id: 3,
+    code: 'upload_file',
+    title: 'Загрузить форму',
+    icon_name: 'upload',
+    icon_class_list: 'svg-icon svg-icon-md',
+  }
+]
+
+const downloadThisDirectoryItems: Array<IDropdownOpenItem> = [
+  {
+    id: 1,
+    code: 'new_file',
+    title: 'Скачать форму [*.json]',
+    icon_name: 'download',
+    icon_class_list: 'svg-icon svg-icon-md',
+  },
+  {
+    id: 2,
+    code: 'new_file',
+    title: 'Скачать директорию архивом [*.zip]',
+    icon_name: 'downloads_folder',
+    icon_class_list: 'svg-icon svg-icon-md',
+  },
+];

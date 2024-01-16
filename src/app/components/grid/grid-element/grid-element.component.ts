@@ -20,7 +20,7 @@ export class GridElementComponent {
   tabindex: number = 0;
 
   @HostListener('focus', ['$event'])
-  onColumnFocus(event: any) {
+  onElementFocus(event: any) {
     this.gridSelection.setSelection(this.element);
   }
 

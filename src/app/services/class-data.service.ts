@@ -3,8 +3,8 @@ import { IGuideItem, IGuideItems } from "../interfaces/guide.interface";
 import { ColumnDisplayType, ColumnOffsetType, ColumnPrefixType, ColumnSeparatorType, ColumnSizeOffsetType, ColumnSizeType } from "../interfaces/column.type";
 import { StateService } from "./core/state.service";
 import { Observable, map } from "rxjs";
-import { sizes, sizes_offset } from "../data/class.data";
 import { IClassDataState, INITIAL_CLASS_DATA_STATE, IColumnClassList } from "../interfaces/class/class-data.interface";
+import { sizes, sizes_offset } from "./class.data";
 
 @Injectable()
 export class ClassDataService extends StateService<IClassDataState> {
