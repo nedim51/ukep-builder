@@ -1,15 +1,19 @@
 // $sidebar-bg-color: #F8F6F2;
-$sidebar-min-width: 300px;
+// $sidebar-min-width: 300px;
 $sidebar-max-width: 300px;
 
 :host {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  min-width: $sidebar-min-width;
+  // min-width: $sidebar-min-width;
   max-width: $sidebar-max-width;
   // background-color: $sidebar-bg-color;
   padding: 15px;
+
+  .sidebar-body {
+    height: 100%;
+  }
 
   a {
     text-decoration: none;
@@ -26,7 +30,7 @@ $sidebar-max-width: 300px;
       padding: 0;
       overflow-x: hidden;
       overflow-y: scroll;
-      height: 75%;
+      height: calc(100% - 60px);
       display: flex;
       flex-direction: column;
       gap: 10px;

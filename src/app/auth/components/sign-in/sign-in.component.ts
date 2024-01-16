@@ -6,8 +6,6 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { indicate } from '../../../services/operators';
 import { Destroy } from '../../../services/core/destroy.service';
-import { HttpErrorResponse } from '@angular/common/http';
-
 
 @Component({
   selector: 'app-sign-in',

@@ -18,17 +18,11 @@ import { IGuideItems } from './interfaces/guide.interface';
 import { IResize } from './directives/resizable/resize.interface';
 import { Destroy } from './services/core/destroy.service';
 import { ContainerType } from './interfaces/column.type';
-import { NgUkepIconsModule, NgUkepIconsRegistry } from 'ng-ukep-icons';
-import { ukepIconsRncbKod } from 'ng-ukep-icons-builder';
 
-// Столкнулся с такой ошибкой что standalone components не удавалось вкладывать друг в друга, 
-// так и не понял с чем это связано, не мог понять почему проект валится когда нажимаешь начать (строятся простые строки и колонки) и на этом валится
-// с ошибкой "Cannot read properties of undefined (reading 'ɵcmp')", 
-// в итоге решил попробовать вынести все grid... components в один модуль и все заработало (вложение rows в cols component)
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, RouterOutlet, GridModule, DraggableDropzoneDirective, ResizableDirective, DraggableDirective, NgUkepIconsModule],
+  imports: [CommonModule, RouterOutlet, GridModule, DraggableDropzoneDirective, ResizableDirective, DraggableDirective],
   providers: [
     {
       multi: false,
@@ -67,10 +61,8 @@ export class AppComponent1 implements AfterViewInit {
     private classData: ClassDataService,
     private gridSelection: GridSelectionService,
     private gridTemplate: GridTemplateService,
-    private gridContainer: GridContainerService,
-    private iconsResigry: NgUkepIconsRegistry) {
+    private gridContainer: GridContainerService) {
       
-      this.iconsResigry.registerIcons([ukepIconsRncbKod]);
     this.targetSelection$ = this.gridSelection.selectTarget()
     this.targetClassList$ = this.targetSelection$.pipe(
       filter(selection => selection !== undefined && selection.type === 'column'), 

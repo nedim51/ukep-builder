@@ -1,1 +1,185 @@
-<h4>register works!</h4>
+<div class="container mt-5">
+    <div class="row mb-2 align-items-center">
+      <div class="col">
+        <nav class="navbar-nav me-auto mb-2 mb-lg-0" aria-label="breadcrumb">      
+          <ol class="nav-item breadcrumb mt-1 mb-0 ms-2 d-flex align-items-center">
+            <li class="nav-link breadcrumb-item"><a href="javascript: void(0);" (click)="getupByBreadcrumb(undefined)">Корневой каталог</a></li>
+            @for (breadcrumb of breadcrumbs(); track breadcrumb.id) {
+              <li class="nav-link breadcrumb-item"><a href="javascript: void(0);" (click)="getupByBreadcrumb(breadcrumb.id)">{{ breadcrumb.file_name }}</a></li>
+            }
+            <!-- @if (breadcrumbs().length == 0) {
+              <li class="nav-link breadcrumb-item"></li>
+            } -->
+            <li class="nav-link breadcrumb-item"></li>
+            <li class="nav-link">
+              <div ngbDropdown class="d-inline-block">
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="appendThisDirectory" ngbDropdownToggle>
+                  <span class="svg-icon svg-icon-sm" [ngClass]="(themeName$ | async) === 'light' ? 'svg-icon-dark' : 'svg-icon-light'">
+                    <ukep-icons name="plus"></ukep-icons>  
+                  </span>
+                </button> 
+            
+                <div ngbDropdownMenu aria-labelledby="appendThisDirectory">
+                  @for (item of appendThisDirectoryItems; track item.code) {
+                  <button ngbDropdownItem>
+                    <span [class]="item.icon_class_list">
+                      <ukep-icons [name]="item.icon_name"></ukep-icons> 
+                    </span>
+                    <span class="text-muted fw-100 ms-2">{{ item.title }}</span>
+                  </button>
+                  }
+                </div>
+              </div>
+            </li>
+          </ol>
+        </nav>
+      </div>
+      
+      <div class="col-auto justify-self-end">
+        <div ngbDropdown class="d-inline-block">
+          <button type="button" class="btn btn-sm btn-outline-secondary" id="themeSwitcher" ngbDropdownToggle>
+            <span class="svg-icon svg-icon-sm" [ngClass]="(themeName$ | async) === 'light' ? 'svg-icon-dark' : 'svg-icon-light'">
+              <ukep-icons name="download"></ukep-icons>  
+            </span>
+          </button>
+      
+          <div ngbDropdownMenu aria-labelledby="themeSwitcher">
+            @for (item of downloadThisDirectoryItems; track item.code) {
+            <button ngbDropdownItem>
+              <span [class]="item.icon_class_list">
+                <ukep-icons [name]="item.icon_name"></ukep-icons> 
+              </span>
+              <span class="text-muted fw-100 ms-2">{{ item.title }}</span>
+            </button>
+            }
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-3">
+        <form class="input-group input-group-sm">
+          <input class="form-control" type="text" aria-describedby="table-filtering-search"/>
+          <span class="input-group-text" id="table-filtering-search">
+            <span class="svg-icon svg-icon-dark">
+              <ukep-icons name="search"></ukep-icons> 
+            </span>
+          </span>
+        </form>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col">
+        <div class="table-responsive card p-0">
+          <table class="table table-hover m-0">
+            <thead [class]="(themeName$ | async) === 'light' ? 'table-light' : 'table-dark'">
+              <tr>
+                <th scope="col">Наименование</th>
+                <th scope="col">Дата создания</th>
+                <th scope="col">Создатель документа</th>
+                <th scope="col">Изменено в</th>
+                <th scope="col">Последний редактор</th>
+                <th scope="col">Размер файла</th>
+              </tr>
+            </thead>
+            <tbody>
+             
+              <ng-container *ngTemplateOutlet="levelList; context: { $implicit: rootId() }"></ng-container>
+  
+              <!-- @for (row of treeListData$ | async; track row.id; let last = $last) {
+                <tr>
+                  <td [class.bb-none]="last" class="cursor-pointer text-underline"> 
+                    @if(row.icon_name) {
+                      <span 
+                        class="me-2" 
+                        ukep-icons 
+                        [class]="row.icon_class_list" 
+                        [name]="row.icon_name">
+                      </span>
+                    }
+                    <span>{{ row.name }}</span>
+                  </td>
+                  <td [class.bb-none]="last">{{ row.create_at | date:'fullDate' }}</td>
+                  <td [class.bb-none]="last">{{ row.creator_shortname }}</td>
+                  <td [class.bb-none]="last">{{ row.modified_at | date:'fullDate' }}</td>
+                  <td [class.bb-none]="last">{{ row.modified_shortname }}</td>
+                  <td [class.bb-none]="last" class="text-center">{{ row.file_size }}</td>
+                
+                </tr>
+              } -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #levelList let-parent>
+    <!-- Если не находимся в корне то показываю что бы вернуться вверх -->
+    @if (parent != undefined) {
+      <tr>
+        <td class="pe-auto cursor-pointer text-underline" (click)="getup(parent)">
+          <span 
+            class="me-2" 
+            ukep-icons 
+            style="opacity: 0;"
+            class="svg-icon svg-icon-md svg-icon-secondary"
+            name="arrow_left">
+          </span>
+          <span class="ms-2">..</span>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    }
+  
+    @for (row of selectItemsAtParent$(parent) | async; track row.id; let last = $last) {
+      <tr>
+        <td [class.bb-none]="last" class="cursor-pointer text-underline" (click)="getdown(row, parent)"> 
+          @if(row.icon_name) {
+            <span 
+              class="me-2" 
+              ukep-icons 
+              [class]="row.icon_class_list" 
+              [name]="row.icon_name"> 
+            </span>
+          }
+          <span>{{ row.file_name }}</span>
+        </td>
+        <td [class.bb-none]="last">{{ row.create_at | date: 'fullDate' }}</td>
+        <td [class.bb-none]="last">{{ row.creator_shortname }}</td>
+        <td [class.bb-none]="last">{{ row.modified_at | date: 'fullDate' }}</td>
+        <td [class.bb-none]="last">{{ row.modified_shortname }}</td>
+        <td [class.bb-none]="last" class="text-center">{{ row.file_size }}</td>
+      </tr>
+    }
+  </ng-template>
+  
+  
+  
+  <!-- 
+    <tr>
+      <div (click)="toggle(row.id)">
+  
+  
+        <span class="fw-500">{{ item.name }}</span>
+  
+        @if (hasChildren$(item.id) | async; as hasChildren) {
+        <span 
+          class="svg-icon svg-icon-angle-down" 
+          [class.svg-icon-angle-down--expanded]="opened().has(item.id)"
+          ukep-icons 
+          name="angle_down">
+        </span>
+        }
+      </div>
+    </tr> -->
+  
+    <!-- @if (opened().has(row.id)) { 
+    <ul @collapseItems>
+      <ng-container *ngTemplateOutlet="levelList; context: { $implicit: row.id }"></ng-container>
+    </ul>
+    } -->

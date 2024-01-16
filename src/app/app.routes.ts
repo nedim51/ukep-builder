@@ -26,6 +26,17 @@ export const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
   },
   {
+    path: 'builder',
+    data: {
+      icon: 'layout_top_panel_2',
+      title: 'Конструктор WEB-интерфейсов',
+      sidebar: false,
+      header: false,
+    },
+    canActivate: [AuthGuardFn],
+    loadChildren: () => import('./builder/builder.module').then(m => m.BuilderModule)
+  },
+  {
     path: 'other',
     data: {
       sidebar: false, 

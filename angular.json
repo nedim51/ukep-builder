@@ -42,6 +42,7 @@
               "src/assets/styles/flexbox-grid-lg.scss",
               
               "src/assets/styles/icons.scss",
+              "src/assets/styles/scrollbar.scss",
               
               "src/assets/styles/selection.scss",
               "src/assets/styles/utils.scss",

@@ -5,6 +5,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 const routes: Routes = [
   {
     path: '',
+    component: NotFoundComponent,
     children: [
       {
         path: 'not-found',

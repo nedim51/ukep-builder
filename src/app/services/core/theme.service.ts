@@ -78,12 +78,12 @@ export class ThemeService extends BehaviorSubject<IThemeSwitcherItem> {
 // import { ChangeDetectionStrategy, Component, WritableSignal, effect, signal } from '@angular/core';
 
 // @Component({
-//   selector: 'kod-create',
-//   templateUrl: './kod-create.component.html',
-//   styleUrl: './kod-create.component.scss',
+//   selector: 'ukep-create',
+//   templateUrl: './ukep-create.component.html',
+//   styleUrl: './ukep-create.component.scss',
 //   changeDetection: ChangeDetectionStrategy.OnPush
 // })
-// export class KodCreateComponent {
+// export class UkepCreateComponent {
 
   
 

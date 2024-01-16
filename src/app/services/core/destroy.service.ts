@@ -5,14 +5,14 @@ import { Observable, ReplaySubject } from 'rxjs';
   providedIn: 'root' 
 })
 export class Destroy extends Observable<void> implements OnDestroy {
-  private readonly destroySubject$ = new ReplaySubject<void>(1);
+  private readonly destroy$ = new ReplaySubject<void>(1);
 
   constructor() {
-    super((subscriber) => this.destroySubject$.subscribe(subscriber));
+    super((subscriber) => this.destroy$.subscribe(subscriber));
   }
 
   ngOnDestroy(): void {
-    this.destroySubject$.next();
-    this.destroySubject$.complete();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

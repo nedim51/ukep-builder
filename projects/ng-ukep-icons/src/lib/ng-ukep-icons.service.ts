@@ -15,7 +15,7 @@ export class NgUkepIconsRegistry {
 
   public getIcon(iconName: ukepIcons): string | undefined {
     if(!this.registry.has(iconName)) {
-      console.warn(`${iconName} не зарегистрирована в библиотеке KodIcons`);
+      console.warn(`${iconName} не зарегистрирована в библиотеке UkepIcons`);
     }
 
     return this.registry.get(iconName)

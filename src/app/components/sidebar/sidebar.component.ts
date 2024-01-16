@@ -4,7 +4,7 @@ import { ISidebarItems, ISidebarItem } from './sidebar-item.interface';
 import { CommonModule } from '@angular/common';
 import { Observable, debounceTime, map, takeUntil, tap } from 'rxjs';
 import { SidebarDataService } from './sidebar-data.service';
-import { IAnimationDuration, collapseItems } from './sidebar.animations';
+import { IAnimationDuration, collapseItems, collapseWidth, collapseWidthItems } from './sidebar.animations';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs/operators';
@@ -27,15 +27,19 @@ const DEFAULT_SEARCH_DEBOUNCE_TIME: number = 800;
   styleUrl: './sidebar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-    collapseItems(DEFAULT_DURATION.duration, DEFAULT_DURATION.durationType)
+    collapseItems(DEFAULT_DURATION.duration, DEFAULT_DURATION.durationType),
+    collapseWidthItems(DEFAULT_DURATION.duration, DEFAULT_DURATION.durationType),
+    collapseWidth(DEFAULT_DURATION.duration, DEFAULT_DURATION.durationType)
   ]
 })
 export class SidebarComponent implements OnInit {
 
+  // Animations
+  @HostBinding('@collapseWidthItems') collapseWidthItems: boolean = true
+  @HostBinding('@collapseWidth') collapseWidthItems2: boolean = true
+
   @HostBinding('class.bg-body-tertiary') sidebarBgColor: boolean = true;
-
-  // public user = signal({ username: 'Иванов Иван', right: 'Разработчик' });
-
+  
   public applicationThemeName$: Observable<IThemeColors>;
 
   public items$: Observable<ISidebarItems>

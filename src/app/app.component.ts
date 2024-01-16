@@ -5,9 +5,11 @@ import { Observable, filter, map, mergeMap } from 'rxjs';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 import { IRouterData } from './interfaces/router/router-data.interface';
-import { NgUkepIconsRegistry } from 'ng-ukep-icons';
-import { completeIconSet } from 'ng-ukep-icons-builder';
-import { ThemeService } from './services/core/theme.service';
+
+// Столкнулся с такой ошибкой что standalone components не удавалось вкладывать друг в друга, 
+// так и не понял с чем это связано, не мог понять почему проект валится когда нажимаешь начать (строятся простые строки и колонки) и на этом валится
+// с ошибкой "Cannot read properties of undefined (reading 'ɵcmp')", 
+// в итоге решил попробовать вынести все grid... components в один модуль и все заработало (вложение rows в cols component)
 
 @Component({
   selector: 'app-root',
@@ -35,10 +37,6 @@ export class AppComponent {
 
   constructor(
     private router: Router, 
-    private activatedRoute: ActivatedRoute, 
-    private ukepIconsRegistry: NgUkepIconsRegistry,
-    private themeService: ThemeService) {
-    this.themeService.loadTheme();
-    this.ukepIconsRegistry.registerIcons(completeIconSet); // completeSet потом перебрать обязательно !!!
+    private activatedRoute: ActivatedRoute) {
   }
 }

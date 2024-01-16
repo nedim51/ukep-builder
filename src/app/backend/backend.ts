@@ -28,7 +28,7 @@ export class BackendInterceptor {
         const storedUser: string | null = localStorage.getItem(USER_KEY);
         this.currentUser = storedUser ? JSON.parse(storedUser) : INITIAL_USER;
         
-        // Так себе решение, но работает :)
+        // Костыль? - да! Но работает :)
         this.usersData.selectUsers().pipe(
             map(users => users.find(user => user.id === this.currentUser.id)),
             filter(user => user !== undefined)

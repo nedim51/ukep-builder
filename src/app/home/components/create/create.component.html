@@ -1,1 +1,169 @@
-<h4>create works!</h4>
+<div class="container">
+
+    <div class="mb-3"></div>
+  
+    <div class="row" @collapseItems>
+      <!-- <div class="col-auto">
+        <div class="card pt-2 mt-2">
+          <div class="mx-auto">
+            <span class="svg-icon svg-icon-primary svg-icon-5x">
+              <ukep-icons name="file_plus"></ukep-icons>
+            </span>
+          </div>
+          <div class="card-body">
+            <a href="#">
+              Новый документ
+            </a>
+          </div>
+        </div>
+      </div> -->
+  
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary p-0" [routerLink]="['/builder']">
+          <div class="card pt-2 w-btn">
+            <div class="mx-auto">
+              <span class="svg-icon svg-icon-primary svg-icon-4x">
+                <ukep-icons name="layout_top_panel_6"></ukep-icons>
+              </span>
+            </div>
+  
+            <div class="card-body">
+              <p class="card-text">Пустая форма</p>
+            </div>
+          </div>
+        </button>
+      </div>
+  
+<hr class="mt-3">
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary p-0" [routerLink]="['/builder']">
+          <div class="card pt-2 w-btn">
+            <div class="mx-auto">
+              <span class="svg-icon svg-icon-primary svg-icon-4x">
+                <ukep-icons name="layout_4_blocks"></ukep-icons>
+              </span>
+            </div>
+  
+            <div class="card-body">
+              <p class="card-text">Шаблон 4 x 2</p>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary p-0" [routerLink]="['/builder']">
+          <div class="card pt-2 w-btn">
+            <div class="mx-auto">
+              <span class="svg-icon svg-icon-primary svg-icon-4x">
+                <ukep-icons name="layout_grid"></ukep-icons>
+              </span>
+            </div>
+  
+            <div class="card-body">
+              <p class="card-text">Шаблон 8 x 2</p>
+            </div>
+          </div>
+        </button>
+      </div>
+<hr class="mt-3">
+      <div class="col-auto">
+        <button class="btn btn-outline-secondary p-0" [routerLink]="['/builder']">
+          <div class="card pt-2 w-btn">
+            <div class="mx-auto">
+              <span class="svg-icon svg-icon-primary svg-icon-4x">
+                <ukep-icons name="compass_1"></ukep-icons>
+              </span>
+            </div>
+  
+            <div class="card-body">
+              <p class="card-text">Нарисовать</p>
+            </div>
+          </div>
+        </button>
+      </div>
+  
+      <!-- <div class="col-auto">
+        <button class="btn btn-outline-secondary p-0">
+          <div class="card pt-2">
+            <div class="mx-auto">
+              <span class="svg-icon svg-icon-primary svg-icon-4x">
+                <ukep-icons name="file_plus"></ukep-icons>
+              </span>
+            </div>
+  
+            <div class="card-body">
+              <p class="card-text">Новый документ *.pdf</p>
+            </div>
+          </div>
+        </button>
+      </div> -->
+    </div>
+  </div>
+  
+  
+  <!-- <div style="border: 2px solid red;">
+  </div> -->
+  
+  <!-- <div class="row">
+      <div class="col">
+          <div ngbDropdown class="d-inline-block" >
+              <button type="button" class="btn btn-outline-secondary btn-sm" id="themeSwitcher" ngbDropdownToggle>
+                  <span [class]="currentTheme().icon_class_list">
+            <ukep-icons [name]="currentTheme().icon_name"></ukep-icons> 
+          </span>
+              </button>
+              <div ngbDropdownMenu aria-labelledby="themeSwitcher">
+          @for (item of themeItems; track item.code) {
+          <button ngbDropdownItem (click)="onThemeChange(item)">
+            <span [class]="item.icon_class_list">
+              <ukep-icons [name]="item.icon_name"></ukep-icons> 
+            </span>
+            <span class="text-muted fw-500 ms-2">{{ item.title }}</span>
+          </button>
+          }
+              </div>
+          </div>
+      </div>
+  </div> -->
+  
+  
+  <!-- 
+  <span class="svg-icon svg-icon-dark svg-icon-5x">
+    <ukep-icons name="rncb_ukep"></ukep-icons> 
+  </span>
+  <span class="svg-icon svg-icon-sm">
+    <ukep-icons name="rncb_simple"></ukep-icons> 
+  </span>
+  <span class="svg-icon svg-icon-lg">
+    <ukep-icons name="rncb_logo"></ukep-icons> 
+  </span>
+  <span class="svg-icon svg-icon svg-icon-primary">
+    <ukep-icons name="add_music"></ukep-icons> 
+  </span> -->
+  
+  <!-- <span class="svg-icon svg-icon-warning svg-icon-sm" ukep-icons name="rncb_ukep">
+  </span> -->
+  
+  <!-- <span class="svg-icon svg-icon-warning svg-icon-md" ukep-icons name="add_music"> -->
+    <!-- <></ukep-icons>  -->
+  <!-- </span> -->
+  
+  <!-- <span class="svg-icon svg-icon-warning svg-icon-lg" ukep-icons name="address_card"> -->
+    <!-- <></ukep-icons>  -->
+  <!-- </span> -->
+  
+  <!-- <span class="svg-icon svg-icon-warning svg-icon-xl" ukep-icons name="address_card"> -->
+    <!-- <></ukep-icons>  -->
+  <!-- </span> -->
+  <!-- <span class="svg-icon svg-icon-warning svg-icon-xxl" ukep-icons name="address_card"> -->
+    <!-- <></ukep-icons>  -->
+  <!-- </span> -->
+  <!-- <span class="svg-icon svg-icon-warning" ukep-icons name="file_push"></span> -->
+  
+  <!-- <span class="svg-icon svg-icon-warning svg-icon-xl">
+    <ukep-icons name="active_call"></ukep-icons> 
+  </span>
+  <span class="svg-icon svg-icon-danger svg-icon-5x">
+    <ukep-icons name="active_call"></ukep-icons> 
+  </span> -->

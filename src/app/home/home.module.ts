@@ -9,6 +9,9 @@ import { SettingComponent } from './components/setting/setting.component';
 import { SuccessComponent } from './components/success/success.component';
 import { MonitoringComponent } from './components/monitoring/monitoring.component';
 import { ArchiveComponent } from './components/archive/archive.component';
+import { NgUkepIconsModule } from 'ng-ukep-icons';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { WellcomeComponent } from './components/wellcome/wellcome.component';
 
 
 @NgModule({
@@ -19,10 +22,13 @@ import { ArchiveComponent } from './components/archive/archive.component';
     SettingComponent,
     SuccessComponent,
     MonitoringComponent,
-    ArchiveComponent
+    ArchiveComponent,
+    WellcomeComponent
   ],
   imports: [
     CommonModule,
+    NgUkepIconsModule,
+    NgbDropdownModule,
     HomeRoutingModule
   ]
 })
