@@ -1,8 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input, Optional } from '@angular/core';
 import { NgUkepIconsRegistry } from './ng-ukep-icons.service';
-import { ukepIcons } from '../../../../dist/ng-ukep-icons-builder';
-// import { ukepIcons } from 'ng-ukep-icons-builder';
+// import { ukepIcons } from '../../../../dist/ng-ukep-icons-builder';
+import { ukepIcons } from 'ng-ukep-icons-builder';
 
 @Component({
   selector: 'ukep-icons, [ukep-icons]',

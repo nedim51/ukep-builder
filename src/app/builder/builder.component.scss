@@ -12,8 +12,36 @@
         top: 0;
     }
 
+    .builder-main {
+        height: 100%;
+        display: flex;
+
+        .grid-sidebar {
+            // padding: 30px;
+            min-width: 280px; 
+            max-width: 320px; 
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 0 12px;
+        }
+
+        .grid-l-side {
+            margin-left: -12px;
+        }
+        
+        .grid-r-side {
+            margin-right: -12px;
+        }
+    }
 }
 
+.select-ellipsis {
+    width: 245px;
+    display: inline-flex;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 // .root-container {
 //     display: flex;
 //     flex-direction: row;

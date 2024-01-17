@@ -61,8 +61,9 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     if(!element) 
     return
 
+    const newElementId = this.GLOBAL_OBJECT_ID.NEXT_ID();
     const newElement: IGridElement = this.createElement(
-      this.GLOBAL_OBJECT_ID.NEXT_ID(), 
+      newElementId, 
       element.id,
       element.title, 
       parent_id, 

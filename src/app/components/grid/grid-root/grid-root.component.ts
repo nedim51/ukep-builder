@@ -1,11 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, ViewEncapsulation } from '@angular/core';
-import { Observable, Subject, filter, map, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
+import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
+import { Observable, Subject, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
 import { IResize } from '../../../directives/resizable/resize.interface';
 import { ClassDataService } from '../../../services/class-data.service';
 import { Destroy } from '../../../services/core/destroy.service';
 import { ThemeService } from '../../../services/core/theme.service';
 import { GridContainerService } from '../../../services/grid-container.service';
-import { IGridColumn } from '../interfaces/grid-column.interface';
 import { IGridRow } from '../interfaces/grid-row.interface';
 import { GridSelectionService } from '../services/grid-selection.service';
 import { GridTemplateService } from '../services/grid-template.service';
@@ -27,7 +26,10 @@ export class GridRootComponent implements AfterViewInit {
   container$: Observable<ContainerType>;
   selectContainerSize$ = this.containerSize$.asObservable()
     .pipe(throttleTime(200));
-  
+
+  @Output()
+  resize: EventEmitter<IResize> = new EventEmitter();
+
   constructor(
     private destroy$: Destroy,
     private classData: ClassDataService,
@@ -62,7 +64,8 @@ export class GridRootComponent implements AfterViewInit {
   }
 
   onResizeContainer(size: IResize): void {
-    this.containerSize$.next(size)
+    this.containerSize$.next(size);
+    this.resize.emit(size);
   }
 
   handleDroppedItem(item: IGridRow): void {

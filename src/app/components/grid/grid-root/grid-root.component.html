@@ -1,8 +1,8 @@
 <main class="root">
     <div class="board" [ngClass]="container$ | async" resizable (resize)="onResizeContainer($event)" [minWidth]="512"
         [minHeight]="512" [maxWidth]="1200" [maxHeight]="1200">
-        <div class="container-fluid">
-            <app-grid-container draggableDropzone (itemDropped)="handleDroppedItem($event)"></app-grid-container>
+        <div class="container-fluid" draggableDropzone (itemDropped)="handleDroppedItem($event)">
+            <app-grid-container></app-grid-container>
         </div>
     </div>
 </main>

@@ -3,4 +3,9 @@
 :host {
     width: 100%;
     padding: $element-padding;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
 }

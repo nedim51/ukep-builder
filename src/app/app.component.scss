@@ -1,32 +1,31 @@
 :host {
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    flex: 1 1 100%;
-    
-    overflow-y: scroll;
-  }
-  
-  .main-container {
-    display: flex;
-    flex-direction: row;
-    flex: 1 1 100%;
-    box-sizing: border-box;
-    max-height: 100%;
-    
-  }
-  
-  .content {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 0%;
-    box-sizing: border-box;
-    overflow-x: hidden;
-  }
-  
-  .sidebar-header {
-    min-height: 92px;
-  }
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  flex: 1 1 100%;
+
+  overflow-y: scroll;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 100%;
+  box-sizing: border-box;
+  max-height: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  min-height: 92px;
+}
 
 // :host {
 //     display: flex;
@@ -70,7 +69,7 @@
 //     align-items: center;
 //     box-sizing: border-box;
 //     overflow-x: auto;
-    
+
 //     background-color: rgb(238, 238, 238);
 
 //     padding: 20px;
@@ -112,7 +111,7 @@
 //                 border-bottom-color: red;
 //             }
 //         }
-        
+
 //         &.resizable--active {
 //             position: relative;
 //             cursor: se-resize;
@@ -133,16 +132,16 @@
 // .multiselect {
 //     width: 200px;
 //   }
-  
+
 //   .selectBox {
 //     position: relative;
 //   }
-  
+
 //   .selectBox select {
 //     width: 100%;
 //     font-weight: bold;
 //   }
-  
+
 //   .overSelect {
 //     position: absolute;
 //     left: 0;
@@ -150,15 +149,15 @@
 //     top: 0;
 //     bottom: 0;
 //   }
-  
+
 //   #checkboxes {
 //     // display: none;
 //     background-color: #FFF;
 //     border: 1px #dadada solid;
 //   }
-  
+
 // #checkboxes {
-    
+
 //     label {
 //         display: block;
 //     }

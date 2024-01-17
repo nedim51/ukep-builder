@@ -8,7 +8,7 @@ $selected-row-btn-offset: calc($selected-row-btn-width / 2 - $selected-row-btn-w
     position: absolute;
     padding: 0;
     cursor: pointer;
-    outline: 3px solid $color-white;
+    // outline: 3px solid $color-white;
     z-index: 1;
 }
 
@@ -17,7 +17,7 @@ $selected-row-btn-offset: calc($selected-row-btn-width / 2 - $selected-row-btn-w
     height: $selected-row-btn-width;
 
     &--primary {
-        background-color: $color-white;
+        background-color: var(--theme-background);
         border-width: $border-width;
         border-style: $border-solid;
         border-color: $color-primary;
@@ -25,7 +25,7 @@ $selected-row-btn-offset: calc($selected-row-btn-width / 2 - $selected-row-btn-w
     }
 
     &--danger {
-        background-color: $color-white;
+        background-color: var(--theme-background);
         border-width: $border-width;
         border-style: $border-solid;
         border-color: $color-warning-light;

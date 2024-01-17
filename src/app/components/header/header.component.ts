@@ -3,14 +3,14 @@ import { IThemeColors, IThemeSwitcherItem, IThemeSwitcherItems } from '../../int
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { ThemeService } from '../../services/core/theme.service';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgUkepIconsModule } from 'ng-ukep-icons';
 import { ukepIcons } from '../../../../dist/ng-ukep-icons-builder/build/ukep-icons.model';
 
 @Component({
   selector: 'ukep-header, [ukep-header]',
   standalone: true, 
-  imports: [CommonModule, NgUkepIconsModule, NgbPopoverModule],
+  imports: [CommonModule, NgUkepIconsModule, NgbPopoverModule, NgbTooltipModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

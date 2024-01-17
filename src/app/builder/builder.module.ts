@@ -11,13 +11,16 @@ import { DraggableDropzoneDirective } from '../directives/draggable-dropzone/dra
 import { ResizableDirective } from '../directives/resizable/resizable.directive';
 import { DraggableDirective } from '../directives/draggable/draggable.directive';
 import { GridModule } from '../components/grid/grid.module';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ColClassPipe } from './pipes/col-class.pipe';
 
 
 @NgModule({
   declarations: [
     BuilderComponent,
     GridDrawComponent,
+    ColClassPipe,
   ],
   imports: [
     CommonModule,
@@ -28,7 +31,10 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
     ResizableDirective, 
     DraggableDirective,
     NgbDropdownModule,
+    NgbTooltipModule,
     GridModule, 
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [
     {

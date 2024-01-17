@@ -16,6 +16,8 @@
 //   box-shadow: 0px 50px 0px rgba(82, 63, 105, 0.15);
 // }
 
+// ... Изменять переменные bootsrap тут
+
 // Переменные bootstrap
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap/scss/_variables";
@@ -23,15 +25,15 @@
 // Переменные проекта
 @import '_variables.scss'; 
 
-// :root {
-//   --theme-background: white;
-//   --theme-color: black;
-// }
+:root {
+  --theme-background: white;
+  --theme-color: black;
+}
 
-// :root[theme=dark] {
-//   --theme-background: #222226;
-//   --theme-color: rgba(255,255,255,.75);
-// }
+:root[data-bs-theme=dark] {
+  --theme-background: #222226;
+  --theme-color: rgba(255,255,255,.75);
+}
 
 html,
 body {
@@ -49,14 +51,18 @@ body {
   // transition: all ease-in-out 400ms;
 }
 
+.user-draggable {
+  // display: flex;
+  // align-items: flex-end;
+  // padding-right: 4px;
+  user-select: none;
+  cursor: grab;
+}
 
-              
 // "src/assets/styles/flexbox-grid.scss",
 // "src/assets/styles/flexbox-grid-xs.scss",
 // "src/assets/styles/flexbox-grid-sm.scss",
 // "src/assets/styles/flexbox-grid-md.scss",
 // "src/assets/styles/flexbox-grid-lg.scss",
 // "src/assets/styles/selection.scss",
-
-
-
+// "src/assets/styles/utils.scss",

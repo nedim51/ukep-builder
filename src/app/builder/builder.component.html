@@ -1,6 +1,6 @@
 <header ukep-header class="header-sticky">
     <ng-container ngProjectAs="[natigation]">
-        <button type="button" class="btn btn-outline-secondary" [routerLink]="['..']">
+        <button type="button" class="btn btn-outline-secondary" [routerLink]="['..']" ngbTooltip="Главная">
             <span class="svg-icon svg-icon-primary">
                 <ukep-icons name="angle_left"></ukep-icons>
             </span>
@@ -14,16 +14,16 @@
         </button> -->
         
         <!-- Title документа открытого -->
-        <span class="h6 ms-3 mb-0">{{ title() }}</span>
+        <span class="h6 ms-3 mb-0" ngbTooltip="Наименование формы">{{ title() }}</span>
 
         <div class="ms-5 d-flex gap-2">
-          <button type="button" class="btn btn-outline-secondary" type="button" (click)="undo()">
+          <button type="button" class="btn btn-outline-secondary" type="button" (click)="undo()" ngbTooltip="Отменить">
             <span class="svg-icon svg-icon-primary">
                 <ukep-icons name="undo"></ukep-icons>
             </span>
           </button>
 
-          <button type="button" class="btn btn-outline-secondary" type="button" (click)="redo()">
+          <button type="button" class="btn btn-outline-secondary" type="button" (click)="redo()" ngbTooltip="Применить">
             <span class="svg-icon svg-icon-primary">
                 <ukep-icons name="redo"></ukep-icons>
             </span>
@@ -32,15 +32,25 @@
 
         @if (targetSelection$ | async; as targetSelection) {
           <div class="ms-5">
-            <span>Выбран: {{ targetSelection.title }}, позиция: {{ targetSelection.index }}</span>
+            <span>
+              Выбран: {{ targetSelection.title }}, позиция: {{ targetSelection.index }}
+              <ng-container *ngIf="targetSelection.type === 'column'">[{{ targetClassList$ | async | json }}]</ng-container>
+            </span>
+            
           </div>
         }
     </ng-container>
 
     <ng-container ngProjectAs="[actions]">
-      <app-grid-switcher></app-grid-switcher>
+      <app-grid-switcher ngbTooltip="Макет"></app-grid-switcher>
 
-      <button type="button" class="btn btn-outline-secondary me-5" [routerLink]="['/']">
+      <button type="button" class="btn btn-outline-secondary" [routerLink]="['/']" ngbTooltip="Результат">
+        <span class="svg-icon svg-icon-primary">
+          <ukep-icons name="visible"></ukep-icons>
+        </span>
+      </button>
+
+      <button type="button" class="btn btn-outline-secondary me-5" [routerLink]="['/']" ngbTooltip="Экспорт">
         <span class="svg-icon svg-icon-warning">
           <ukep-icons name="export"></ukep-icons>
         </span>
@@ -48,4 +58,150 @@
     </ng-container>
 </header>
 
-  <app-grid-root></app-grid-root>
+<main class="builder-main">
+
+  <aside class="grid-sidebar grid-l-side bg-body-tertiary">
+
+    <h6 class="mt-3">Список элементов</h6>
+
+    <ul class="p-0">
+    @for (item of elementList$ | async; track item.id) {
+        <li class="sidebar-item user-draggable" appDraggable [dragData]="item">
+
+          <!-- Title {{ $index + 1 }}. -->
+          <h6>{{ item.title }}</h6>
+
+          <!-- Input -->
+          @if (item.id === 0) {
+            <div class="form-group" tabindex="-1" (mousedown)="$event.preventDefault()">
+              <label>Lorem ipsum dolor</label>
+              <input type="email" class="form-control form-control-sm" placeholder="Lorem ipsum dolor sit" tabindex="-1" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
+              <small class="form-text text-muted">Lorem ipsum dolor sit, amet adipisicing.</small>
+            </div>
+          }
+
+          <!-- File-input -->
+          @if (item.id === 1) {
+            <div class="form-group">
+              <label>Lorem ipsum dolor</label>
+              <input type="file" class="form-control-file" tabindex="-1" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
+            </div>
+          }
+
+          <!-- Checkbox -->
+          @if (item.id === 2) {
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
+              <label class="form-check-label">
+                Lorem ipsum dolor sit
+              </label>
+            </div>
+          }
+
+          <!-- Radio-button -->
+          @if (item.id === 3) {
+            <div class="form-check">
+              <input class="form-check-input" type="radio" value="" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
+              <label class="form-check-label">
+                Lorem ipsum dolor sit
+              </label>
+            </div>
+          }
+
+          <!-- Button -->
+          @if (item.id === 4) {
+            <button type="submit" class="btn btn-primary" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">Lorem ipsum dolor sit</button>
+          }
+
+          <!-- Combobox -->
+          @if (item.id === 5) {
+            <div class="form-group"> 
+              <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Lorem ipsum</label>
+              <select class="custom-select custom-select-sm">
+                <option selected>Lorem ipsum dolor sits</option>
+              </select>
+            </div>
+          }
+
+          <!-- Table -->
+          @if (item.id === 6) { }
+
+
+        </li>
+        
+        <hr *ngIf="!$last">
+      }
+    </ul>
+  </aside>
+
+  <app-grid-root (resize)="onResizeContainer($event)"></app-grid-root>
+  
+  <aside class="grid-sidebar grid-r-side bg-body-tertiary">
+
+    <h6 class="mt-3">Параметры</h6>
+
+    @if (targetSelection$ | async; as targetSelection) {
+      <div class="mb-1">
+        <label for="classSelector">Класс колонки</label>
+        <div ngbDropdown class="d-inline-block">
+          <button type="button" class="btn btn-md btn-outline-secondary" id="classSelector" ngbDropdownToggle>
+            <div class="select-ellipsis">{{ targetClassList$ | async | uppercase }}</div>
+          </button>
+        
+          <ul ngbDropdownMenu aria-labelledby="classSelector">
+            @for (size of sizes$ | async; track $index) {
+              <li class="ps-2">
+                <label for="checkbox-{{size.id}}">
+                  <input type="checkbox" id="checkbox-{{size.id}}" (change)="onCheckboxChange($event, size.code, targetSelection)"/>
+                {{ size.name }}</label>
+              </li>
+            }
+            @empty {
+              <span>Нет записей</span> 
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div>
+        <label for="offsetSelector">Отступ колонки</label>
+        <div ngbDropdown class="d-inline-block">
+          <button type="button" class="btn btn-md btn-outline-secondary" id="offsetSelector" ngbDropdownToggle>
+            <div class="select-ellipsis">{{ targetClassList$ | async | uppercase }}</div>
+          </button>
+        
+          <ul ngbDropdownMenu aria-labelledby="offsetSelector">
+            @for (offset of offsets$ | async; track $index) {
+              <li class="ps-2">
+                <label for="checkbox-{{offset.id}}">
+                  <input type="checkbox" id="checkbox-{{offset.id}}" (change)="onCheckboxChange($event, offset.code, targetSelection)"/>
+                {{ offset.name }}</label>
+              </li>
+            }
+            @empty {
+              <span>Нет записей</span> 
+            }
+          </ul>
+        </div>
+      </div>
+    }
+    @else {
+      <span>Выберите элемент или колонку для детальной настройки</span> 
+    }
+
+    <!-- С использованием FormGroup позже доработать !!! -->
+    <!-- <div ngbDropdown class="d-inline-block" [formGroup]="selectForm">
+      <button class="btn btn-info" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" formArrayName="selects">
+        <div class="form-group mr-auto border-bottom"
+          *ngFor="let option of selectForm.controls['selects'].controls; index as index">
+          <input type="checkbox" class="form-check-check" [id]="index" [formControlName]="index">
+          <label class="form-check-label" for="{{ index }}">
+            {{index}}
+            {{ options[index] }}
+          </label>
+        </div>
+      </div> -->
+  </aside>
+
+</main>

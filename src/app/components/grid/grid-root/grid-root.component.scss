@@ -1,4 +1,9 @@
+// ViewEncapsulation === ShadowDom !!!
+
+@import 'scrollbar.scss';
 @import 'selection.scss';
+@import 'utils.scss';
+
 @import 'flexbox-grid.scss';
 @import 'flexbox-grid-xs.scss';
 @import 'flexbox-grid-sm.scss';
@@ -6,15 +11,16 @@
 @import 'flexbox-grid-lg.scss';
 
 :host {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 0%;
-    align-items: center;
-    box-sizing: border-box;
-    overflow-x: auto;
     height: 100%;
     width: 100%;
     padding: 20px;
+    box-sizing: border-box;
+    overflow-x: auto;
+
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+    align-items: center;
     
     .board {
         border: 1px solid rgb(177, 177, 177);
@@ -24,7 +30,7 @@
         min-width: 512px;
         transition: width .3s ease-in-out;
         cursor: default;
-
+        
         &.resizable {
             position: relative;
         }
@@ -72,8 +78,16 @@
     color: $color-secondary;
 }
 
+.container-fluid {
+    height: 100%;
+    
+    border-color: transparent;
+    border-width: $border-width;
+    border-style: $border-dashed;
+}
+
 .drag-over {
-    //background-color: $drag-bg-color !important;
+    background-color: $drag-bg-color !important;
     border-color: $color-warning !important;
     border-width: $border-width !important;
     border-style: $border-dashed !important;

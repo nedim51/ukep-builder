@@ -21,16 +21,18 @@
 
   <ng-content select="[actions]"></ng-content>
 
+  @if (currentTheme$ | async; as currentTheme) {
   <button type="button"
     class="btn btn-outline-secondary"
     [popoverClass]="'popoverThemeSwitcher'"
-    [ngbPopover]="popoverThemeSwitcherTemplate">
-    @if (currentTheme$ | async; as currentTheme) {
+    [ngbPopover]="popoverThemeSwitcherTemplate"
+    [ngbTooltip]="'Тема - ' + (currentTheme.title | lowercase)" 
+    placement="bottom-end">
       <span [ngClass]="currentTheme.icon_class_list">
         <ukep-icons [name]="currentTheme.icon_name"></ukep-icons>
       </span>
-    }
-  </button>
+    </button>
+  }
 
   <!-- <button type="button"
     class="btn btn-outline-secondary"

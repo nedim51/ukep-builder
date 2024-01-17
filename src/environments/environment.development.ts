@@ -1,3 +1,4 @@
 export const environment = {
-    baseUrl: 'localhost:3000/api'
+    production: false,
+    baseUrl: `${window.location.protocol}//${window.location.host}/api`
 };

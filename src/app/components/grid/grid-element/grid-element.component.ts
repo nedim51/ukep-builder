@@ -16,8 +16,7 @@ export class GridElementComponent {
 
   selectedElement$: Observable<IGridElement | undefined> = of(undefined)
   
-  @HostBinding('attr.tabindex')
-  tabindex: number = 0;
+  @HostBinding('attr.tabindex') tabindex: number = 0;
 
   @HostListener('focus', ['$event'])
   onElementFocus(event: any) {

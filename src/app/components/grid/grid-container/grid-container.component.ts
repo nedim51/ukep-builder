@@ -1,9 +1,12 @@
-import { ChangeDetectionStrategy, Component, HostBinding, HostListener, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, HostListener } from '@angular/core';
 import { GridTemplateService } from '../services/grid-template.service';
 import { Observable } from 'rxjs';
 import { IGridRow, IGridRows } from '../interfaces/grid-row.interface';
 import { IGridColumn, INITIAL_GRID_COLUMN } from '../interfaces/grid-column.interface';
 import { GridSelectionService } from '../services/grid-selection.service';
+
+const BEGIN_ROWS: number = 4;
+const BEGIN_COLUMNS: number = 1;
 
 @Component({
   selector: 'app-grid-container',
@@ -15,9 +18,9 @@ export class GridContainerComponent {
 
   @HostBinding('class.container') 
   grid_class: boolean = true;
-
+  
   @HostListener('click', ['$event']) clearSelection(event: MouseEvent) {
-    if((event.target as Element).tagName === 'APP-GRID-CONTAINER') {
+    if(['APP-GRID-CONTAINER', 'APP-GRID-ROW'].includes((event.target as Element).tagName)) {
       this.gridSelection.setSelection(INITIAL_GRID_COLUMN);
     }
   }
@@ -35,7 +38,7 @@ export class GridContainerComponent {
   }
 
   createFirstColumns(): void {
-    this.gridTemplate.insertFirstTemplate(10, 1);
+    this.gridTemplate.insertFirstTemplate(BEGIN_ROWS, BEGIN_COLUMNS);
   }
 
   handleDroppedItem(item: IGridColumn, target: IGridRow): void {
