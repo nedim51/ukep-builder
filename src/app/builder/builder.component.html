@@ -141,52 +141,69 @@
     <h6 class="mt-3">Параметры</h6>
 
     @if (targetSelection$ | async; as targetSelection) {
-      <div class="mb-1">
-        <label for="classSelector">Класс колонки</label>
-        <div ngbDropdown class="d-inline-block">
-          <button type="button" class="btn btn-md btn-outline-secondary" id="classSelector" ngbDropdownToggle>
-            <div class="select-ellipsis">{{ targetClassList$ | async | uppercase }}</div>
-          </button>
-        
-          <ul ngbDropdownMenu aria-labelledby="classSelector">
-            @for (size of sizes$ | async; track $index) {
-              <li class="ps-2">
-                <label for="checkbox-{{size.id}}">
-                  <input type="checkbox" id="checkbox-{{size.id}}" (change)="onCheckboxChange($event, size.code, targetSelection)"/>
-                {{ size.name }}</label>
-              </li>
-            }
-            @empty {
-              <span>Нет записей</span> 
-            }
-          </ul>
+      @if (targetSelection.type === 'column') {
+        <div class="mb-1">
+          <label for="classSelector">Класс колонки</label>
+          <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-md btn-outline-secondary" id="classSelector" ngbDropdownToggle>
+              <div class="select-ellipsis">{{ targetClassList$ | async | uppercase }}</div>
+            </button>
+          
+            <ul ngbDropdownMenu aria-labelledby="classSelector">
+              @for (size of sizes$ | async; track $index) {
+                <li class="ps-2">
+                  <label for="checkbox-{{size.id}}">
+                    <input type="checkbox" id="checkbox-{{size.id}}" (change)="onCheckboxChange($event, size.code, targetSelection)"/>
+                  {{ size.name }}</label>
+                </li>
+              }
+              @empty {
+                <span>Нет записей</span> 
+              }
+            </ul>
+          </div>
         </div>
-      </div>
+  
+        <div>
+          <label for="offsetSelector">Отступ колонки</label>
+          <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-md btn-outline-secondary" id="offsetSelector" ngbDropdownToggle>
+              <div class="select-ellipsis">{{ targetClassList$ | async | uppercase }}</div>
+            </button>
+          
+            <ul ngbDropdownMenu aria-labelledby="offsetSelector">
+              @for (offset of offsets$ | async; track $index) {
+                <li class="ps-2">
+                  <label for="checkbox-{{offset.id}}">
+                    <input type="checkbox" id="checkbox-{{offset.id}}" (change)="onCheckboxChange($event, offset.code, targetSelection)"/>
+                  {{ offset.name }}</label>
+                </li>
+              }
+              @empty {
+                <span>Нет записей</span> 
+              }
+            </ul>
+          </div>
+        </div>
+      }
+      @else if(targetSelection.type === 'element') {
 
-      <div>
-        <label for="offsetSelector">Отступ колонки</label>
-        <div ngbDropdown class="d-inline-block">
-          <button type="button" class="btn btn-md btn-outline-secondary" id="offsetSelector" ngbDropdownToggle>
-            <div class="select-ellipsis">{{ targetClassList$ | async | uppercase }}</div>
-          </button>
-        
-          <ul ngbDropdownMenu aria-labelledby="offsetSelector">
-            @for (offset of offsets$ | async; track $index) {
-              <li class="ps-2">
-                <label for="checkbox-{{offset.id}}">
-                  <input type="checkbox" id="checkbox-{{offset.id}}" (change)="onCheckboxChange($event, offset.code, targetSelection)"/>
-                {{ offset.name }}</label>
-              </li>
-            }
-            @empty {
-              <span>Нет записей</span> 
-            }
-          </ul>
-        </div>
-      </div>
+      }
+      @else {
+        <!-- Это если выбрали row к примеру-->
+        <ng-container *ngTemplateOutlet="noRecordsTemplate; context: { 
+          $implicit: { 
+            title: 'Для данного элемента нет настраиваемых параметров' 
+          } 
+        }"></ng-container>
+      }
     }
     @else {
-      <span>Выберите элемент или колонку для детальной настройки</span> 
+      <ng-container *ngTemplateOutlet="noRecordsTemplate; context: { 
+        $implicit: { 
+          title: 'Выберите элемент или колонку для детальной настройки' 
+        } 
+      }"></ng-container>
     }
 
     <!-- С использованием FormGroup позже доработать !!! -->
@@ -205,3 +222,7 @@
   </aside>
 
 </main>
+
+<ng-template #noRecordsTemplate let-dataItem>
+  <span>{{ dataItem.title }}</span>
+</ng-template>

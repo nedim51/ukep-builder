@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { IAnimationDuration, collapseIn } from '../../../components/sidebar/sidebar.animations';
+import { DEFAULT_DURATION, collapseIn } from '../../../helpers/animations';
 import { IWellcomeItems, createItems } from '../wellcome/wellcome.component';
-
-const DEFAULT_DURATION: IAnimationDuration = { duration: 150, durationType: 'ms' };
 
 @Component({
   selector: 'app-create',

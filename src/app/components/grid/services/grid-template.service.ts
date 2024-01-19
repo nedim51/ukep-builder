@@ -8,7 +8,7 @@ import { GlobalObjectIdService } from './grid-global-object-id.service';
 import { IRowColumns } from '../interfaces/grid-rows-cols.interface';
 import { GridObjectType } from '../interfaces/grid-element.type';
 import { elements } from '../../../services/grid-element.data';
-import { insertItemByIndex } from '../../../utils/helper';
+import { insertItemByIndex } from '../../../helpers/helper';
 import { StateHistoryService } from '../../../services/core/state-history.service';
 
 export const MAX_GRID_COLUMNS: number = 12;

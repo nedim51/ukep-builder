@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable, map } from "rxjs";
 import { StateService } from "./state.service";
-import { deepCopy } from "../../utils/helper";
+import { deepCopy } from "../../helpers/helper";
 
 export class StateHistoryService<T> extends StateService<T> {
 

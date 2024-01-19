@@ -13,14 +13,12 @@ import { DraggableDirective } from '../directives/draggable/draggable.directive'
 import { GridModule } from '../components/grid/grid.module';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ColClassPipe } from './pipes/col-class.pipe';
 
 
 @NgModule({
   declarations: [
     BuilderComponent,
-    GridDrawComponent,
-    ColClassPipe,
+    GridDrawComponent
   ],
   imports: [
     CommonModule,

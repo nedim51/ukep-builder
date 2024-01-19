@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, WritableSignal, signal } from '@angular/core';
 import { IThemeColors } from '../interfaces/theme/theme.interface';
-import { Observable, Subject, filter, map, mergeMap, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
+import { EMPTY, Observable, Subject, filter, first, map, mergeMap, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
 import { ThemeService } from '../services/core/theme.service';
 import { IResize } from '../directives/resizable/resize.interface';
 import { IGuideItems } from '../interfaces/guide.interface';
@@ -16,6 +16,8 @@ import { GridContainerService } from '../services/grid-container.service';
 import { GridElementDataService } from '../components/grid/services/grid-element-data.service';
 import { IElements } from '../interfaces/element.interface';
 import { FormGroup } from '@angular/forms';
+import { BuilderDialogService } from './builder-dialog.service';
+import { ActivatedRoute, NavigationEnd, NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-builder',
@@ -35,10 +37,15 @@ export class BuilderComponent {
   offsets$: Observable<IGuideItems>
   containerSize$: Subject<IResize> = new Subject();
   selectContainerSize$ = this.containerSize$.asObservable().pipe(throttleTime(200));
-
+  
   selectForm: FormGroup = new FormGroup({})
 
+  routerExtracts$: Observable<NavigationExtras | undefined>;
+
   constructor(
+    private builderDialog: BuilderDialogService,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private destroy$: Destroy,
     private elementData: GridElementDataService,
     private classData: ClassDataService,
@@ -57,6 +64,27 @@ export class BuilderComponent {
 
     this.sizes$ = this.classData.selectBySize('col-lg');
     this.offsets$ = this.classData.selectByOffset('col-lg-offset');
+    
+    this.routerExtracts$ = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd), 
+      map(event => this.router.getCurrentNavigation()?.extras)
+    );
+
+    this.routerExtracts$.pipe(
+      map(extracts => extracts && extracts.state ? extracts.state : undefined),
+      first(),
+      takeUntil(this.destroy$)
+    ).subscribe(state => {
+      if(state && state['template']) {
+        this.gridTemplate.insertFirstTemplate(state['template']['rows'], state['template']['cols']);
+      }
+
+      if(state && state['dialog'] && state['dialog'] === 'drawTemplate') {
+        this.builderDialog.drawGridDialog('asdasdasd').subscribe()
+      }
+
+      this.router.navigate([], { state: undefined })
+    });
   }
 
   ngAfterViewInit(): void {
@@ -84,7 +112,6 @@ export class BuilderComponent {
       case 'row': this.gridTemplate.appendRowById(item.id, null, null);
         break;
     }
-
     // console.log(`[AppComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
   }
 

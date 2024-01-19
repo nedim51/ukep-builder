@@ -18,7 +18,7 @@
         <div class="row" @collapseItems>
             @for (item of group.items; track $index) {
                 <div class="col-auto">
-                    <button class="btn btn-outline-secondary p-0" [routerLink]="item.routerLink">
+                    <button class="btn btn-outline-secondary p-0" [routerLink]="item.routerLink" [queryParams]="[item.extracts?.queryParams]" [state]="item.extracts?.state" [queryParamsHandling]="item.extracts?.queryParamsHandling">
                         <div class="card border-0 pt-2 w-btn">
                             <div class="mx-auto">
                                 <span [class]="item.icon_class">

@@ -3,9 +3,8 @@ import { AuthService } from '../../../services/auth/auth.service';
 import { Observable } from 'rxjs';
 import { IUser } from '../../../interfaces/user/user.interface';
 import { IconInterface } from '../../../interfaces/icon.interface';
-import { IAnimationDuration, collapseItems } from '../../../components/sidebar/sidebar.animations';
-
-const DEFAULT_DURATION: IAnimationDuration = { duration: 150, durationType: 'ms' };
+import { DEFAULT_DURATION, collapseItems } from '../../../helpers/animations';
+import { NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-wellcome',
@@ -39,6 +38,7 @@ export const createItems: IWellcomeItems = [
     icon_class: 'svg-icon svg-icon-primary svg-icon-2x',
     icon_name: 'layout_4_blocks',
     routerLink: ['/builder'],
+    extracts: { state: { template: { rows: 4, cols: 2 } }, queryParamsHandling: 'merge' },
     index: 1
   },
   {
@@ -46,6 +46,7 @@ export const createItems: IWellcomeItems = [
     icon_class: 'svg-icon svg-icon-primary svg-icon-2x',
     icon_name: 'layout_grid',
     routerLink: ['/builder'],
+    extracts: { state: { template: { rows: 8, cols: 2 } }, queryParamsHandling: 'merge' },
     index: 2
   },
   {
@@ -53,6 +54,7 @@ export const createItems: IWellcomeItems = [
     icon_class: 'svg-icon svg-icon-primary svg-icon-2x',
     icon_name: 'compass_1',
     routerLink: ['/builder'],
+    extracts: { state: { dialog: 'drawTemplate' }, queryParamsHandling: 'merge' },
     index: 3
   },
 ];
@@ -127,6 +129,7 @@ export type IWellcomeGroups = Array<IWellcomeGroup>;
 export interface IWellcomeItem extends IconInterface {
   title: string;
   routerLink: string[] | string | undefined;
+  extracts?: NavigationExtras;
   index: number;
 }
 

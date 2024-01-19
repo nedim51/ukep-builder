@@ -4,7 +4,7 @@ import { ISidebarItems, ISidebarItem } from './sidebar-item.interface';
 import { CommonModule } from '@angular/common';
 import { Observable, debounceTime, map, takeUntil, tap } from 'rxjs';
 import { SidebarDataService } from './sidebar-data.service';
-import { IAnimationDuration, collapseItems, collapseWidth, collapseWidthItems } from './sidebar.animations';
+import { DEFAULT_DURATION, collapseItems, collapseWidth, collapseWidthItems } from '../../helpers/animations';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs/operators';
@@ -15,7 +15,6 @@ import { ThemeService } from '../../services/core/theme.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { IUser } from '../../interfaces/user/user.interface';
 
-const DEFAULT_DURATION: IAnimationDuration = { duration: 150, durationType: 'ms' };
 const DEFAULT_SEARCH_DEBOUNCE_TIME: number = 800;
  
 @Component({ 

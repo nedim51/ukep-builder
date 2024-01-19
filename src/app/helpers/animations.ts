@@ -9,6 +9,9 @@ import {
   AnimationTriggerMetadata
 } from "@angular/animations";
 
+
+export const DEFAULT_DURATION: IAnimationDuration = { duration: 150, durationType: 'ms' };
+
 export interface IAnimationDuration {
   duration: number;
   durationType: 'ms' | 's';

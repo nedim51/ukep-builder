@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, inject } from '@angular/core';
+import { ApplicationConfig, ApplicationRef, ViewContainerRef, importProvidersFrom, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -10,6 +10,7 @@ import { ThemeService } from './services/core/theme.service';
 import { DOCUMENT } from '@angular/common';
 import { NgUkepIconsRegistry } from 'ng-ukep-icons';
 import { completeIconSet } from 'ng-ukep-icons-builder';
+import { DialogService } from './services/dialog.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

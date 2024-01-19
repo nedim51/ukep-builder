@@ -44,7 +44,7 @@
         
         <div>
             @if (user$ | async; as user) {
-              <p class="m-0">{{ user.firstName }} {{ user.lastName }}</p>   
+              <p class="m-0 text-nowrap">{{ user.firstName }} {{ user.lastName }}</p>   
               <p class="blockquote-footer m-0">{{ user.right }}</p>
             }
           </div>
