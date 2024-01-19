@@ -1,5 +1,5 @@
 import { IGridContainersWidth } from "../interfaces/grid-container-width.interface";
-import { display_lg, display_md, display_sm, display_xs } from "./class.data";
+import { display_lg, display_md, display_sm, display_xs } from "./grid-class.data";
 
 export const CONTAINER_WIDTHS: IGridContainersWidth = [
     {

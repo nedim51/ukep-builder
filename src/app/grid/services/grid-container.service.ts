@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { StateService } from "../../services/core/state.service";
 import { Observable, of } from "rxjs";
 import { ColumnDisplayType, ColumnSeparatorType, ContainerPrefixType, ContainerType } from "../../interfaces/column.type";
-import { displays } from "./class.data";
+import { displays } from "./grid-class.data";
 import { CONTAINER_WIDTHS } from "./grid-container.data";
 import { IGridContainer, INITIAL_GRID_CONTAINER } from "../interfaces/grid-container.interface";
 

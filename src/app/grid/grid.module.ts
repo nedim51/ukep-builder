@@ -9,7 +9,7 @@ import { DraggableDropzoneDirective } from '../directives/draggable-dropzone/dra
 import { DraggableDirective } from '../directives/draggable/draggable.directive';
 import { GridSelectionService } from './services/grid-selection.service';
 import { BehaviorSubject } from 'rxjs';
-import { GLOBAL_OBJECT_ID, GlobalObjectIdService } from './services/grid-global-object-id.service';
+import { OBJECT_ID, GridObjectIdService } from './services/grid-object-id.service';
 import { GridTemplateService } from './services/grid-template.service';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgUkepIconsModule } from 'ng-ukep-icons';
@@ -43,22 +43,10 @@ import { ResizableDirective } from '../directives/resizable/resizable.directive'
     GridSwitcherComponent,
   ],
   providers: [
-    { 
-      provide: GLOBAL_OBJECT_ID, 
-      useValue: new BehaviorSubject<number>(0) 
-    },
-    { 
-      provide: GlobalObjectIdService, 
-      useClass: GlobalObjectIdService 
-    },
-    { 
-      provide: GridSelectionService, 
-      useClass: GridSelectionService 
-    },
-    { 
-      provide: GridTemplateService, 
-      useClass: GridTemplateService 
-    }
+    { provide: OBJECT_ID, useValue: new BehaviorSubject<number>(0) },
+    { provide: GridObjectIdService, useClass: GridObjectIdService },
+    { provide: GridSelectionService, useClass: GridSelectionService },
+    { provide: GridTemplateService, useClass: GridTemplateService }
   ]
 })
 export class GridModule { }

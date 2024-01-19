@@ -9,7 +9,7 @@ import { IGridColumn } from '../grid/interfaces/grid-column.interface';
 import { ContainerType } from '../interfaces/column.type';
 import { IGridElement } from '../grid/interfaces/grid-element.interface';
 import { Destroy } from '../services/core/destroy.service';
-import { ClassDataService } from '../grid/services/class-data.service';
+import { ClassDataService } from '../grid/services/grid-class.service';
 import { GridSelectionService } from '../grid/services/grid-selection.service';
 import { GridTemplateService } from '../grid/services/grid-template.service';
 import { GridContainerService } from '../grid/services/grid-container.service';

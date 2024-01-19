@@ -6,7 +6,7 @@ import { BuilderComponent } from './builder.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { NgUkepIconsModule } from 'ng-ukep-icons';
 import { GridDrawComponent } from './components/grid-draw/grid-draw.component';
-import { ClassDataService } from '../grid/services/class-data.service';
+import { ClassDataService } from '../grid/services/grid-class.service';
 import { DraggableDropzoneDirective } from '../directives/draggable-dropzone/draggable-dropzone.directive';
 import { ResizableDirective } from '../directives/resizable/resizable.directive';
 import { DraggableDirective } from '../directives/draggable/draggable.directive';

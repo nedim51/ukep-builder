@@ -1,5 +1,5 @@
 import { ColumnDisplayType, ContainerType } from "../../interfaces/column.type";
-import { display_lg, container_lg } from "../services/class.data";
+import { display_lg, container_lg } from "../services/grid-class.data";
 
 export interface IGridContainer {
     display: ColumnDisplayType,

@@ -4,7 +4,7 @@ import { ColumnDisplayType, ColumnOffsetType, ColumnPrefixType, ColumnSeparatorT
 import { StateService } from "../../services/core/state.service";
 import { Observable, map } from "rxjs";
 import { IClassDataState, INITIAL_CLASS_DATA_STATE, IColumnClassList } from "../../interfaces/class/class-data.interface";
-import { sizes, sizes_offset } from "./class.data";
+import { sizes, sizes_offset } from "./grid-class.data";
 
 @Injectable()
 export class ClassDataService extends StateService<IClassDataState> {

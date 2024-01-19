@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
 import { Observable, Subject, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
 import { IResize } from '../../directives/resizable/resize.interface';
-import { ClassDataService } from '../services/class-data.service';
+import { ClassDataService } from '../services/grid-class.service';
 import { Destroy } from '../../services/core/destroy.service';
 import { ThemeService } from '../../services/root/theme.service';
 import { GridContainerService } from '../services/grid-container.service';
