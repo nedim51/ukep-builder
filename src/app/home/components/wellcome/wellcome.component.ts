@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { AuthService } from '../../../services/auth/auth.service';
+import { AuthService } from '../../../auth/services/auth.service';
 import { Observable } from 'rxjs';
 import { IUser } from '../../../interfaces/user/user.interface';
 import { IconInterface } from '../../../interfaces/icon.interface';

@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
-import { IGuideItem, IGuideItems } from "../interfaces/guide.interface";
-import { ColumnDisplayType, ColumnOffsetType, ColumnPrefixType, ColumnSeparatorType, ColumnSizeOffsetType, ColumnSizeType } from "../interfaces/column.type";
-import { StateService } from "./core/state.service";
+import { IGuideItem, IGuideItems } from "../../interfaces/guide.interface";
+import { ColumnDisplayType, ColumnOffsetType, ColumnPrefixType, ColumnSeparatorType, ColumnSizeOffsetType, ColumnSizeType } from "../../interfaces/column.type";
+import { StateService } from "../../services/core/state.service";
 import { Observable, map } from "rxjs";
-import { IClassDataState, INITIAL_CLASS_DATA_STATE, IColumnClassList } from "../interfaces/class/class-data.interface";
+import { IClassDataState, INITIAL_CLASS_DATA_STATE, IColumnClassList } from "../../interfaces/class/class-data.interface";
 import { sizes, sizes_offset } from "./class.data";
 
 @Injectable()

@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { takeUntil, tap } from 'rxjs/operators';
 import { INITIAL_USER, IUser } from '../../interfaces/user/user.interface';
-import { StateService } from '../core/state.service';
-import { AuthApiService } from './auth-api.service';
-import { Destroy } from '../core/destroy.service';
+import { StateService } from '../../services/core/state.service';
+import { AuthApiService } from '../../services/api/auth-api.service';
+import { Destroy } from '../../services/core/destroy.service';
 
 export const USER_KEY: string = 'UKEP-USER'
 

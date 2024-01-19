@@ -5,7 +5,7 @@ import { Observable, filter, map, mergeMap } from 'rxjs';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 import { IRouterData } from './interfaces/router/router-data.interface';
-import { DialogService } from './services/dialog.service';
+import { DialogService } from './services/core/dialog.service';
 
 // Столкнулся с такой ошибкой что standalone components не удавалось вкладывать друг в друга, 
 // так и не понял с чем это связано, не мог понять почему проект валится когда нажимаешь начать (строятся простые строки и колонки) и на этом валится
@@ -22,7 +22,7 @@ import { DialogService } from './services/dialog.service';
 })
 export class AppComponent {  
 
-  public routeData$: Observable<IRouterData> = this.router.events.pipe(
+  routeData$: Observable<IRouterData> = this.router.events.pipe(
     filter(e => e instanceof NavigationEnd), 
     map(() => this.activatedRoute), 
     map((route) => { while(route.firstChild) { route = route.firstChild } return route }), 

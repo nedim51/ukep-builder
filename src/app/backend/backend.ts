@@ -4,7 +4,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, materialize, dematerialize, map, switchMap, filter } from 'rxjs/operators';
 import { INITIAL_USER, IUser, IUsers } from '../interfaces/user/user.interface';
 import { UserDataService } from './user-data.service';
-import { USER_KEY } from '../services/auth/auth.service';
+import { USER_KEY } from '../auth/services/auth.service';
 
 export const BackendInterceptorFn: HttpInterceptorFn = (
     req: HttpRequest<any>,

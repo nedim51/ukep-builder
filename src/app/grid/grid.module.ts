@@ -5,8 +5,8 @@ import { GridContainerComponent } from './grid-container/grid-container.componen
 import { GridElementComponent } from './grid-element/grid-element.component';
 import { GridRowComponent } from './grid-row/grid-row.component';
 import { GridSwitcherComponent } from './grid-switcher/grid-switcher.component';
-import { DraggableDropzoneDirective } from '../../directives/draggable-dropzone/draggable-dropzone.directive';
-import { DraggableDirective } from '../../directives/draggable/draggable.directive';
+import { DraggableDropzoneDirective } from '../directives/draggable-dropzone/draggable-dropzone.directive';
+import { DraggableDirective } from '../directives/draggable/draggable.directive';
 import { GridSelectionService } from './services/grid-selection.service';
 import { BehaviorSubject } from 'rxjs';
 import { GLOBAL_OBJECT_ID, GlobalObjectIdService } from './services/grid-global-object-id.service';
@@ -14,7 +14,7 @@ import { GridTemplateService } from './services/grid-template.service';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgUkepIconsModule } from 'ng-ukep-icons';
 import { GridRootComponent } from './grid-root/grid-root.component';
-import { ResizableDirective } from '../../directives/resizable/resizable.directive';
+import { ResizableDirective } from '../directives/resizable/resizable.directive';
 
 
 

@@ -14,13 +14,13 @@ export class GlobalObjectIdService {
         // Todo. When switch between templates
     }
 
-    public NEXT_ID(increment: number = 1): number {
+    public next(increment: number = 1): number {
         const current = this.globalObjectId.getValue();
         this.globalObjectId.next(current + increment);
         return this.globalObjectId.getValue();
     }
 
-    public NEXT_ID$(increment: number = 1): Observable<number> {
+    public next$(increment: number = 1): Observable<number> {
         return this.globalObjectId.pipe(
             take(1),
             map(current => current + increment),

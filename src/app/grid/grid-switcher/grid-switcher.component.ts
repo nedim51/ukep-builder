@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { GridContainerService } from '../../../services/grid-container.service';
+import { GridContainerService } from '../services/grid-container.service';
 import { Observable } from 'rxjs';
-import { ColumnDisplayType } from '../../../interfaces/column.type';
-import { ThemeService } from '../../../services/core/theme.service';
-import { IThemeColors } from '../../../interfaces/theme/theme.interface';
+import { ColumnDisplayType } from '../../interfaces/column.type';
+import { ThemeService } from '../../services/root/theme.service';
+import { IThemeColors } from '../../interfaces/theme/theme.interface';
 
 @Component({
   selector: 'app-grid-switcher',

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpRequest, HttpEvent, HttpInterceptorFn, HttpHandlerFn } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from '../services/auth/auth.service';
+import { AuthService } from '../auth/services/auth.service';
 
 export const ErrorInterceptorFn: HttpInterceptorFn = (
     req: HttpRequest<any>,

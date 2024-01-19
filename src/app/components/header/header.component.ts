@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular
 import { IThemeColors, IThemeSwitcherItem, IThemeSwitcherItems } from '../../interfaces/theme/theme.interface';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { ThemeService } from '../../services/core/theme.service';
+import { ThemeService } from '../../services/root/theme.service';
 import { NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgUkepIconsModule } from 'ng-ukep-icons';
 import { ukepIcons } from '../../../../dist/ng-ukep-icons-builder/build/ukep-icons.model';

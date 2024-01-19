@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { DialogService } from "../services/dialog.service";
+import { DialogService } from "../../services/core/dialog.service";
 import { Observable, tap } from "rxjs";
-import { GridDrawComponent } from "./components/grid-draw/grid-draw.component";
+import { GridDrawComponent } from "../components/grid-draw/grid-draw.component";
 
 @Injectable({
     providedIn: 'root'

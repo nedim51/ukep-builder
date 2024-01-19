@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, WritableSignal, signal } from '@angular/core';
-import { AuthApiService } from '../services/auth/auth-api.service';
+import { AuthApiService } from '../services/api/auth-api.service';
 import { Observable } from 'rxjs';
 import { IUsers } from '../interfaces/user/user.interface';
 

@@ -1,23 +1,23 @@
 import { ChangeDetectionStrategy, Component, WritableSignal, signal } from '@angular/core';
 import { IThemeColors } from '../interfaces/theme/theme.interface';
-import { EMPTY, Observable, Subject, filter, first, map, mergeMap, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
-import { ThemeService } from '../services/core/theme.service';
+import { Observable, Subject, filter, first, map, mergeMap, takeUntil, tap, throttleTime } from 'rxjs';
+import { ThemeService } from '../services/root/theme.service';
 import { IResize } from '../directives/resizable/resize.interface';
 import { IGuideItems } from '../interfaces/guide.interface';
-import { IGridRow } from '../components/grid/interfaces/grid-row.interface';
-import { IGridColumn } from '../components/grid/interfaces/grid-column.interface';
+import { IGridRow } from '../grid/interfaces/grid-row.interface';
+import { IGridColumn } from '../grid/interfaces/grid-column.interface';
 import { ContainerType } from '../interfaces/column.type';
-import { IGridElement } from '../components/grid/interfaces/grid-element.interface';
+import { IGridElement } from '../grid/interfaces/grid-element.interface';
 import { Destroy } from '../services/core/destroy.service';
-import { ClassDataService } from '../services/class-data.service';
-import { GridSelectionService } from '../components/grid/services/grid-selection.service';
-import { GridTemplateService } from '../components/grid/services/grid-template.service';
-import { GridContainerService } from '../services/grid-container.service';
-import { GridElementDataService } from '../components/grid/services/grid-element-data.service';
+import { ClassDataService } from '../grid/services/class-data.service';
+import { GridSelectionService } from '../grid/services/grid-selection.service';
+import { GridTemplateService } from '../grid/services/grid-template.service';
+import { GridContainerService } from '../grid/services/grid-container.service';
+import { GridElementDataService } from '../grid/services/grid-element-data.service';
 import { IElements } from '../interfaces/element.interface';
 import { FormGroup } from '@angular/forms';
-import { BuilderDialogService } from './builder-dialog.service';
-import { ActivatedRoute, NavigationEnd, NavigationExtras, Router } from '@angular/router';
+import { BuilderDialogService } from './services/builder-dialog.service';
+import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
 
 @Component({
   selector: 'app-builder',
@@ -44,7 +44,6 @@ export class BuilderComponent {
 
   constructor(
     private builderDialog: BuilderDialogService,
-    private activatedRoute: ActivatedRoute,
     private router: Router,
     private destroy$: Destroy,
     private elementData: GridElementDataService,

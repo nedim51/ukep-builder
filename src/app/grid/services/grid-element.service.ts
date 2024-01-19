@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { StateService } from "./core/state.service";
+import { StateService } from "../../services/core/state.service";
 
 @Injectable({
     providedIn: 'root'

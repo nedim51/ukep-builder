@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } fr
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { map, takeUntil } from 'rxjs/operators';
-import { AuthService } from '../../../services/auth/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { indicate } from '../../../services/operators';
+import { indicate } from '../../../operators/indicate.operator';
 import { Destroy } from '../../../services/core/destroy.service';
 
 @Component({

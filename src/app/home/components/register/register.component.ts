@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { ukepIcons } from 'ng-ukep-icons-builder';
 import { Destroy } from '../../../services/core/destroy.service';
 import { TreeListDataService } from './tree-list-data.service';
-import { ThemeService } from '../../../services/core/theme.service';
+import { ThemeService } from '../../../services/root/theme.service';
 import { ITreeListItem, ITreeListItems } from './tree-list.interface';
 
 export interface IDropdownOpenItem {

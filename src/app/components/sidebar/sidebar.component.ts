@@ -11,8 +11,8 @@ import { filter } from 'rxjs/operators';
 import { IThemeColors } from '../../interfaces/theme/theme.interface';
 import { Destroy } from '../../services/core/destroy.service';
 import { NgUkepIconsModule } from 'ng-ukep-icons';
-import { ThemeService } from '../../services/core/theme.service';
-import { AuthService } from '../../services/auth/auth.service';
+import { ThemeService } from '../../services/root/theme.service';
+import { AuthService } from '../../auth/services/auth.service';
 import { IUser } from '../../interfaces/user/user.interface';
 
 const DEFAULT_SEARCH_DEBOUNCE_TIME: number = 800;

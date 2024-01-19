@@ -1,4 +1,4 @@
-import { ApplicationConfig, ApplicationRef, ViewContainerRef, importProvidersFrom, inject } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, inject } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -6,11 +6,10 @@ import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/
 import { BasicAuthInterceptorFn } from './interseptors/auth.interseptor';
 import { ErrorInterceptorFn } from './interseptors/error.interseptor';
 import { BackendInterceptorFn } from './backend/backend';
-import { ThemeService } from './services/core/theme.service';
+import { ThemeService } from './services/root/theme.service';
 import { DOCUMENT } from '@angular/common';
 import { NgUkepIconsRegistry } from 'ng-ukep-icons';
 import { completeIconSet } from 'ng-ukep-icons-builder';
-import { DialogService } from './services/dialog.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

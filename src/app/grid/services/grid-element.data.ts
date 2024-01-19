@@ -1,4 +1,4 @@
-import { IElements } from "../interfaces/element.interface";
+import { IElements } from "../../interfaces/element.interface";
 
 export const elements: IElements = [
     {

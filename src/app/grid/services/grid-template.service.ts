@@ -7,9 +7,9 @@ import { IGridElement, IGridElements } from '../interfaces/grid-element.interfac
 import { GlobalObjectIdService } from './grid-global-object-id.service';
 import { IRowColumns } from '../interfaces/grid-rows-cols.interface';
 import { GridObjectType } from '../interfaces/grid-element.type';
-import { elements } from '../../../services/grid-element.data';
-import { insertItemByIndex } from '../../../helpers/helper';
-import { StateHistoryService } from '../../../services/core/state-history.service';
+import { elements } from './grid-element.data';
+import { insertItemByIndex } from '../../helpers/helper';
+import { StateHistoryService } from '../../services/core/state-history.service';
 
 export const MAX_GRID_COLUMNS: number = 12;
 
@@ -61,7 +61,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     if(!element) 
     return
 
-    const newElementId = this.GLOBAL_OBJECT_ID.NEXT_ID();
+    const newElementId = this.GLOBAL_OBJECT_ID.next();
     const newElement: IGridElement = this.createElement(
       newElementId, 
       element.id,
@@ -154,7 +154,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     }
     
     const columnNewIndex = column.index + right;
-    const columnId = this.GLOBAL_OBJECT_ID.NEXT_ID();
+    const columnId = this.GLOBAL_OBJECT_ID.next();
     const newColumn = this.createColumn(
       columnId,
       columnNewIndex,
@@ -185,7 +185,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     // Индекс нового объекта (если сверху то остается такой же как и опорного объекта иначе +1)
     const rowIndexNew = row.index + bottom;
     // Создаем новый объект
-    const rowId = this.GLOBAL_OBJECT_ID.NEXT_ID();
+    const rowId = this.GLOBAL_OBJECT_ID.next();
     const newRow = this.createRow(
       rowId, 
       rowIndexNew,
@@ -432,7 +432,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
    * Вызывается пользователем, если в пустой строке нажать добавить колонку
    */
   insertFirstColumn(row: IGridRow): void {
-    const colFirstId = this.GLOBAL_OBJECT_ID.NEXT_ID();
+    const colFirstId = this.GLOBAL_OBJECT_ID.next();
     const colFirstIdx = 0;
     const newCol = this.createColumn(
       colFirstId, 
@@ -472,7 +472,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     };
     
     for(let i = 0; i < rows; i++) {
-      const nextId: number = this.GLOBAL_OBJECT_ID.NEXT_ID();
+      const nextId: number = this.GLOBAL_OBJECT_ID.next();
       const row: IGridRow = this.createRow(nextId, i, parent_id, parent_type);
       const col: IGridColumns = this.createColumns(cols, row.id, row.type);
       
@@ -493,7 +493,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
   ): IRowColumns {
     if(cols > MAX_GRID_COLUMNS) cols = 12;
     
-    const nextId: number = this.GLOBAL_OBJECT_ID.NEXT_ID();
+    const nextId: number = this.GLOBAL_OBJECT_ID.next();
     const row: IGridRow = this.createRow(
       nextId,
       index,
@@ -518,7 +518,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     let columns: IGridColumns = [];
     
     for(let i = 0; i < count; i++) {
-      const nextId: number = this.GLOBAL_OBJECT_ID.NEXT_ID();
+      const nextId: number = this.GLOBAL_OBJECT_ID.next();
       columns.push(this.createColumn(
         nextId, 
         i,

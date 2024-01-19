@@ -1,5 +1,5 @@
-import { ColumnPrefixType, ColumnSeparatorType, ColumnDisplayType, ColumnSizeType, ColumnSizeOffsetType, ContainerType } from "../interfaces/column.type";
-import { ConcatType } from "../interfaces/core/concat.type";
+import { ColumnPrefixType, ColumnSeparatorType, ColumnDisplayType, ColumnSizeType, ColumnSizeOffsetType, ContainerType } from "../../interfaces/column.type";
+import { ConcatType } from "../../interfaces/core/concat.type";
 
 /**
  * Displays

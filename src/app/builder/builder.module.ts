@@ -6,11 +6,11 @@ import { BuilderComponent } from './builder.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { NgUkepIconsModule } from 'ng-ukep-icons';
 import { GridDrawComponent } from './components/grid-draw/grid-draw.component';
-import { ClassDataService } from '../services/class-data.service';
+import { ClassDataService } from '../grid/services/class-data.service';
 import { DraggableDropzoneDirective } from '../directives/draggable-dropzone/draggable-dropzone.directive';
 import { ResizableDirective } from '../directives/resizable/resizable.directive';
 import { DraggableDirective } from '../directives/draggable/draggable.directive';
-import { GridModule } from '../components/grid/grid.module';
+import { GridModule } from '../grid/grid.module';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 

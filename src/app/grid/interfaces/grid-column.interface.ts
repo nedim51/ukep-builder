@@ -1,4 +1,4 @@
-import { class_cols } from "../../../services/class.data";
+import { class_cols } from "../services/class.data";
 import { IGridBase } from "./grid.interface";
 
 export interface IGridColumn extends IGridBase {

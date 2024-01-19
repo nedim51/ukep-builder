@@ -1,4 +1,4 @@
-import { GridObjectType } from "../components/grid/interfaces/grid-element.type";
+import { GridObjectType } from "../grid/interfaces/grid-element.type";
 import { IconInterface } from "./icon.interface";
 
 export interface IElement extends IconInterface {

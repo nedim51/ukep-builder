@@ -5,7 +5,7 @@ import { IGridRow, IGridRows } from '../interfaces/grid-row.interface';
 import { IGridColumn, IGridColumns } from '../interfaces/grid-column.interface';
 import { IGridElement, IGridElements } from '../interfaces/grid-element.interface';
 import { GridTemplateService } from './grid-template.service';
-import { StateService } from '../../../services/core/state.service';
+import { StateService } from '../../services/core/state.service';
 import { IGridSelection } from '../interfaces/grid-selection.interface';
 import { IGridBase } from '../interfaces/grid.interface';
 
@@ -34,7 +34,7 @@ export class GridSelectionService extends StateService<IGridSelection> {
 
             mergeMap(selected => this.gridTemplateState$.pipe(
                 map(state => {
-                    const type: keyof IGridTemplate = typeToKey(selected!.type)
+                    const type: keyof IGridTemplate = this.typeToKey(selected!.type)
                     return state[type].find(item => item.id === selected!.id);
                 })
             )
@@ -63,7 +63,7 @@ export class GridSelectionService extends StateService<IGridSelection> {
 
             // Обрабатываем изменение состояния элементов, обязательно, потому что могут измениться свойства
             mergeMap(selected => selected ? this.gridTemplateState$.pipe(
-                map(state => findAllOccurrences(state, selected!.id)),
+                map(state => this.findAllOccurrences(state, selected!.id)),
                 map(selections => {
                     return {
                         rows: selections.filter(items => items.type === 'row') as IGridRows,
@@ -76,6 +76,46 @@ export class GridSelectionService extends StateService<IGridSelection> {
         )
     }
 
+    findAllOccurrences(tree: IGridTemplate, targetId: number | null) {
+        const result: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+        const findRecursive = (nodes: Array<IGridRow> | Array<IGridColumn> | Array<IGridElement>) => {
+            const occurrences: Array<IGridRow | IGridColumn | IGridElement> = [];
+    
+            for (const node of nodes) {
+                if (node.id === targetId) {
+                    occurrences.push(node);
+    
+                    const parentNodes = node.parent_id !== null ? this.findAllOccurrences(tree, node.parent_id) : [];
+    
+                    occurrences.unshift(...parentNodes);
+    
+                    return occurrences; // обрываем цикл !!!
+                }
+            }
+    
+            return occurrences;
+        }
+    
+        for (const key in tree) {
+            const found = findRecursive(tree[key as keyof IGridTemplate]);
+    
+            if (found.length > 0) {
+                result.push(...found);
+            }
+        }
+    
+        return result;
+    }
+
+    typeToKey(type: IGridBase['type']): keyof IGridTemplate {
+        switch (type) {
+            case 'row': return 'rows';
+            case 'column': return 'cols';
+            case 'element': return 'elements';
+        }
+    }
+
     clear(): void {
         this.setState({
             selected: undefined
@@ -83,43 +123,3 @@ export class GridSelectionService extends StateService<IGridSelection> {
     }
 }
 
-export function typeToKey(type: IGridBase['type']): keyof IGridTemplate {
-    switch (type) {
-        case 'row': return 'rows';
-        case 'column': return 'cols';
-        case 'element': return 'elements';
-    }
-}
-
-
-export function findAllOccurrences(tree: IGridTemplate, targetId: number | null) {
-    const result: Array<IGridRow | IGridColumn | IGridElement> = [];
-
-    function findRecursive(nodes: Array<IGridRow> | Array<IGridColumn> | Array<IGridElement>) {
-        const occurrences: Array<IGridRow | IGridColumn | IGridElement> = [];
-
-        for (const node of nodes) {
-            if (node.id === targetId) {
-                occurrences.push(node);
-
-                const parentNodes = node.parent_id !== null ? findAllOccurrences(tree, node.parent_id) : [];
-
-                occurrences.unshift(...parentNodes);
-
-                return occurrences; // обрываем цикл !!!
-            }
-        }
-
-        return occurrences;
-    }
-
-    for (const key in tree) {
-        const found = findRecursive(tree[key as keyof IGridTemplate]);
-
-        if (found.length > 0) {
-            result.push(...found);
-        }
-    }
-
-    return result;
-}
