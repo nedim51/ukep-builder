@@ -122,8 +122,21 @@ export class ClassDataService extends StateService<IClassDataState> {
         return this.select(state => state.sizes);
     }
 
+    selectSizesCodes(): Observable<Array<IGuideItem['code']>> {
+        return this.select(state => state.sizes).pipe(
+                map(sizes => sizes.map(size => size.list).flat().map(sizesList => sizesList.code)
+            )
+        )
+    }
+    
     selectOffsets(): Observable<IClassDataState['offsets']> {
         return this.select(state => state.offsets);
+    }
+
+    selectOffsetsCodes(): Observable<Array<IGuideItem['code']>> {
+        return this.select(state => state.offsets).pipe(
+            map(offsets => offsets.map(offset => offset.list).flat().map(offsetsList => offsetsList.code))
+        )
     }
 
     selectBySize(sizeType: ColumnSizeType | undefined = undefined): Observable<IGuideItems> {

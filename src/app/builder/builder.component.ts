@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, WritableSignal, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } from '@angular/core';
 import { IThemeColors } from '../interfaces/theme/theme.interface';
-import { Observable, Subject, filter, first, map, mergeMap, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
+import { Observable, Subject, combineLatest, filter, first, map, mergeMap, of, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
 import { ThemeService } from '../services/root/theme.service';
 import { IResize } from '../directives/resizable/resize.interface';
 import { IGuideItems } from '../interfaces/guide.interface';
@@ -25,9 +25,10 @@ import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
   styleUrl: './builder.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BuilderComponent {
+export class BuilderComponent implements OnInit {
   
   title: WritableSignal<string> = signal('Анкета-заявка 115-ФЗ');
+  formCreate: WritableSignal<boolean> = signal(false);
   themeName$: Observable<IThemeColors>
   container$: Observable<ContainerType>
   targetSelection$: Observable<IGridRow | IGridColumn | IGridElement | undefined>  
@@ -38,11 +39,20 @@ export class BuilderComponent {
   containerSize$: Subject<IResize> = new Subject();
   selectContainerSize$ = this.containerSize$.asObservable().pipe(throttleTime(200));
   
-  selectForm: FormGroup = new FormGroup({})
+  selectForm?: FormGroup;
+  
   get selectsFormArray(): FormArray {
-    return this.selectForm.controls['selects'] as FormArray
+    return this.selectForm?.controls['selects'] as FormArray
   }
-  classListCodes$: Observable<string[]>;
+
+  sizeCodeList$: Observable<string[]>;
+  offsetCodeList$: Observable<string[]>;
+  createForm$: Observable<FormGroup>;
+  formArraySizes$: Observable<FormArray>;
+  formArrayOffsets$: Observable<FormArray>;
+  formChanges$: Observable<{ sizes: string[], offsets: string[] }> | undefined;
+  sizesChanges$: Observable<string[]> | undefined;
+  offsetsChanges$: Observable<string[]> | undefined;
 
   routerExtracts$: Observable<NavigationExtras | undefined>;
 
@@ -60,34 +70,43 @@ export class BuilderComponent {
     this.themeName$ = this.themeService.selectCurrentThemeName()
     this.elementList$ = this.elementData.selectElementList();
     this.targetSelection$ = this.gridSelection.selectTarget();
+    this.container$ = this.gridContainer.selectContainer();
+    this.sizes$ = this.classData.selectBySize('col-lg');
+    this.offsets$ = this.classData.selectByOffset('col-lg-offset');
+    this.sizeCodeList$ = this.classData.selectSizesCodes();
+    this.offsetCodeList$ = this.classData.selectOffsetsCodes();
 
-    this.classListCodes$ = this.classData.selectSizes().pipe(
-      map(sizes => sizes.map(size => size.list).flat().map(classList => classList.code))
+    this.formArraySizes$ = this.sizeCodeList$.pipe(
+      map(sizeList => this.fb.array(sizeList.map(code => false)))
     )
 
-    this.classListCodes$.pipe(
-      map(classList => this.fb.array(classList.map(code => false))),
-      switchMap(selects => {
-        this.selectForm = new FormGroup({
-          selects: selects
-        })
+    this.formArrayOffsets$ = this.offsetCodeList$.pipe(
+      map(offsetList => this.fb.array(offsetList.map(code => false)))
+    )
 
-        return this.selectForm.controls['selects'].valueChanges
-      }),
-      switchMap(changes => this.classListCodes$.pipe(
-        map(classListCodes => classListCodes.map((code, index) => changes[index] === true ? classListCodes[index] : null).filter(contactNo => !!contactNo)))
-      ),
-      takeUntil(this.destroy$)
-    ).subscribe(selects => console.log(selects))
+    this.createForm$ = of(new FormGroup({})).pipe(
+      switchMap((group) => this.formArraySizes$.pipe(
+        map(array => { 
+          group.addControl('sizes', array);
+          return group;
+        })
+      )),
+      
+      switchMap((group) => this.formArrayOffsets$.pipe(
+        map(array => {
+          group.addControl('offsets', array)
+          return group;
+        })
+      ))
+    )
+
+
+
 
     this.targetClassList$ = this.targetSelection$.pipe(
       filter(selection => selection !== undefined && selection.type === 'column'), 
       map(selection => (selection as IGridColumn).class)
     );
-    this.container$ = this.gridContainer.selectContainer();
-
-    this.sizes$ = this.classData.selectBySize('col-lg');
-    this.offsets$ = this.classData.selectByOffset('col-lg-offset');
     
     this.routerExtracts$ = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd), 
@@ -111,17 +130,92 @@ export class BuilderComponent {
     });
   }
 
+  ngOnInit(): void {
+    /**
+     * Создаем форму
+     */
+    // this.createForm$.pipe(takeUntil(this.destroy$))
+    // .subscribe(form => {
+    //   this.sizesChanges$ = form.controls['sizes'].valueChanges.pipe(
+    //     switchMap(changes => this.sizeCodeList$.pipe(
+    //       map(sizeCodeList => sizeCodeList
+    //         .map((code, index) => changes[index] === true ? sizeCodeList[index] : null)
+    //         .filter(x => !!x) as string[])
+    //       )
+    //     ),
+    //     tap(changes => console.log(changes.join().replaceAll(',', ' ')))
+    //   )
+
+    //   this.offsetsChanges$ = form.controls['offsets'].valueChanges.pipe(
+    //     switchMap(changes => this.offsetCodeList$.pipe(
+    //       map(offsetCodeList => offsetCodeList
+    //         .map((code, index) => changes[index] === true ? offsetCodeList[index] : null)
+    //         .filter(x => !!x) as string[])
+    //       )
+    //     ),
+    //     tap(changes => console.log(changes))
+    //   )
+
+      // this.formChanges$ = combineLatest([
+      //   form.valueChanges, this.sizeCodeList$, this.offsetCodeList$
+      // ]).pipe(
+      //   map(([changes, sizes, offsets]) => {
+      //     const sizeCodes = sizes
+      //       .map((code, index) => changes[index] === true ? sizes[index] : null)
+      //       .filter(x => !!x) as string[];
+
+      //     const offsetCodes = offsets
+      //       .map((code, index) => changes[index] === true ? offsets[index] : null)
+      //       .filter(x => !!x) as string[];
+
+      //     return {
+      //       sizes: sizeCodes,
+      //       offsets: offsetCodes
+      //     }
+      //   }),
+      //   // tap(({ sizes, offsets }) => null)
+      // )
+      
+    //   this.selectForm = form;
+    // });
+  }
+
   ngAfterViewInit(): void {
     this.selectContainerSize$.pipe(
       tap(({ width }) => this.gridContainer.setContainerByWidth(width)), 
       mergeMap(_ => this.gridContainer.selectDisplay()), 
+      tap(display => {
+        const columnFilter = this.classData.createColumnSize('col', '-', display);
+        const columnOffsetFilter = this.classData.createColumnOffset('col', '-', display, 'offset');
+        
+        this.sizes$ = this.classData.selectBySize(columnFilter);
+        this.offsets$ = this.classData.selectByOffset(columnOffsetFilter);
+      }),
+      switchMap(display => this.createForm$),
       takeUntil(this.destroy$)
-    ).subscribe((display) => {
-      const columnFilter = this.classData.createColumnSize('col', '-', display);
-      const columnOffsetFilter = this.classData.createColumnOffset('col', '-', display, 'offset')
-      
-      this.sizes$ = this.classData.selectBySize(columnFilter)
-      this.offsets$ = this.classData.selectByOffset(columnOffsetFilter)
+    ).subscribe((form) => {
+      this.sizesChanges$ = form.controls['sizes'].valueChanges.pipe(
+        switchMap(changes => this.sizeCodeList$.pipe(
+          map(sizeCodeList => sizeCodeList
+            .map((code, index) => changes[index] === true ? sizeCodeList[index] : null)
+            .filter(x => !!x) as string[])
+          )
+        ),
+        tap(changes => console.log(changes.join().replaceAll(',', ' ')))
+      )
+
+      this.offsetsChanges$ = form.controls['offsets'].valueChanges.pipe(
+        switchMap(changes => this.offsetCodeList$.pipe(
+          map(offsetCodeList => offsetCodeList
+            .map((code, index) => changes[index] === true ? offsetCodeList[index] : null)
+            .filter(x => !!x) as string[])
+          )
+        ),
+        tap(changes => console.log(changes))
+      )
+
+      this.selectForm = form;
+      this.formCreate.set(true)
     })
   }
   

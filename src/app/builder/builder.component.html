@@ -207,21 +207,57 @@
     }
 
     <!-- С использованием FormGroup позже доработать !!! -->
-    <form [formGroup]="selectForm">
-      <div ngbDropdown class="d-inline-block">
-        <button class="btn btn-info" id="dropdownBasic1" ngbDropdownToggle>Класс колонки</button>
-        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" formArrayName="selects">
-          @for (controlName of sizes$ | async; track $index) {
-            <div class="form-group ms-2">
-              <input type="checkbox" class="form-check-check me-1" id="checkbox-{{$index}}" [formControlName]="$index">
-              <label class="form-check-label" for="checkbox-{{ $index }}">
-                {{ controlName.code }}
-              </label>
-            </div>
-          }
-        </div> 
-      </div>
-    </form>
+    @if (selectForm) {
+      <form class="d-flex flex-column gap-2" [formGroup]="selectForm">
+        <div class="d-block">
+          <label for="dropdownBasic1">Класс колонки</label>
+          <div ngbDropdown class="d-block">
+            <button class="btn btn-outline-secondary" id="dropdownBasic1" ngbDropdownToggle>
+              @for (sizesChanges of sizesChanges$ | async; track $index) {
+                {{ sizesChanges }}
+              }
+              @empty {
+                <span>Значение по умолчанию</span>
+              }
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" formArrayName="sizes">
+              @for (controlName of sizes$ | async; track $index) {
+                <div class="form-group ms-2">
+                  <input type="checkbox" class="form-check-check me-1" id="checkbox-{{$index}}" [formControlName]="$index">
+                  <label class="form-check-label" for="checkbox-{{ $index }}">
+                    {{ controlName.code }}
+                  </label>
+                </div>
+              }
+            </div> 
+          </div>
+        </div>
+
+        <div class="d-block">
+          <label for="dropdownBasic1">Отступ колонки</label>
+          <div ngbDropdown class="d-block">
+            <button class="btn btn-outline-secondary" id="dropdownBasic1" ngbDropdownToggle>
+              @for (offsetsChanges of offsetsChanges$ | async; track $index) {
+                {{ offsetsChanges }}
+              }
+              @empty {
+                <span>Значение не задано</span>
+              }
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" formArrayName="offsets">
+              @for (controlName of offsets$ | async; track $index) {
+                <div class="form-group ms-2">
+                  <input type="checkbox" class="form-check-check me-1" id="checkbox-{{$index}}" [formControlName]="$index">
+                  <label class="form-check-label" for="checkbox-{{ $index }}">
+                    {{ controlName.code }}
+                  </label>
+                </div>
+              }
+            </div> 
+          </div>
+        </div>
+      </form>
+    }
   </aside>
 
 </main>
