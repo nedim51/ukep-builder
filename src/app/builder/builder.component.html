@@ -187,7 +187,7 @@
         </div>
       }
       @else if(targetSelection.type === 'element') {
-
+        <span>Скоро можно будет применить параметры</span>
       }
       @else {
         <!-- Это если выбрали row к примеру-->
@@ -207,18 +207,21 @@
     }
 
     <!-- С использованием FormGroup позже доработать !!! -->
-    <!-- <div ngbDropdown class="d-inline-block" [formGroup]="selectForm">
-      <button class="btn btn-info" id="dropdownBasic1" ngbDropdownToggle>Toggle dropdown</button>
-      <div ngbDropdownMenu aria-labelledby="dropdownBasic1" formArrayName="selects">
-        <div class="form-group mr-auto border-bottom"
-          *ngFor="let option of selectForm.controls['selects'].controls; index as index">
-          <input type="checkbox" class="form-check-check" [id]="index" [formControlName]="index">
-          <label class="form-check-label" for="{{ index }}">
-            {{index}}
-            {{ options[index] }}
-          </label>
-        </div>
-      </div> -->
+    <form [formGroup]="selectForm">
+      <div ngbDropdown class="d-inline-block">
+        <button class="btn btn-info" id="dropdownBasic1" ngbDropdownToggle>Класс колонки</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1" formArrayName="selects">
+          @for (controlName of sizes$ | async; track $index) {
+            <div class="form-group ms-2">
+              <input type="checkbox" class="form-check-check me-1" id="checkbox-{{$index}}" [formControlName]="$index">
+              <label class="form-check-label" for="checkbox-{{ $index }}">
+                {{ controlName.code }}
+              </label>
+            </div>
+          }
+        </div> 
+      </div>
+    </form>
   </aside>
 
 </main>

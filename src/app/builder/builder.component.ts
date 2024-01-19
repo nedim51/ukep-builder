@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, WritableSignal, signal } from '@angular/core';
 import { IThemeColors } from '../interfaces/theme/theme.interface';
-import { Observable, Subject, filter, first, map, mergeMap, takeUntil, tap, throttleTime } from 'rxjs';
+import { Observable, Subject, filter, first, map, mergeMap, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
 import { ThemeService } from '../services/root/theme.service';
 import { IResize } from '../directives/resizable/resize.interface';
 import { IGuideItems } from '../interfaces/guide.interface';
@@ -15,7 +15,7 @@ import { GridTemplateService } from '../grid/services/grid-template.service';
 import { GridContainerService } from '../grid/services/grid-container.service';
 import { GridElementDataService } from '../grid/services/grid-element-data.service';
 import { IElements } from '../interfaces/element.interface';
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { BuilderDialogService } from './services/builder-dialog.service';
 import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
 
@@ -39,22 +39,47 @@ export class BuilderComponent {
   selectContainerSize$ = this.containerSize$.asObservable().pipe(throttleTime(200));
   
   selectForm: FormGroup = new FormGroup({})
+  get selectsFormArray(): FormArray {
+    return this.selectForm.controls['selects'] as FormArray
+  }
+  classListCodes$: Observable<string[]>;
 
   routerExtracts$: Observable<NavigationExtras | undefined>;
 
   constructor(
-    private builderDialog: BuilderDialogService,
     private router: Router,
+    private fb: FormBuilder,
     private destroy$: Destroy,
-    private elementData: GridElementDataService,
     private classData: ClassDataService,
+    private elementData: GridElementDataService,
+    private builderDialog: BuilderDialogService,
     private gridSelection: GridSelectionService,
     private gridTemplate: GridTemplateService,
     private gridContainer: GridContainerService,
     private themeService: ThemeService) {
     this.themeName$ = this.themeService.selectCurrentThemeName()
     this.elementList$ = this.elementData.selectElementList();
-    this.targetSelection$ = this.gridSelection.selectTarget()
+    this.targetSelection$ = this.gridSelection.selectTarget();
+
+    this.classListCodes$ = this.classData.selectSizes().pipe(
+      map(sizes => sizes.map(size => size.list).flat().map(classList => classList.code))
+    )
+
+    this.classListCodes$.pipe(
+      map(classList => this.fb.array(classList.map(code => false))),
+      switchMap(selects => {
+        this.selectForm = new FormGroup({
+          selects: selects
+        })
+
+        return this.selectForm.controls['selects'].valueChanges
+      }),
+      switchMap(changes => this.classListCodes$.pipe(
+        map(classListCodes => classListCodes.map((code, index) => changes[index] === true ? classListCodes[index] : null).filter(contactNo => !!contactNo)))
+      ),
+      takeUntil(this.destroy$)
+    ).subscribe(selects => console.log(selects))
+
     this.targetClassList$ = this.targetSelection$.pipe(
       filter(selection => selection !== undefined && selection.type === 'column'), 
       map(selection => (selection as IGridColumn).class)
