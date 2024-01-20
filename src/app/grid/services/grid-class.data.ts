@@ -1,4 +1,4 @@
-import { ColumnPrefixType, ColumnSeparatorType, ColumnDisplayType, ColumnSizeType, ColumnSizeOffsetType, ContainerType } from "../../interfaces/column.type";
+import { ColumnPrefixType, ColumnSeparatorType, ColumnDisplayType, ColumnSizeType, ColumnSizeOffsetType, ContainerType } from "../interfaces/grid-column.type";
 import { ConcatType } from "../../interfaces/core/concat.type";
 
 /**

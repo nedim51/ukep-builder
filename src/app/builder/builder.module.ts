@@ -13,6 +13,7 @@ import { DraggableDirective } from '../directives/draggable/draggable.directive'
 import { GridModule } from '../grid/grid.module';
 import { NgbDropdownModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BuilderParamsService } from './services/builder-params.service';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         classDataService.initState();
         return classDataService;
       },
-    }
+    },
+    BuilderParamsService,
   ]
 })
 export class BuilderModule { }

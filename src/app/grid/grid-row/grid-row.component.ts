@@ -5,6 +5,7 @@ import { IGridRow, INITIAL_GRID_ROW } from '../interfaces/grid-row.interface';
 import { IGridColumn, IGridColumns } from '../interfaces/grid-column.interface';
 import { IGridElement } from '../interfaces/grid-element.interface';
 import { GridSelectionService } from '../services/grid-selection.service';
+import { GridElementService } from '../services/grid-element.service';
 
 @Component({
   selector: 'app-grid-row',
@@ -27,6 +28,7 @@ export class GridRowComponent implements OnChanges {
   selectedRow$: Observable<IGridRow | undefined> = of(undefined);
 
   constructor(
+    private gridElement: GridElementService,
     private gridSelection: GridSelectionService,
     private gridTemplate: GridTemplateService) {}
 
@@ -61,7 +63,10 @@ export class GridRowComponent implements OnChanges {
 
   handleDroppedItem(item: IGridRow | IGridElement, target: IGridColumn): void {
     switch(item.type) {
-      case 'element': this.gridTemplate.appendElementById(item.id, target.id, target.type);
+      case 'element': {
+        this.gridTemplate.appendElementById(item.id, target.id, target.type);
+        this.gridElement.setElement((item as IGridElement).element_id, item.id, item.index); 
+      }
         break;
       case 'row': this.gridTemplate.appendRowById(item.id, target.id, target.type);
         break;

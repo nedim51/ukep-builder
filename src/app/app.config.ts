@@ -29,6 +29,7 @@ export const appConfig: ApplicationConfig = {
         const document = inject(DOCUMENT);
         const themeService = new ThemeService(document);
         themeService.loadTheme();
+        
         return themeService;
       }
     },

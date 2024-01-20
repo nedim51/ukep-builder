@@ -7,7 +7,7 @@ export interface IControlCombobox extends IControlBase {
     // "rows": 1, Для чего ???
 }
 
-export const INITIAL_CONTROL_RADIO_BUTTON: IControlCombobox = {
+export const INITIAL_CONTROL_COMBOBOX: IControlCombobox = {
     ...INITIAL_CONTROL_BASE,
     type: 'dict',
     component: 'select',

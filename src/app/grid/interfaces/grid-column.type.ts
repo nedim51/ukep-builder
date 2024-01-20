@@ -1,4 +1,4 @@
-import { ConcatType } from "./core/concat.type";
+import { ConcatType } from "../../interfaces/core/concat.type";
 /**
  * Префикс, используемый для конфигурации контейнеров.
  */

@@ -1,10 +1,11 @@
 import { Injectable } from "@angular/core";
 import { IGuideItem, IGuideItems } from "../../interfaces/guide.interface";
-import { ColumnDisplayType, ColumnOffsetType, ColumnPrefixType, ColumnSeparatorType, ColumnSizeOffsetType, ColumnSizeType } from "../../interfaces/column.type";
+import { ColumnDisplayType, ColumnOffsetType, ColumnPrefixType, ColumnSeparatorType, ColumnSizeOffsetType, ColumnSizeType } from "../interfaces/grid-column.type";
 import { StateService } from "../../services/core/state.service";
 import { Observable, map } from "rxjs";
-import { IClassDataState, INITIAL_CLASS_DATA_STATE, IColumnClassList } from "../../interfaces/class/class-data.interface";
+import { IColumnClassList } from "../interfaces/grid-class.interface";
 import { sizes, sizes_offset } from "./grid-class.data";
+import { IClassDataState, INITIAL_CLASS_DATA_STATE } from "../interfaces/grid-class-state.interface";
 
 @Injectable()
 export class ClassDataService extends StateService<IClassDataState> {
@@ -150,6 +151,12 @@ export class ClassDataService extends StateService<IClassDataState> {
         )
     }
 
+    selectCodesBySize(sizeType: ColumnSizeType | undefined = undefined): Observable<Array<IGuideItem['code']>> {
+        return this.selectBySize(sizeType).pipe(
+            map(sizes => sizes.map(size => size.code))
+        )
+    }
+
     selectByOffset(offsetType: ColumnSizeOffsetType | undefined = undefined): Observable<IGuideItems> {
         return this.select(state => state.offsets).pipe(
             map(sizes => {
@@ -158,6 +165,12 @@ export class ClassDataService extends StateService<IClassDataState> {
                     .map(item => item.list)
                     .flat()
             })
+        )
+    }
+    
+    selectCodesByOffset(offsetType: ColumnSizeOffsetType | undefined = undefined): Observable<Array<IGuideItem['code']>> {
+        return this.selectByOffset(offsetType).pipe(
+            map(offsets => offsets.map(offset => offset.code))
         )
     }
 }

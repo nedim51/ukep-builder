@@ -1,4 +1,4 @@
-import { GridObjectType } from "./grid-element.type";
+import { GridObjectType } from "./grid-object.type";
 
 export interface IGridBase {
     id: number;

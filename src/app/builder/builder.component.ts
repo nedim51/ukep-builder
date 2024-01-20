@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, OnInit, WritableSignal, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, WritableSignal, signal } from '@angular/core';
 import { IThemeColors } from '../interfaces/theme/theme.interface';
-import { Observable, Subject, combineLatest, filter, first, map, mergeMap, of, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
+import { Observable, Subject, distinctUntilChanged, filter, first, map, merge, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
 import { ThemeService } from '../services/root/theme.service';
 import { IResize } from '../directives/resizable/resize.interface';
 import { IGuideItems } from '../interfaces/guide.interface';
 import { IGridRow } from '../grid/interfaces/grid-row.interface';
 import { IGridColumn } from '../grid/interfaces/grid-column.interface';
-import { ContainerType } from '../interfaces/column.type';
+import { ColumnDisplayType, ColumnSizeOffsetType, ColumnSizeType, ContainerType } from '../grid/interfaces/grid-column.type';
 import { IGridElement } from '../grid/interfaces/grid-element.interface';
 import { Destroy } from '../services/core/destroy.service';
 import { ClassDataService } from '../grid/services/grid-class.service';
@@ -15,9 +15,11 @@ import { GridTemplateService } from '../grid/services/grid-template.service';
 import { GridContainerService } from '../grid/services/grid-container.service';
 import { GridElementDataService } from '../grid/services/grid-element-data.service';
 import { IElements } from '../interfaces/element.interface';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { BuilderDialogService } from './services/builder-dialog.service';
 import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
+import { BuilderParamsService } from './services/builder-params.service';
+import { ElementType, GridElementService } from '../grid/services/grid-element.service';
 
 @Component({
   selector: 'app-builder',
@@ -25,10 +27,9 @@ import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
   styleUrl: './builder.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BuilderComponent implements OnInit {
+export class BuilderComponent implements AfterViewInit {
   
   title: WritableSignal<string> = signal('Анкета-заявка 115-ФЗ');
-  formCreate: WritableSignal<boolean> = signal(false);
   themeName$: Observable<IThemeColors>
   container$: Observable<ContainerType>
   targetSelection$: Observable<IGridRow | IGridColumn | IGridElement | undefined>  
@@ -37,30 +38,34 @@ export class BuilderComponent implements OnInit {
   sizes$: Observable<IGuideItems>
   offsets$: Observable<IGuideItems>
   containerSize$: Subject<IResize> = new Subject();
-  selectContainerSize$ = this.containerSize$.asObservable().pipe(throttleTime(200));
+  selectContainerSize$ = this.containerSize$.asObservable().pipe(
+    throttleTime(200)
+  );
   
-  selectForm?: FormGroup;
+  selectForm?: WritableSignal<FormGroup>;
   
-  get selectsFormArray(): FormArray {
-    return this.selectForm?.controls['selects'] as FormArray
+  get selectsFormArray(): FormArray | undefined {
+    if(!this.selectForm) return undefined
+
+    return this.selectForm().controls['selects'] as FormArray 
   }
 
   sizeCodeList$: Observable<string[]>;
   offsetCodeList$: Observable<string[]>;
-  createForm$: Observable<FormGroup>;
-  formArraySizes$: Observable<FormArray>;
-  formArrayOffsets$: Observable<FormArray>;
   formChanges$: Observable<{ sizes: string[], offsets: string[] }> | undefined;
-  sizesChanges$: Observable<string[]> | undefined;
-  offsetsChanges$: Observable<string[]> | undefined;
-
+  sizesChanges$?: Observable<string[]>
+  offsetsChanges$?: Observable<string[]>
+  
   routerExtracts$: Observable<NavigationExtras | undefined>;
+
+  element$: Observable<ElementType | undefined> | undefined;
 
   constructor(
     private router: Router,
-    private fb: FormBuilder,
     private destroy$: Destroy,
     private classData: ClassDataService,
+    private gridElement: GridElementService,
+    private buildParams: BuilderParamsService,
     private elementData: GridElementDataService,
     private builderDialog: BuilderDialogService,
     private gridSelection: GridSelectionService,
@@ -75,33 +80,6 @@ export class BuilderComponent implements OnInit {
     this.offsets$ = this.classData.selectByOffset('col-lg-offset');
     this.sizeCodeList$ = this.classData.selectSizesCodes();
     this.offsetCodeList$ = this.classData.selectOffsetsCodes();
-
-    this.formArraySizes$ = this.sizeCodeList$.pipe(
-      map(sizeList => this.fb.array(sizeList.map(code => false)))
-    )
-
-    this.formArrayOffsets$ = this.offsetCodeList$.pipe(
-      map(offsetList => this.fb.array(offsetList.map(code => false)))
-    )
-
-    this.createForm$ = of(new FormGroup({})).pipe(
-      switchMap((group) => this.formArraySizes$.pipe(
-        map(array => { 
-          group.addControl('sizes', array);
-          return group;
-        })
-      )),
-      
-      switchMap((group) => this.formArrayOffsets$.pipe(
-        map(array => {
-          group.addControl('offsets', array)
-          return group;
-        })
-      ))
-    )
-
-
-
 
     this.targetClassList$ = this.targetSelection$.pipe(
       filter(selection => selection !== undefined && selection.type === 'column'), 
@@ -130,7 +108,194 @@ export class BuilderComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  updateClassList(display: ColumnDisplayType, size: ColumnSizeType, offset: ColumnSizeOffsetType): void {
+    this.gridContainer.setContainer(display);
+    this.sizes$ = this.classData.selectBySize(size);
+    this.offsets$ = this.classData.selectByOffset(offset);
+  }
+
+  ngAfterViewInit(): void {
+    merge(
+      /**
+       * Ждем события фокуса на объект или событие изменения контейнера
+       */
+      this.targetSelection$.pipe(
+        switchMap(selection => {
+          return this.gridContainer.selectDisplay().pipe(
+            map(display => {
+              return {
+                selection: selection,
+                size: this.classData.createColumnSize('col', '-', display),
+                offset: this.classData.createColumnOffset('col', '-', display, 'offset')
+              }
+            })
+          )
+        })
+      ),
+
+      this.selectContainerSize$.pipe(
+        map(({ width }) => this.gridContainer.getContainerByWidth(width)),
+        distinctUntilChanged(), 
+        filter(display => display != undefined),
+        switchMap((display) => {
+          const columnFilter = this.classData.createColumnSize('col', '-', display as ColumnDisplayType);
+          const columnOffsetFilter = this.classData.createColumnOffset('col', '-', display as ColumnDisplayType, 'offset');
+          
+          this.updateClassList(display as ColumnDisplayType, columnFilter, columnOffsetFilter);
+  
+          return this.targetSelection$.pipe(
+            map(selection => {
+              return {
+                selection: selection,
+                size: columnFilter,
+                offset: columnOffsetFilter
+              }
+            }) 
+          )
+        })
+      )
+    )
+    .pipe(
+      tap(selection => {
+        if(selection.selection!.type === 'element') {
+          this.element$ = this.gridElement.selectElementById(selection.selection!.id)
+        }
+      }),
+      tap(selection => this.selectForm = undefined),
+      filter(selection => selection != undefined && selection.selection != undefined && selection.selection.type === 'column'),
+      distinctUntilChanged((prev, curr) => prev!.selection!.type != curr!.selection!.type),
+      switchMap((targetSelection) => {
+        const classList = (targetSelection.selection as IGridColumn).class.split(' ');
+        return this.buildParams.createForm(classList, { size: targetSelection.size, offset: targetSelection.offset}).pipe(
+          map(form => { 
+            return { 
+              form: form, 
+              selection: targetSelection.selection as IGridColumn,
+              size: targetSelection.size,
+              offset: targetSelection.offset
+            }
+          })
+        )
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(({ form, selection, size, offset }) => {
+
+      this.sizesChanges$ = form.controls['sizes'].valueChanges.pipe(
+        switchMap(changes => this.classData.selectBySize(size).pipe(
+          map(sizes => sizes.map(size => size.code)),
+          map(codes => codes
+            .map((code, index) => changes[index] === true ? codes[index] : null)
+            .filter(x => !!x) as string[])
+          )
+        ),
+        tap(changes => {
+          this.gridTemplate.setColumnClass2(selection, changes.join().replaceAll(',', ' '))
+          console.log(changes)
+        })
+      )
+
+      this.offsetsChanges$ = form.controls['offsets'].valueChanges.pipe(
+        switchMap(changes => this.classData.selectByOffset(offset).pipe(
+          map(offsets => offsets.map(offset => offset.code)),
+          map(codes => codes
+            .map((code, index) => changes[index] === true ? codes[index] : null)
+            .filter(x => !!x) as string[])
+          )
+        ),
+        tap(changes => {
+          this.gridTemplate.setColumnClass2(selection, changes.join().replaceAll(',', ' '))
+          console.log(changes)
+        })
+      )
+
+      this.selectForm = signal(form);
+    })
+  }
+  
+  onDragStart(event: DragEvent, id: number): void {
+    if (event && event.dataTransfer) {
+      event.dataTransfer.setData('text/plain', `${id}`);
+    }
+  }
+
+  handleDroppedItem(item: IGridRow): void {
+    switch (item.type) {
+      case 'row': this.gridTemplate.appendRowById(item.id, null, null);
+        break;
+    }
+    // console.log(`[AppComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
+  }
+
+  onCheckboxChange(event: any, value: string, target: any): void {
+    this.gridTemplate.setColumnClass(target, value, event.target.checked)
+  }
+
+  onResizeContainer(size: IResize): void {
+    this.containerSize$.next(size);
+  }
+
+  export(): void {
+    this.gridTemplate.export();
+  }
+
+  undo(): void {
+    this.gridTemplate.undo();
+  }
+
+  redo(): void {
+    this.gridTemplate.redo();
+  }
+}
+
+
+        // map(({ width }) => this.gridContainer.getContainerByWidth(width)),
+        // distinctUntilChanged(), 
+        // filter(display => display != undefined),
+        // switchMap(display => {
+        //   this.gridContainer.setContainer(display as ColumnDisplayType);
+
+        //   const columnFilter = this.classData.createColumnSize('col', '-', display as ColumnDisplayType);
+        //   const columnOffsetFilter = this.classData.createColumnOffset('col', '-', display as ColumnDisplayType, 'offset');
+
+        //   this.sizes$ = this.classData.selectBySize(columnFilter);
+        //   this.offsets$ = this.classData.selectByOffset(columnOffsetFilter);
+
+        //   return this.targetSelection$
+        // })
+
+
+  // createForm$: Observable<FormGroup>;
+  // formArraySizes$: Observable<FormArray>;
+  // formArrayOffsets$: Observable<FormArray>;
+
+    // private fb: FormBuilder,
+
+    // this.formArraySizes$ = this.sizeCodeList$.pipe(
+    //   map(sizeList => this.fb.array(sizeList.map(code => false))) // не false а определять существующие классы !!!
+    // )
+
+    // this.formArrayOffsets$ = this.offsetCodeList$.pipe(
+    //   map(offsetList => this.fb.array(offsetList.map(code => false))) // не false а определять существующие классы !!!
+    // )
+
+    // this.createForm$ = of(new FormGroup({})).pipe(
+    //   switchMap((group) => this.formArraySizes$.pipe(
+    //     map(array => { 
+    //       group.addControl('sizes', array);
+    //       return group;
+    //     })
+    //   )),
+      
+    //   switchMap((group) => this.formArrayOffsets$.pipe(
+    //     map(array => {
+    //       group.addControl('offsets', array)
+    //       return group;
+    //     })
+    //   ))
+    // )
+
+
+  // ngOnInit(): void {
     /**
      * Создаем форму
      */
@@ -178,78 +343,41 @@ export class BuilderComponent implements OnInit {
       
     //   this.selectForm = form;
     // });
-  }
+  // }
 
-  ngAfterViewInit(): void {
-    this.selectContainerSize$.pipe(
-      tap(({ width }) => this.gridContainer.setContainerByWidth(width)), 
-      mergeMap(_ => this.gridContainer.selectDisplay()), 
-      tap(display => {
-        const columnFilter = this.classData.createColumnSize('col', '-', display);
-        const columnOffsetFilter = this.classData.createColumnOffset('col', '-', display, 'offset');
+  // createSizesFormArray(source: string[]): Observable<FormArray> {
+  //   return this.sizeCodeList$.pipe(
+  //     map(sizeList => this.fb.array(sizeList.map(code => source.includes(code)))) // не false а определять существующие классы !!!
+  //   )
+  // }
+
+  // createOffsetsFormArray(source: string[]): Observable<FormArray> {
+  //   return this.offsetCodeList$.pipe(
+  //     map(offsetList => this.fb.array(offsetList.map(code => source.includes(code)))) // не false а определять существующие классы !!!
+  //   )
+  // }
+
+  // createFormGroup(): FormGroup<{ sizes: FormArray<any>, offsets: FormArray<any> }> {
+  //   return new FormGroup({
+  //     sizes: this.fb.array([]),
+  //     offsets: this.fb.array([])
+  //   })
+  // }
+
+        // switchMap((group) => {
+        //   const classList = (targetSelection as IGridColumn).class.split(' ');
+        //   console.log(classList)
+        //   return this.createSizesFormArray(classList).pipe(
+        //     map(array => { 
+        //       group.addControl('sizes', array);
+        //       return group;
+        //     })
+        //   )
+        // }),
         
-        this.sizes$ = this.classData.selectBySize(columnFilter);
-        this.offsets$ = this.classData.selectByOffset(columnOffsetFilter);
-      }),
-      switchMap(display => this.createForm$),
-      takeUntil(this.destroy$)
-    ).subscribe((form) => {
-      this.sizesChanges$ = form.controls['sizes'].valueChanges.pipe(
-        switchMap(changes => this.sizeCodeList$.pipe(
-          map(sizeCodeList => sizeCodeList
-            .map((code, index) => changes[index] === true ? sizeCodeList[index] : null)
-            .filter(x => !!x) as string[])
-          )
-        ),
-        tap(changes => console.log(changes.join().replaceAll(',', ' ')))
-      )
-
-      this.offsetsChanges$ = form.controls['offsets'].valueChanges.pipe(
-        switchMap(changes => this.offsetCodeList$.pipe(
-          map(offsetCodeList => offsetCodeList
-            .map((code, index) => changes[index] === true ? offsetCodeList[index] : null)
-            .filter(x => !!x) as string[])
-          )
-        ),
-        tap(changes => console.log(changes))
-      )
-
-      this.selectForm = form;
-      this.formCreate.set(true)
-    })
-  }
-  
-  onDragStart(event: DragEvent, id: number): void {
-    if (event && event.dataTransfer) {
-      event.dataTransfer.setData('text/plain', `${id}`);
-    }
-  }
-
-  handleDroppedItem(item: IGridRow): void {
-    switch (item.type) {
-      case 'row': this.gridTemplate.appendRowById(item.id, null, null);
-        break;
-    }
-    // console.log(`[AppComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
-  }
-
-  onCheckboxChange(event: any, value: string, target: any): void {
-    this.gridTemplate.setColumnClass(target, value, event.target.checked)
-  }
-
-  onResizeContainer(size: IResize): void {
-    this.containerSize$.next(size);
-  }
-
-  export(): void {
-    this.gridTemplate.export();
-  }
-
-  undo(): void {
-    this.gridTemplate.undo();
-  }
-
-  redo(): void {
-    this.gridTemplate.redo();
-  }
-}
+        // switchMap((group) => this.createOffsetsFormArray((targetSelection as IGridColumn).class.split(' ')).pipe(
+        //   map(array => {
+        //     group.addControl('offsets', array)
+        //     return group;
+        //   })
+        // ))

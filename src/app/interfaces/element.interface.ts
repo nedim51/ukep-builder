@@ -1,8 +1,9 @@
-import { GridObjectType } from "../grid/interfaces/grid-element.type";
+import { GridObjectType } from "../grid/interfaces/grid-object.type";
+import { ElementEnum } from "../grid/services/grid-element.data";
 import { IconInterface } from "./icon.interface";
 
 export interface IElement extends IconInterface {
-    id: number;
+    id: ElementEnum;
     title: string;
     type: GridObjectType
 }

@@ -140,7 +140,7 @@
 
     <h6 class="mt-3">Параметры</h6>
 
-    @if (targetSelection$ | async; as targetSelection) {
+    <!-- @if (targetSelection$ | async; as targetSelection) {
       @if (targetSelection.type === 'column') {
         <div class="mb-1">
           <label for="classSelector">Класс колонки</label>
@@ -190,7 +190,6 @@
         <span>Скоро можно будет применить параметры</span>
       }
       @else {
-        <!-- Это если выбрали row к примеру-->
         <ng-container *ngTemplateOutlet="noRecordsTemplate; context: { 
           $implicit: { 
             title: 'Для данного элемента нет настраиваемых параметров' 
@@ -204,27 +203,27 @@
           title: 'Выберите элемент или колонку для детальной настройки' 
         } 
       }"></ng-container>
-    }
+    } -->
 
     <!-- С использованием FormGroup позже доработать !!! -->
-    @if (selectForm) {
-      <form class="d-flex flex-column gap-2" [formGroup]="selectForm">
+    @if (selectForm && selectForm()) {
+      <form class="d-flex flex-column gap-2" [formGroup]="selectForm()">
         <div class="d-block">
-          <label for="dropdownBasic1">Класс колонки</label>
+          <label for="size-dropdown">Класс колонки</label>
           <div ngbDropdown class="d-block">
-            <button class="btn btn-outline-secondary" id="dropdownBasic1" ngbDropdownToggle>
-              @for (sizesChanges of sizesChanges$ | async; track $index) {
-                {{ sizesChanges }}
+            <button class="btn btn-outline-secondary" id="size-dropdown" ngbDropdownToggle>
+              @if (sizesChanges$ | async; as sizesChanges) {
+                <span>Выбранно: {{ sizesChanges.length }}</span>
               }
-              @empty {
+              @else {
                 <span>Значение по умолчанию</span>
               }
             </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" formArrayName="sizes">
+            <div ngbDropdownMenu aria-labelledby="size-dropdown" formArrayName="sizes">
               @for (controlName of sizes$ | async; track $index) {
                 <div class="form-group ms-2">
-                  <input type="checkbox" class="form-check-check me-1" id="checkbox-{{$index}}" [formControlName]="$index">
-                  <label class="form-check-label" for="checkbox-{{ $index }}">
+                  <input type="checkbox" class="form-check-check me-1" id="checkbox-size-{{$index}}" [formControlName]="$index">
+                  <label class="form-check-label" for="checkbox-size-{{$index}}">
                     {{ controlName.code }}
                   </label>
                 </div>
@@ -234,21 +233,21 @@
         </div>
 
         <div class="d-block">
-          <label for="dropdownBasic1">Отступ колонки</label>
+          <label for="offset-dropdown">Отступ колонки</label>
           <div ngbDropdown class="d-block">
-            <button class="btn btn-outline-secondary" id="dropdownBasic1" ngbDropdownToggle>
-              @for (offsetsChanges of offsetsChanges$ | async; track $index) {
-                {{ offsetsChanges }}
+            <button class="btn btn-outline-secondary" id="offset-dropdown" ngbDropdownToggle>
+              @if (offsetsChanges$ | async; as offsetsChanges) {
+                <span>Выбранно: {{ offsetsChanges.length }}</span>
               }
-              @empty {
+              @else {
                 <span>Значение не задано</span>
               }
             </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1" formArrayName="offsets">
+            <div ngbDropdownMenu aria-labelledby="offset-dropdown" formArrayName="offsets">
               @for (controlName of offsets$ | async; track $index) {
                 <div class="form-group ms-2">
-                  <input type="checkbox" class="form-check-check me-1" id="checkbox-{{$index}}" [formControlName]="$index">
-                  <label class="form-check-label" for="checkbox-{{ $index }}">
+                  <input type="checkbox" class="form-check-check me-1" id="checkbox-offset-{{$index}}" [formControlName]="$index">
+                  <label class="form-check-label" for="checkbox-offset-{{$index}}">
                     {{ controlName.code }}
                   </label>
                 </div>

@@ -8,7 +8,7 @@ export interface IControlChecbox extends IControlBase {
     // "rows": 1, Для чего ???
 }
 
-export const INITIAL_CONTROL_RADIO_BUTTON: IControlChecbox = {
+export const INITIAL_CONTROL_CHECKBOX: IControlChecbox = {
     ...INITIAL_CONTROL_BASE,
     type: 'dict',
     component: 'checkbox',

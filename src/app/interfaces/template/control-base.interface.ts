@@ -1,4 +1,4 @@
-import { IControlChecbox } from "./check-box.interface";
+import { IControlChecbox } from "./control-check-box.interface";
 import { IControlCombobox } from "./control-combo-box.interface";
 import { IControlDate } from "./control-date.interface";
 import { IControlRadioButton } from "./control-radio-button.interface";

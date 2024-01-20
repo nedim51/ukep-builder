@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { StateService } from "../../services/core/state.service";
 import { Observable, of } from "rxjs";
-import { ColumnDisplayType, ColumnSeparatorType, ContainerPrefixType, ContainerType } from "../../interfaces/column.type";
+import { ColumnDisplayType, ColumnSeparatorType, ContainerPrefixType, ContainerType } from "../interfaces/grid-column.type";
 import { displays } from "./grid-class.data";
 import { CONTAINER_WIDTHS } from "./grid-container.data";
 import { IGridContainer, INITIAL_GRID_CONTAINER } from "../interfaces/grid-container.interface";
@@ -17,7 +17,9 @@ export class GridContainerService extends StateService<IGridContainer> {
     constructor() {
         super(INITIAL_GRID_CONTAINER)
     }
-
+    /**
+     * Установить значение контейнера
+     */
     setContainer(display: ColumnDisplayType): void {
         const container: ContainerType = this.createContainer('container', '-', display);
 
@@ -26,15 +28,20 @@ export class GridContainerService extends StateService<IGridContainer> {
             container: container
         })
     }
+     
+    /**
+     * Получить код контейнера по ширине значение в px.
+     */
+    getContainerByWidth(width: number): ColumnDisplayType | undefined {
+        const container = this.containersWidth.find(item => item.min_width <= width && width <= item.max_width)
 
-    setContainerByWidth(width: number): void {
-        const container = this.containersWidth.find(item => item.min_width <= width && width <= item.max_width);
-
-        if(container) {
-            this.setContainer(container.display);
-        }
+        return container ? container.display : undefined;
     }
 
+    /**
+     * Создать код контейнера по типу
+     * Пока что так, думаю имеет право на жизнь :)
+     */
     createContainer(container: ContainerPrefixType, separator: ColumnSeparatorType, display: ColumnDisplayType): ContainerType {
         return `${container}${separator}${display}`
     }

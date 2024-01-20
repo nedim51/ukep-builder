@@ -1,4 +1,4 @@
-import { ColumnDisplayType } from "../../interfaces/column.type";
+import { ColumnDisplayType } from "./grid-column.type";
 
 export interface IGridContainerWidht {
     min_width: number;

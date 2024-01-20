@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { IGridTemplate, INITIAL_GRID_TEMPLATE } from '../interfaces/grid-template.service';
 import { IGridRow, IGridRows } from '../interfaces/grid-row.interface';
-import { IGridColumn, IGridColumns } from '../interfaces/grid-column.interface';
+import { IGridColumn, IGridColumns, INITIAL_GRID_COLUMN } from '../interfaces/grid-column.interface';
 import { IGridElement, IGridElements } from '../interfaces/grid-element.interface';
 import { GridObjectIdService } from './grid-object-id.service';
 import { IRowColumns } from '../interfaces/grid-rows-cols.interface';
-import { GridObjectType } from '../interfaces/grid-element.type';
+import { GridObjectType } from '../interfaces/grid-object.type';
 import { elements } from './grid-element.data';
 import { insertItemByIndex } from '../../helpers/helper';
 import { StateHistoryService } from '../../services/core/state-history.service';
@@ -58,7 +58,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     const element = elements.find(element => element.id === drop_element_id);
 
     if(!element) 
-    return
+    return 
 
     const newElementId = this.gridObjectId.next();
     const newElement: IGridElement = this.createElement(
@@ -295,6 +295,38 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
    */
   setColumnClass(column: IGridColumn, className: string, append: boolean): void {
     append === true ? this.appendColumnClass(column, className) : this.removeColumnClass(column, className)
+  }
+
+  setColumnClass2(column: IGridColumn, classList: string): void {
+    // Находим индекс колонки в текущем состоянии
+    const columnIndex = this.state.cols.findIndex(item => item.id === column.id);
+    const cpColumn = { ...column };
+
+    if(columnIndex === -1) return;
+
+    // Фильтруем колонки, исключая текущую по идентификатору
+    const colsFiltered = this.state.cols.filter(item => item.id !== column.id);
+
+    // Объединяем существующие и новые классы, удаляем повторения
+    /*const classList = className;`${column.class} ${className}`
+      .split(' ')
+      .filter((value, index, array) => array.indexOf(value) === index)
+      .filter(item => {
+        const splitted = item.split('-');
+        const classSplitted = className.split('-');
+
+        // [col, xs] | [col, xs, 1] || [col, xs, offset, 1]
+        return !(
+          (classSplitted.length === 3 || classSplitted.length === 5) && 
+          (splitted.length === classSplitted.length && splitted[1] === classSplitted[1] && splitted[2] !== classSplitted[2]))
+      }).join(' ');*/
+
+    // Присваиваем новый список классов к скопированной колонке
+    cpColumn.class = `${INITIAL_GRID_COLUMN.class} ${classList}`;
+    
+    this.setState({
+      cols: insertItemByIndex(colsFiltered, columnIndex, cpColumn)
+    })
   }
   /**
    * Добавить класс к колонке

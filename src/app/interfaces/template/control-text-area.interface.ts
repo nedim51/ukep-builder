@@ -6,7 +6,7 @@ export interface IControlTextArea extends IControlBase {
     placeholder: string,         // Заглушка (placeholder)
 }
 
-export const INITIAL_CONTROL_FILE: IControlTextArea = {
+export const INITIAL_CONTROL_TEXT_AREA: IControlTextArea = {
     ...INITIAL_CONTROL_BASE,
     type: 'string',
     component: 'textarea',
