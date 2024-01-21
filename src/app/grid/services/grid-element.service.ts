@@ -8,11 +8,8 @@ import { IControlFile, INITIAL_CONTROL_FILE } from "../../interfaces/template/co
 import { IControlCombobox, INITIAL_CONTROL_COMBOBOX } from "../../interfaces/template/control-combo-box.interface";
 import { IControlTable, INITIAL_CONTROL_TABLE } from "../../interfaces/template/control-table.interface";
 import { ElementEnum } from "./grid-element.data";
-import { Observable, map } from "rxjs";
-
-export interface IElementState {
-    elements: Array<ElementType>;
-}
+import { Observable, map } from "rxjs"; 
+import { IElementState, INITIAL_ELEMENT_STATE } from "../interfaces/element-state.interface";
 
 export type ElementType = IControlTextbox | IControlTextArea | IControlChecbox | IControlRadioButton | IControlFile | IControlCombobox | IControlTable;
 
@@ -24,27 +21,31 @@ const FIELD_NAME_PREFIX: string = 'field';
 export class GridElementService extends StateService<IElementState> { 
     
     constructor() {
-        super({
-            elements: []
-        })
+        super(INITIAL_ELEMENT_STATE)
+    }
+
+    updateParam(): void {
+        // ... тут нужно подумать как буду обновлять параметры элемента, нужно это сделать как-нибудь гибко
     }
 
     setElement(element_id: ElementEnum, id: number, order: number = -1): void {
+        const newElement = this.createElement(element_id, id, order);
+
         this.setState({
-            elements: [...this.state.elements, this.createElement(element_id, id, order)]
+            elements: [...this.state.elements, newElement]
         })
     }
 
     createElement(element_id: ElementEnum, id: number, order: number = -1): ElementType {
         switch(element_id) {
-            case 0: return this.createTextbox(id, order);
-            case 1: return this.createFile(id, order);
-            case 2: return this.createCheckbox(id, order);
-            case 3: return this.createRadioButton(id, order);
-            // case 4: return this.createButton(id, order);
-            case 5: return this.createCombobox(id, order);
-            case 6: return this.createTable(id, order);
-            case 7: return this.createTextArea(id, order);
+            case ElementEnum.TextBox: return this.createTextbox(id, order);
+            case ElementEnum.File: return this.createFile(id, order);
+            case ElementEnum.CheckBox: return this.createCheckbox(id, order);
+            case ElementEnum.RadioButton: return this.createRadioButton(id, order);
+            // case ElementEnum.Button: return this.createButton(id, order);
+            case ElementEnum.ComboBox: return this.createCombobox(id, order);
+            case ElementEnum.Table: return this.createTable(id, order);
+            case ElementEnum.TextArea: return this.createTextArea(id, order);
             default: 
                 return this.createTextbox(id, order);
         }
@@ -141,7 +142,7 @@ export class GridElementService extends StateService<IElementState> {
     selectElements(): Observable<Array<ElementType>> {
         return this.select(state => state.elements);
     }
-
+ 
     selectElementById(id: number): Observable<ElementType | undefined> {
         return this.select(state => state.elements).pipe(
             map(elements => elements.find(element => element.name === `${FIELD_NAME_PREFIX}_${id}`))

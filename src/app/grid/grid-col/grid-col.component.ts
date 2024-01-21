@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostBinding, HostListener, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { GridTemplateService } from '../services/grid-template.service';
+import { GridService } from '../services/grid.service';
 import { IGridColumn, INITIAL_GRID_COLUMN } from '../interfaces/grid-column.interface';
 import { Observable, of } from 'rxjs';
 import { IGridElements } from '../interfaces/grid-element.interface';
@@ -35,7 +35,7 @@ export class GridColComponent implements OnChanges {
 
   constructor(
     private gridSelection: GridSelectionService,
-    private gridTemplate: GridTemplateService) {
+    private grid: GridService) {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -43,10 +43,10 @@ export class GridColComponent implements OnChanges {
       const column_id: number = changes['column'].currentValue.id;
       const column_parent_id: number | null = changes['column'].currentValue.parent_id;
 
-      this.rows$ = this.gridTemplate.selectRows(column_id)
-      this.elements$ = this.gridTemplate.selectElements(column_id)
+      this.rows$ = this.grid.selectRows(column_id)
+      this.elements$ = this.grid.selectElements(column_id)
       this.column$ = this.gridSelection.selectByType('cols', column_id) as Observable<IGridColumn | undefined>;
-      this.canInsertNewColumn$ = this.gridTemplate.selectCanInsertNewColumn(column_parent_id);
+      this.canInsertNewColumn$ = this.grid.selectCanInsertNewColumn(column_parent_id);
     }
     
     if(changes['column'].currentValue && changes['column'].previousValue && changes['column'].currentValue.class != changes['column'].previousValue.class) {
@@ -55,21 +55,21 @@ export class GridColComponent implements OnChanges {
   }
 
   onAppendColumnLeft(selected: IGridColumn): void {
-    this.gridTemplate.insertColumn(selected, 0);
+    this.grid.insertColumn(selected, 0);
   }
 
   onAppendColumnRight(selected: IGridColumn): void {
-    this.gridTemplate.insertColumn(selected, 1);
+    this.grid.insertColumn(selected, 1);
   }
 
   onRemoveColumn(selected: IGridColumn): void {
-    this.gridTemplate.removeColumn(selected)
+    this.grid.removeColumn(selected)
   }
 
   // Обработчик на случай если дропнули колонку в строку
   handleDroppedItem(item: IGridColumn, target: IGridRow): void {
     switch(item.type) {
-      case 'column': this.gridTemplate.appendColumnById(item.id, target.id, target.type);
+      case 'column': this.grid.appendColumnById(item.id, target.id, target.type);
     }
 
     // console.log(`[GridColComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)

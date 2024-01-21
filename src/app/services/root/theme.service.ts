@@ -1,24 +1,25 @@
-import { Inject, Injectable, Optional } from "@angular/core";
-import { IThemeColors, IThemeSwitcherItem, IThemeSwitcherItems } from "../../interfaces/theme/theme.interface";
 import { DOCUMENT } from "@angular/common";
+import { Inject, Injectable, Optional } from "@angular/core";
 import { BehaviorSubject, Observable, distinctUntilChanged, map, of } from "rxjs";
+import { IThemeColors, IThemeSwitcherItem, IThemeSwitcherItems, ThemeEnum } from "../../interfaces/theme/theme.interface";
 
 export const LOCAL_STORAGE_THEME_KEY: string = 'UKEP-THEME';
 
 export const themeItems: IThemeSwitcherItems = [
   {
     title: 'Светлая',
-    code: 'light',
+    code: ThemeEnum.Light,
     icon_name: 'sun',
     icon_class_list: 'svg-icon svg-icon-md svg-icon-warning'
   },
   {
     title: 'Темная',
-    code: 'dark',
+    code: ThemeEnum.Dark,
     icon_name: 'moon',
     icon_class_list: 'svg-icon svg-icon-md svg-icon-secondary'
   }
 ];
+
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,7 @@ export class ThemeService extends BehaviorSubject<IThemeSwitcherItem> {
     @Optional() 
     @Inject(DOCUMENT) 
     private document: Document) {
-    const currentThemeName = localStorage.getItem(LOCAL_STORAGE_THEME_KEY) as IThemeColors || 'light';
+    const currentThemeName = localStorage.getItem(LOCAL_STORAGE_THEME_KEY) as IThemeColors || ThemeEnum.Light;
     const currentThemeItem = themeItems.find(x => x.code === currentThemeName) || themeItems[0];
     super(currentThemeItem)      
   }
@@ -49,7 +50,7 @@ export class ThemeService extends BehaviorSubject<IThemeSwitcherItem> {
   }
 
   loadTheme(): void {
-    let themeName: IThemeColors = localStorage.getItem(LOCAL_STORAGE_THEME_KEY) as IThemeColors || 'light';
+    let themeName: IThemeColors = localStorage.getItem(LOCAL_STORAGE_THEME_KEY) as IThemeColors || ThemeEnum.Light;
     this.setTheme(themeName)
   }
 

@@ -4,7 +4,7 @@ import { IResize } from '../../directives/resizable/resize.interface';
 import { ClassDataService } from '../services/grid-class.service';
 import { GridContainerService } from '../services/grid-container.service';
 import { IGridRow } from '../interfaces/grid-row.interface';
-import { GridTemplateService } from '../services/grid-template.service';
+import { GridService } from '../services/grid.service';
 import { ContainerType } from '../interfaces/grid-column.type';
 import { IGuideItems } from '../../interfaces/guide.interface';
 
@@ -26,7 +26,7 @@ export class GridRootComponent {
 
   constructor(
     private classData: ClassDataService,
-    private gridTemplate: GridTemplateService,
+    private grid: GridService,
     private gridContainer: GridContainerService) {
     this.sizes$ = this.classData.selectBySize('col-lg');
     this.offsets$ = this.classData.selectByOffset('col-lg-offset');
@@ -45,7 +45,7 @@ export class GridRootComponent {
 
   handleDroppedItem(item: IGridRow): void {
     switch (item.type) {
-      case 'row': this.gridTemplate.appendRowById(item.id, null, null);
+      case 'row': this.grid.appendRowById(item.id, null, null);
         break;
     }
 

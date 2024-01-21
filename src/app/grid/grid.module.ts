@@ -10,7 +10,7 @@ import { DraggableDirective } from '../directives/draggable/draggable.directive'
 import { GridSelectionService } from './services/grid-selection.service';
 import { BehaviorSubject } from 'rxjs';
 import { OBJECT_ID, GridObjectIdService } from './services/grid-object-id.service';
-import { GridTemplateService } from './services/grid-template.service';
+import { GridService } from './services/grid.service';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgUkepIconsModule } from 'ng-ukep-icons';
 import { GridRootComponent } from './grid-root/grid-root.component';
@@ -39,14 +39,13 @@ import { ResizableDirective } from '../directives/resizable/resizable.directive'
   ],
   exports: [
     GridRootComponent,
-    GridContainerComponent,
     GridSwitcherComponent,
   ],
   providers: [
     { provide: OBJECT_ID, useValue: new BehaviorSubject<number>(0) },
     { provide: GridObjectIdService, useClass: GridObjectIdService },
     { provide: GridSelectionService, useClass: GridSelectionService },
-    { provide: GridTemplateService, useClass: GridTemplateService }
+    { provide: GridService, useClass: GridService }
   ]
 })
 export class GridModule { }

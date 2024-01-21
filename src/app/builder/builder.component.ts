@@ -11,7 +11,7 @@ import { IGridElement } from '../grid/interfaces/grid-element.interface';
 import { Destroy } from '../services/core/destroy.service';
 import { ClassDataService } from '../grid/services/grid-class.service';
 import { GridSelectionService } from '../grid/services/grid-selection.service';
-import { GridTemplateService } from '../grid/services/grid-template.service';
+import { GridService } from '../grid/services/grid.service';
 import { GridContainerService } from '../grid/services/grid-container.service';
 import { GridElementDataService } from '../grid/services/grid-element-data.service';
 import { IElements } from '../interfaces/element.interface';
@@ -20,6 +20,8 @@ import { BuilderDialogService } from './services/builder-dialog.service';
 import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
 import { BuilderParamsService } from './services/builder-params.service';
 import { ElementType, GridElementService } from '../grid/services/grid-element.service';
+import { GridObjectEnum } from '../grid/interfaces/grid-object.type';
+import { ElementEnum } from '../grid/services/grid-element.data';
 
 @Component({
   selector: 'app-builder',
@@ -29,6 +31,8 @@ import { ElementType, GridElementService } from '../grid/services/grid-element.s
 })
 export class BuilderComponent implements AfterViewInit {
   
+  readonly elementEnum = ElementEnum;
+
   title: WritableSignal<string> = signal('Анкета-заявка 115-ФЗ');
   themeName$: Observable<IThemeColors>
   container$: Observable<ContainerType>
@@ -58,7 +62,7 @@ export class BuilderComponent implements AfterViewInit {
   
   routerExtracts$: Observable<NavigationExtras | undefined>;
 
-  element$: Observable<ElementType | undefined> | undefined;
+  element$?: Observable<Array<keyof ElementType> | undefined>;
 
   constructor(
     private router: Router,
@@ -69,7 +73,7 @@ export class BuilderComponent implements AfterViewInit {
     private elementData: GridElementDataService,
     private builderDialog: BuilderDialogService,
     private gridSelection: GridSelectionService,
-    private gridTemplate: GridTemplateService,
+    private grid: GridService,
     private gridContainer: GridContainerService,
     private themeService: ThemeService) {
     this.themeName$ = this.themeService.selectCurrentThemeName()
@@ -80,9 +84,9 @@ export class BuilderComponent implements AfterViewInit {
     this.offsets$ = this.classData.selectByOffset('col-lg-offset');
     this.sizeCodeList$ = this.classData.selectSizesCodes();
     this.offsetCodeList$ = this.classData.selectOffsetsCodes();
-
+    // this.element$ = this.gridElement.selectElementById(null)
     this.targetClassList$ = this.targetSelection$.pipe(
-      filter(selection => selection !== undefined && selection.type === 'column'), 
+      filter(selection => selection !== undefined && selection.type === GridObjectEnum.Column), 
       map(selection => (selection as IGridColumn).class)
     );
     
@@ -97,7 +101,7 @@ export class BuilderComponent implements AfterViewInit {
       takeUntil(this.destroy$)
     ).subscribe(state => {
       if(state && state['template']) {
-        this.gridTemplate.insertFirstTemplate(state['template']['rows'], state['template']['cols']);
+        this.grid.insertFirstTemplate(state['template']['rows'], state['template']['cols']);
       }
 
       if(state && state['dialog'] && state['dialog'] === 'drawTemplate') {
@@ -155,15 +159,21 @@ export class BuilderComponent implements AfterViewInit {
         })
       )
     )
-    .pipe(
+    .pipe( 
+      filter(selection => selection != undefined && selection.selection != undefined),
+
       tap(selection => {
-        if(selection.selection!.type === 'element') {
-          this.element$ = this.gridElement.selectElementById(selection.selection!.id)
+        if(selection.selection!.type === GridObjectEnum.Element) {
+          this.element$ = this.gridElement.selectElementById(selection.selection!.id).pipe(map(elementParams => elementParams ? Object.keys(elementParams) as Array<keyof ElementType> : undefined))
         }
+
+        this.selectForm = undefined
       }),
-      tap(selection => this.selectForm = undefined),
-      filter(selection => selection != undefined && selection.selection != undefined && selection.selection.type === 'column'),
+
+      filter(selection => selection!.selection!.type === GridObjectEnum.Column),
+      
       distinctUntilChanged((prev, curr) => prev!.selection!.type != curr!.selection!.type),
+
       switchMap((targetSelection) => {
         const classList = (targetSelection.selection as IGridColumn).class.split(' ');
         return this.buildParams.createForm(classList, { size: targetSelection.size, offset: targetSelection.offset}).pipe(
@@ -189,8 +199,7 @@ export class BuilderComponent implements AfterViewInit {
           )
         ),
         tap(changes => {
-          this.gridTemplate.setColumnClass2(selection, changes.join().replaceAll(',', ' '))
-          console.log(changes)
+          this.grid.setColumnClass2(selection, changes.join().replaceAll(',', ' '))
         })
       )
 
@@ -203,8 +212,7 @@ export class BuilderComponent implements AfterViewInit {
           )
         ),
         tap(changes => {
-          this.gridTemplate.setColumnClass2(selection, changes.join().replaceAll(',', ' '))
-          console.log(changes)
+          this.grid.setColumnClass2(selection, changes.join().replaceAll(',', ' '))
         })
       )
 
@@ -220,14 +228,14 @@ export class BuilderComponent implements AfterViewInit {
 
   handleDroppedItem(item: IGridRow): void {
     switch (item.type) {
-      case 'row': this.gridTemplate.appendRowById(item.id, null, null);
+      case 'row': this.grid.appendRowById(item.id, null, null);
         break;
     }
     // console.log(`[AppComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)
   }
 
   onCheckboxChange(event: any, value: string, target: any): void {
-    this.gridTemplate.setColumnClass(target, value, event.target.checked)
+    this.grid.setColumnClass(target, value, event.target.checked)
   }
 
   onResizeContainer(size: IResize): void {
@@ -235,17 +243,26 @@ export class BuilderComponent implements AfterViewInit {
   }
 
   export(): void {
-    this.gridTemplate.export();
+    this.grid.export();
   }
 
   undo(): void {
-    this.gridTemplate.undo();
+    this.grid.undo();
   }
 
   redo(): void {
-    this.gridTemplate.redo();
+    this.grid.redo();
   }
 }
+
+
+
+
+
+
+
+
+
 
 
         // map(({ width }) => this.gridContainer.getContainerByWidth(width)),

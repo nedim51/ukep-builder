@@ -1,4 +1,5 @@
 import { IControlBase, INITIAL_CONTROL_BASE } from "./control-base.interface";
+import { ControlTypeEnum } from "./control-type.enum";
 import { IDictCode, IDictItems } from "./dict.interface";
 
 // Интерфейс контрола файлового вложения
@@ -13,6 +14,7 @@ export interface IControlFile extends IControlBase {
 
 export const INITIAL_CONTROL_FILE: IControlFile = {
     ...INITIAL_CONTROL_BASE,
+    type: ControlTypeEnum.File,
     file_types: [],
     allowed_extension: [],
     default_type: '',

@@ -1,5 +1,5 @@
 <!-- Input -->
-@if (element.element_id === 0) {
+@if (element.element_id === elementEnum.TextBox) {
   <div class="form-group">
     <label>Lorem ipsum dolor</label>
     <input type="email" class="form-control form-control-sm" placeholder="Lorem ipsum dolor sit" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
@@ -8,7 +8,7 @@
 }
 
 <!-- File-input -->
-@if (element.element_id === 1) {
+@if (element.element_id === elementEnum.File) {
   <div class="form-group">
     <label>Lorem ipsum dolor</label>
     <input type="file" class="form-control-file" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
@@ -16,32 +16,38 @@
 }
 
 <!-- Checkbox -->
-@if (element.element_id === 2) {
-  <div class="form-check">
-    <input class="form-check-input" type="checkbox" value="" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
-    <label class="form-check-label">Lorem ipsum dolor sit</label>
-  </div>
+@if (element.element_id === elementEnum.CheckBox) {
+  @for (dictItem of dictItems$ | async; track dictItem.code) {
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" value="{{dictItem.code}}" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
+      <label class="form-check-label">{{ dictItem.caption }}</label>
+    </div>
+  }
 }
 
 <!-- Radio-button -->
-@if (element.element_id === 3) {
-  <div class="form-check">
-    <input class="form-check-input" type="radio" value="" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
-    <label class="form-check-label">Lorem ipsum dolor sit</label>
-  </div>
+@if (element.element_id === elementEnum.RadioButton) {
+  @for (dictItem of dictItems$ | async; track dictItem.code) {
+    <div class="form-check">
+      <input class="form-check-input" type="radio" value="" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">
+      <label class="form-check-label">Lorem ipsum dolor sit</label>
+    </div>
+  }
 }
 
 <!-- Button -->
-@if (element.element_id === 4) {
+@if (element.element_id === elementEnum.Button) {
   <button type="submit" class="btn btn-primary" (click)="$event.preventDefault()" (mousedown)="$event.preventDefault()">Lorem ipsum dolor sit</button>
 }
 
 <!-- Combobox -->
-@if (element.element_id === 5) {
+@if (element.element_id === elementEnum.ComboBox) {
   <div class="form-group"> 
     <label class="my-1 mr-2" for="inlineFormCustomSelectPref">Lorem ipsum</label>
     <select class="custom-select custom-select-sm">
-      <option selected>Lorem ipsum dolor sits</option>
+      @for (dictItem of dictItems$ | async; track dictItem.code) {
+        <option selected>{{ dictItem.caption }}</option>
+      }
     </select>
   </div>
 }

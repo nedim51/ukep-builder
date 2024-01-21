@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Observable, filter, map, mergeMap, of } from 'rxjs';
-import { IGridTemplate } from '../interfaces/grid-template.service';
+import { IGridState } from '../interfaces/grid-state.interface';
 import { IGridRow, IGridRows } from '../interfaces/grid-row.interface';
 import { IGridColumn, IGridColumns } from '../interfaces/grid-column.interface';
 import { IGridElement, IGridElements } from '../interfaces/grid-element.interface';
-import { GridTemplateService } from './grid-template.service';
+import { GridService } from './grid.service';
 import { StateService } from '../../services/core/state.service';
 import { IGridSelection } from '../interfaces/grid-selection.interface';
 import { IGridBase } from '../interfaces/grid.interface';
@@ -12,12 +12,12 @@ import { IGridBase } from '../interfaces/grid.interface';
 @Injectable()
 export class GridSelectionService extends StateService<IGridSelection> {
 
-    gridTemplateState$: Observable<IGridTemplate>
+    gridState$: Observable<IGridState>
 
-    constructor(private gridTemplate: GridTemplateService) {
+    constructor(private grid: GridService) {
         super({});
 
-        this.gridTemplateState$ = this.gridTemplate.selectState()
+        this.gridState$ = this.grid.selectState()
     }
 
     // Set current selections
@@ -32,9 +32,9 @@ export class GridSelectionService extends StateService<IGridSelection> {
             // Skip undefined
             filter(selected => selected !== undefined),
 
-            mergeMap(selected => this.gridTemplateState$.pipe(
+            mergeMap(selected => this.gridState$.pipe(
                 map(state => {
-                    const type: keyof IGridTemplate = this.typeToKey(selected!.type)
+                    const type: keyof IGridState = this.typeToKey(selected!.type)
                     return state[type].find(item => item.id === selected!.id);
                 })
             )
@@ -48,21 +48,21 @@ export class GridSelectionService extends StateService<IGridSelection> {
     }
 
     // Get select
-    selectByType(type: keyof IGridTemplate, selected_id: number): Observable<IGridRow | IGridColumn | IGridElement | undefined> {
+    selectByType(type: keyof IGridState, selected_id: number): Observable<IGridRow | IGridColumn | IGridElement | undefined> {
         return this.selectAll().pipe(
             map(selected => selected && selected[type] ? selected[type].find(item => item.id === selected_id) : undefined)
         )
     }
 
     // Get all selections { [], [], [] }
-    selectAll(): Observable<IGridTemplate> {
+    selectAll(): Observable<IGridState> {
         return this.select(state => state.selected).pipe(
 
             //Skip undefined
             filter(selected => selected !== undefined),
 
             // Обрабатываем изменение состояния элементов, обязательно, потому что могут измениться свойства
-            mergeMap(selected => selected ? this.gridTemplateState$.pipe(
+            mergeMap(selected => selected ? this.gridState$.pipe(
                 map(state => this.findAllOccurrences(state, selected!.id)),
                 map(selections => {
                     return {
@@ -76,7 +76,7 @@ export class GridSelectionService extends StateService<IGridSelection> {
         )
     }
 
-    findAllOccurrences(tree: IGridTemplate, targetId: number | null) {
+    findAllOccurrences(tree: IGridState, targetId: number | null) {
         const result: Array<IGridRow | IGridColumn | IGridElement> = [];
 
         const findRecursive = (nodes: Array<IGridRow> | Array<IGridColumn> | Array<IGridElement>) => {
@@ -98,7 +98,7 @@ export class GridSelectionService extends StateService<IGridSelection> {
         }
     
         for (const key in tree) {
-            const found = findRecursive(tree[key as keyof IGridTemplate]);
+            const found = findRecursive(tree[key as keyof IGridState]);
     
             if (found.length > 0) {
                 result.push(...found);
@@ -108,7 +108,7 @@ export class GridSelectionService extends StateService<IGridSelection> {
         return result;
     }
 
-    typeToKey(type: IGridBase['type']): keyof IGridTemplate {
+    typeToKey(type: IGridBase['type']): keyof IGridState {
         switch (type) {
             case 'row': return 'rows';
             case 'column': return 'cols';

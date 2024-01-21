@@ -6,10 +6,8 @@ import { IControlTable } from "./control-table.interface";
 import { IControlTextArea } from "./control-text-area.interface";
 import { IControlTextbox } from "./control-text-box.interface";
 import { IControlFile } from "./control-file-input.interface";
-
-export type ControlType = 'date' | 'string' | 'dict' | 'file' | 'table' | 'number';
-
-export type ControlComponentType = 'select' | 'checkbox' | 'radio' | 'textarea';
+import { ControlComponentType } from "./control-component.enum";
+import { ControlType, ControlTypeEnum } from "./control-type.enum";
 
 export type TableControlType = IControlChecbox | IControlCombobox | IControlRadioButton | IControlDate | IControlTextArea | IControlTextbox | IControlFile;
 
@@ -31,7 +29,7 @@ export interface IControlBase {
 export const INITIAL_CONTROL_BASE: IControlBase = {
     name: '',
     caption: '',
-    type: 'string',
+    type: ControlTypeEnum.String,
     required: false,
     readonly: false,
     visible: false,

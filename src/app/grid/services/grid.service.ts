@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { IGridTemplate, INITIAL_GRID_TEMPLATE } from '../interfaces/grid-template.service';
+import { IGridState, INITIAL_GRID_STATE } from '../interfaces/grid-state.interface';
 import { IGridRow, IGridRows } from '../interfaces/grid-row.interface';
 import { IGridColumn, IGridColumns, INITIAL_GRID_COLUMN } from '../interfaces/grid-column.interface';
-import { IGridElement, IGridElements } from '../interfaces/grid-element.interface';
+import { IGridElement, IGridElements, INITIAL_GRID_ELEMENT } from '../interfaces/grid-element.interface';
 import { GridObjectIdService } from './grid-object-id.service';
 import { IRowColumns } from '../interfaces/grid-rows-cols.interface';
 import { GridObjectType } from '../interfaces/grid-object.type';
@@ -14,19 +14,19 @@ import { StateHistoryService } from '../../services/core/state-history.service';
 export const MAX_GRID_COLUMNS: number = 12;
 
 @Injectable()
-export class GridTemplateService extends StateHistoryService<IGridTemplate> {
+export class GridService extends StateHistoryService<IGridState> {
   
   constructor(private gridObjectId: GridObjectIdService) {
-    super(INITIAL_GRID_TEMPLATE)
+    super(INITIAL_GRID_STATE)
   }
 
   export() {
     this.select(state => state).pipe(map(state => {
       const keys = Object.keys(state);
-      let init: any = INITIAL_GRID_TEMPLATE;
+      let init: any = INITIAL_GRID_STATE;
 
       for(let key of keys) {
-        init[key] = state[key as keyof IGridTemplate].map(item => {
+        init[key] = state[key as keyof IGridState].map(item => {
           switch(item.type) {
             case 'row': case 'element': return {
               id: item.id,
@@ -54,11 +54,11 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
     drop_element_id: number, 
     parent_id: number | null = null, 
     parent_type: GridObjectType | null
-  ): void {
+  ): IGridElement {
     const element = elements.find(element => element.id === drop_element_id);
 
     if(!element) 
-    return 
+    return INITIAL_GRID_ELEMENT;
 
     const newElementId = this.gridObjectId.next();
     const newElement: IGridElement = this.createElement(
@@ -66,12 +66,14 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
       element.id,
       element.title, 
       parent_id, 
-      parent_type
+      parent_type 
     );
     
     this.setState({
       elements: [...this.state.elements, newElement]
     })
+
+    return newElement;
   }
   /**
    * Вызываеся когда дропнули колонку в строку
@@ -392,7 +394,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
   /**
    * Получить последнюю позицию индекса по свойству
    */
-  getMaxIndex(property: keyof IGridTemplate, parent_id: number | null): number {
+  getMaxIndex(property: keyof IGridState, parent_id: number | null): number {
     const indexList = this.state[property]
       // .filter(item => item.parent_id === parent_id)
       .map(item => item.parent_id === parent_id ? item.index : -1);
@@ -406,7 +408,7 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
    * Пока что не используется !!! 
    * Жестко обновить весть список индексов
    */
-  updateIndexListHard(property: keyof IGridTemplate, parent_id: number | null): void {
+  updateIndexListHard(property: keyof IGridState, parent_id: number | null): void {
     const indexList = this.state[property]
       .filter(item => item.parent_id === parent_id)
       .map(item => item.index);
@@ -625,11 +627,11 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
    * 
    * Селектнуть все
    */
-  selectState(): Observable<IGridTemplate> {
+  selectState(): Observable<IGridState> {
     return this.select(state => state);
   }
   /**
-   * Селектнуть строки + фильтр + сортировка
+   * Селектнуть строки + сортировка
    */
   selectRows(
     parent_id: number | null, 
@@ -637,6 +639,18 @@ export class GridTemplateService extends StateHistoryService<IGridTemplate> {
   ): Observable<IGridRows> {
     return this.select(state => state.rows).pipe(
       map(rows => rows.filter(row => row.parent_id === parent_id).sort(sortFn))
+    );
+  }
+  /**
+   * Селектнуть строки + фильтр + сортировка
+   */
+  selectRowByFilter(
+    parent_id: number | null, 
+    filterFn: (row: IGridRow) => boolean = (row) => row.parent_id === parent_id,
+    sortFn: (a: IGridRow, b: IGridRow) => number = (a, b) => a.index - b.index
+  ): Observable<IGridRows> {
+    return this.select(state => state.rows).pipe(
+      map(rows => rows.filter(filterFn).sort(sortFn))
     );
   }
   /**

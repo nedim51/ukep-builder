@@ -1,4 +1,5 @@
 import { IControlBase, INITIAL_CONTROL_BASE } from "./control-base.interface";
+import { ControlTypeEnum } from "./control-type.enum";
 
 export interface IControlTextbox extends IControlBase {
     default_value: string, // Значение по умолчанию
@@ -12,6 +13,7 @@ export interface IControlTextbox extends IControlBase {
 
 export const INITIAL_CONTROL_TEXTBOX: IControlTextbox = {
     ...INITIAL_CONTROL_BASE,
+    type: ControlTypeEnum.String,
     default_value: '',
     min_rows: 1,
     max_rows: 1,

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, HostBinding, HostListener } from '@angular/core';
-import { GridTemplateService } from '../services/grid-template.service';
+import { GridService } from '../services/grid.service';
 import { Observable } from 'rxjs';
 import { IGridRow, IGridRows } from '../interfaces/grid-row.interface';
 import { IGridColumn, INITIAL_GRID_COLUMN } from '../interfaces/grid-column.interface';
@@ -31,19 +31,22 @@ export class GridContainerComponent {
 
   constructor(
     private gridSelection: GridSelectionService,
-    private gridTemplate: GridTemplateService) {
-    this.rows$ = this.gridTemplate.selectRows(null);
-    this.canUndo$ = this.gridTemplate.canUndo();
-    this.canRedo$ = this.gridTemplate.canRedo();
+    private grid: GridService) {
+    this.rows$ = this.grid.selectRows(null); // Фокусирование на эелемент тут будет id row на который нужно зафокуситься
+    this.canUndo$ = this.grid.canUndo();
+    this.canRedo$ = this.grid.canRedo();
+    // setTimeout(() => {
+    //   this.rows$ = this.grid.selectRowByFilter(null, (row) => row.id === 7);
+    // }, 4000)
   }
 
   createFirstColumns(): void {
-    this.gridTemplate.insertFirstTemplate(BEGIN_ROWS, BEGIN_COLUMNS);
+    this.grid.insertFirstTemplate(BEGIN_ROWS, BEGIN_COLUMNS);
   }
 
   handleDroppedItem(item: IGridColumn, target: IGridRow): void {
     switch(item.type) {
-      case 'column': this.gridTemplate.appendColumnById(item.id, target.id, target.type);
+      case 'column': this.grid.appendColumnById(item.id, target.id, target.type);
     }
     
     // console.log(`[GridContainerComponent] handleDroppedItem [DROP_TYPE = ${item.type.toUpperCase()}]`, item)

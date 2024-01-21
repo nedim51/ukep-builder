@@ -9,7 +9,7 @@ export interface ITemplateBase {
 
 // Начальное состояние шаблона
 export const INITIAL_TEMPLATE_BASE: ITemplateBase = {
-    template_id: 0,
+    template_id: -1,
     caption: '',
     field_group: []
 }

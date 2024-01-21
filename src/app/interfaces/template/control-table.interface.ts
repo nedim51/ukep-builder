@@ -1,4 +1,5 @@
 import { IControlBase, INITIAL_CONTROL_BASE, TableControlType } from "./control-base.interface";
+import { ControlTypeEnum } from "./control-type.enum";
 
 // Интерфейс контрола таблицы
 export interface IControlTable extends IControlBase {
@@ -10,7 +11,7 @@ export interface IControlTable extends IControlBase {
 
 export const INITIAL_CONTROL_TABLE: IControlTable = {
     ...INITIAL_CONTROL_BASE,
-    type: 'table',
+    type: ControlTypeEnum.Table,
     fields: [],
     min_rows: 0,
     max_rows: 0,
