@@ -83,7 +83,7 @@
         <li class="sidebar-item user-draggable" appDraggable [dragData]="item">
 
           <!-- Title {{ $index + 1 }}. -->
-          <h6>{{ item.title }}</h6>
+          <span class="h6 small">{{ item.title }}</span>
 
           <!-- Input -->
           @if (item.id === elementEnum.TextBox) {
@@ -163,7 +163,7 @@
                 <input class="form-control" id="{{item.key}}-{{item.type}}" type="text" [value]="item.element[item.key2]" [disabled]="item.readonly">
               }
               @else if (item.type === contolParamType.Number) {
-                <input class="form-control" id="{{item.key}}-{{item.type}}" type="number" [value]="item.element[item.key2]" [disabled]="item.readonly">
+                <input class="form-control" [min]="item.min" [max]="item.max" id="{{item.key}}-{{item.type}}" type="number" [value]="item.element[item.key2]" [disabled]="item.readonly">
               }
               @else if (item.type === contolParamType.Boolean) {
                 <input class="form-check-input m-0" id="{{item.key}}-{{item.type}}" type="checkbox" [checked]="item.element[item.key2]" [disabled]="item.readonly">
