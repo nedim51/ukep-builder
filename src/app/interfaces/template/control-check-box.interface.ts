@@ -14,7 +14,7 @@ export const INITIAL_CONTROL_CHECKBOX: IControlChecbox = {
     ...INITIAL_CONTROL_BASE,
     type: ControlTypeEnum.Dict,
     component: ControlComponentEnum.CheckBox,
-    multi_select: false,
+    multi_select: true,
     dict_items: INITIAL_DICT_ITEMS,
     default_item: INITIAL_DICT_CODES
 }

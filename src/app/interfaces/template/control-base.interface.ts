@@ -32,7 +32,7 @@ export const INITIAL_CONTROL_BASE: IControlBase = {
     type: ControlTypeEnum.String,
     required: false,
     readonly: false,
-    visible: false,
+    visible: true,
     hint: '',
     order: -1
 }

@@ -12,7 +12,7 @@ import { Observable, map } from "rxjs";
 import { IElementState, INITIAL_ELEMENT_STATE } from "../interfaces/element-state.interface";
 
 export type ElementType = IControlTextbox | IControlTextArea | IControlChecbox | IControlRadioButton | IControlFile | IControlCombobox | IControlTable;
-
+export type ElementTypeIdx = keyof ElementType;
 const FIELD_NAME_PREFIX: string = 'field';
 
 @Injectable({

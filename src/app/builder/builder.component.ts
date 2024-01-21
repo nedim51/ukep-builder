@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, WritableSignal, signal } from '@angular/core';
 import { IThemeColors } from '../interfaces/theme/theme.interface';
-import { Observable, Subject, distinctUntilChanged, filter, first, map, merge, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
+import { Observable, Subject, distinctUntilChanged, filter, first, map, merge, of, switchMap, takeUntil, tap, throttleTime } from 'rxjs';
 import { ThemeService } from '../services/root/theme.service';
 import { IResize } from '../directives/resizable/resize.interface';
 import { IGuideItems } from '../interfaces/guide.interface';
@@ -19,9 +19,10 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { BuilderDialogService } from './services/builder-dialog.service';
 import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
 import { BuilderParamsService } from './services/builder-params.service';
-import { ElementType, GridElementService } from '../grid/services/grid-element.service';
+import { ElementType, ElementTypeIdx, GridElementService } from '../grid/services/grid-element.service';
 import { GridObjectEnum } from '../grid/interfaces/grid-object.type';
 import { ElementEnum } from '../grid/services/grid-element.data';
+import { CONTROL_PARAMS, ControlParamTypeEnum, IControlParam } from '../interfaces/template/control-param.interface';
 
 @Component({
   selector: 'app-builder',
@@ -32,7 +33,8 @@ import { ElementEnum } from '../grid/services/grid-element.data';
 export class BuilderComponent implements AfterViewInit {
   
   readonly elementEnum = ElementEnum;
-
+  readonly contolParamType = ControlParamTypeEnum;
+  
   title: WritableSignal<string> = signal('Анкета-заявка 115-ФЗ');
   themeName$: Observable<IThemeColors>
   container$: Observable<ContainerType>
@@ -62,7 +64,7 @@ export class BuilderComponent implements AfterViewInit {
   
   routerExtracts$: Observable<NavigationExtras | undefined>;
 
-  element$?: Observable<Array<keyof ElementType> | undefined>;
+  element$?: Observable<Array<IControlParam & { element: ElementType, key2: ElementTypeIdx }> | undefined>;
 
   constructor(
     private router: Router,
@@ -160,11 +162,27 @@ export class BuilderComponent implements AfterViewInit {
       )
     )
     .pipe( 
+      tap(_ => this.element$ = of(undefined)),
       filter(selection => selection != undefined && selection.selection != undefined),
 
       tap(selection => {
         if(selection.selection!.type === GridObjectEnum.Element) {
-          this.element$ = this.gridElement.selectElementById(selection.selection!.id).pipe(map(elementParams => elementParams ? Object.keys(elementParams) as Array<keyof ElementType> : undefined))
+          this.element$ = this.gridElement.selectElementById(selection.selection!.id).pipe(
+            map(elementParams => {
+              if(!elementParams) 
+                return undefined;
+
+              const keys = Object.keys(elementParams);
+
+              return CONTROL_PARAMS.filter(param => keys.includes(param.key)).map(params => { 
+                return { 
+                  ...params, 
+                  key2: params.key as ElementTypeIdx,
+                  element: elementParams 
+                }
+              })
+            })
+          )
         }
 
         this.selectForm = undefined
@@ -176,7 +194,7 @@ export class BuilderComponent implements AfterViewInit {
 
       switchMap((targetSelection) => {
         const classList = (targetSelection.selection as IGridColumn).class.split(' ');
-        return this.buildParams.createForm(classList, { size: targetSelection.size, offset: targetSelection.offset}).pipe(
+        return this.buildParams.createForm(classList, { size: targetSelection.size, offset: targetSelection.offset }).pipe(
           map(form => { 
             return { 
               form: form, 
