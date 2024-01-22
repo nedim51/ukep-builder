@@ -11,7 +11,7 @@ import { IGridElement } from '../grid/interfaces/grid-element.interface';
 import { Destroy } from '../services/core/destroy.service';
 import { ClassDataService } from '../grid/services/grid-class.service';
 import { GridSelectionService } from '../grid/services/grid-selection.service';
-import { GridService } from '../grid/services/grid.service';
+import { GridService, findChildrenRecursive } from '../grid/services/grid.service';
 import { GridContainerService } from '../grid/services/grid-container.service';
 import { GridElementDataService } from '../grid/services/grid-element-data.service';
 import { IElements } from '../interfaces/element.interface';
@@ -23,12 +23,17 @@ import { ElementType, ElementTypeIdx, GridElementService } from '../grid/service
 import { GridObjectEnum } from '../grid/interfaces/grid-object.type';
 import { ElementEnum } from '../grid/services/grid-element.data';
 import { CONTROL_PARAMS, ControlParamTypeEnum, IControlParam } from '../interfaces/template/control-param.interface';
+import { collapseItems, DEFAULT_DURATION } from '../helpers/animations';
+import { downloadFile } from '../helpers/helper';
 
 @Component({
   selector: 'app-builder',
   templateUrl: './builder.component.html',
   styleUrl: './builder.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    collapseItems(DEFAULT_DURATION.duration, DEFAULT_DURATION.durationType)
+  ]
 })
 export class BuilderComponent implements AfterViewInit {
   
@@ -261,7 +266,12 @@ export class BuilderComponent implements AfterViewInit {
   }
 
   export(): void {
-    this.grid.export();
+    this.grid.export()
+    .pipe(first())
+    .subscribe(result => 
+      console.log(findChildrenRecursive(result, 3))
+      // downloadFile('grid export.json', JSON.stringify(result))
+    );
   }
 
   undo(): void {

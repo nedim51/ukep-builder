@@ -6,6 +6,10 @@ import { displays } from "./grid-class.data";
 import { CONTAINER_WIDTHS } from "./grid-container.data";
 import { IGridContainer, INITIAL_GRID_CONTAINER } from "../interfaces/grid-container.interface";
 
+/**
+ * Сервис представляет взаимодействие с контейнером
+ */
+
 @Injectable({
     providedIn: 'root'
 })

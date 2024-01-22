@@ -64,7 +64,7 @@
         </span>
       </button>
 
-      <button type="button" class="btn btn-outline-secondary me-5" [routerLink]="['/']" ngbTooltip="Экспорт">
+      <button type="button" class="btn btn-outline-secondary me-5" ngbTooltip="Экспорт" (click)="export()">
         <span class="svg-icon svg-icon-warning">
           <ukep-icons name="export"></ukep-icons>
         </span>
@@ -156,7 +156,7 @@
 
       <ul class="p-0">
         @for (item of element$ | async; track $index) {
-          <li class="mb-2" style="list-style-type: none;">
+          <li class="mb-2" style="list-style-type: none;" @collapseItems>
             <div class="d-flex" [ngClass]="item.type === contolParamType.Boolean ? 'flex-row-reverse gap-2 align-items-center justify-content-end' : 'flex-column'">
               <label class="h6 small m-0" [ngClass]="item.type !== contolParamType.Boolean ? 'mb-1' : ''" for="{{item.key}}-{{item.type}}">{{ item.title }}</label>
               @if (item.type === contolParamType.String) {

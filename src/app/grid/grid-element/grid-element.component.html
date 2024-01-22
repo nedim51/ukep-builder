@@ -56,5 +56,6 @@
   <div class="test-selected-label test-selected-element user-draggable" tabindex="0">
     <img ngSrc="../../../../assets/svg/drag.svg" width="16" height="16"/>
     <span>{{ selectedElement.type }}-{{ selectedElement.id }}[{{selectedElement.index}}]</span>
+    <button class="selected selected-btn selected-btn-drop-right selected-btn--danger" type="button" (click)="onRemoveElement(selectedElement)">de</button>
   </div>
 }

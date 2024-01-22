@@ -53,6 +53,11 @@ $selected-row-btn-offset: calc($selected-row-btn-width / 2 - $selected-row-btn-w
     top: calc(50% - $selected-row-btn-width / 2 - 1px);
 }
 
+.selected-btn-drop-right {
+    right: calc($selected-row-btn-offset * 2 + 2px);
+    top: calc(50% - $selected-row-btn-width / 2);
+}
+
 .selected-btn-drop-right-bottom {
     bottom: calc($selected-row-btn-half - 1px);
     right: $selected-row-btn-offset;

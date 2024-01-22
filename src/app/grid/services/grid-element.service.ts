@@ -10,10 +10,11 @@ import { IControlTable, INITIAL_CONTROL_TABLE } from "../../interfaces/template/
 import { ElementEnum } from "./grid-element.data";
 import { Observable, map } from "rxjs"; 
 import { IElementState, INITIAL_ELEMENT_STATE } from "../interfaces/element-state.interface";
+import { IGridElement } from "../interfaces/grid-element.interface";
 
 export type ElementType = IControlTextbox | IControlTextArea | IControlChecbox | IControlRadioButton | IControlFile | IControlCombobox | IControlTable;
 export type ElementTypeIdx = keyof ElementType;
-const FIELD_NAME_PREFIX: string = 'field';
+export const FIELD_NAME_PREFIX: string = 'field';
 
 @Injectable({
     providedIn: 'root'
@@ -33,6 +34,14 @@ export class GridElementService extends StateService<IElementState> {
 
         this.setState({
             elements: [...this.state.elements, newElement]
+        })
+    }
+
+    removeElement(element: IGridElement): void {
+        const newElements = this.state.elements.filter(item => item.name !== `${FIELD_NAME_PREFIX}_${element.id}`);
+
+        this.setState({
+            elements: newElements
         })
     }
 

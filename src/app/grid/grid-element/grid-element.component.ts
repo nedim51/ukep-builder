@@ -7,6 +7,7 @@ import { IControlChecbox } from '../../interfaces/template/control-check-box.int
 import { IDictItems } from '../../interfaces/template/dict.interface';
 import { ElementEnum } from '../services/grid-element.data';
 import { ControlTypeEnum } from '../../interfaces/template/control-type.enum';
+import { GridService } from '../services/grid.service';
 
 @Component({
   selector: 'app-grid-element',
@@ -33,6 +34,7 @@ export class GridElementComponent {
   }
 
   constructor(
+    private grid: GridService,
     private gridElement: GridElementService,
     private gridSelection: GridSelectionService) {}
 
@@ -47,5 +49,10 @@ export class GridElementComponent {
         map(element => (element as IControlChecbox).dict_items)
       );
     }
+  }
+
+  onRemoveElement(selected: IGridElement): void {
+    this.grid.removeElement(selected);
+    this.gridElement.removeElement(selected);
   }
 }

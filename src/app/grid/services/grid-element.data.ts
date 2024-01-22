@@ -1,5 +1,5 @@
 import { IElements } from "../../interfaces/element.interface";
-import { GridObjectType } from "../interfaces/grid-object.type";
+import { GridObjectEnum } from "../interfaces/grid-object.type";
 
 export enum ElementEnum {
     TextBox = 0,
@@ -12,62 +12,60 @@ export enum ElementEnum {
     TextArea = 7
 }
 
-export const ELEMENT_TYPE: GridObjectType = 'element';
-
 export const elements: IElements = [
     {
         id: ElementEnum.TextBox,
         title: 'TextBox',
-        type: ELEMENT_TYPE,
+        type: GridObjectEnum.Element,
         icon_name: '',
         icon_class: '',
     },
     {
         id: ElementEnum.File,
         title: 'File',
-        type: ELEMENT_TYPE,
+        type: GridObjectEnum.Element,
         icon_name: '',
         icon_class: '',
     },
     {
         id: ElementEnum.CheckBox,
         title: 'CheckBox',
-        type: ELEMENT_TYPE,
+        type: GridObjectEnum.Element,
         icon_name: '',
         icon_class: '',
     },
     {
         id: ElementEnum.RadioButton,
         title: 'RadioButton',
-        type: ELEMENT_TYPE,
+        type: GridObjectEnum.Element,
         icon_name: '',
         icon_class: '',
     },
     {
         id: ElementEnum.Button,
         title: 'Button',
-        type: ELEMENT_TYPE,
+        type: GridObjectEnum.Element,
         icon_name: '',
         icon_class: '',
     },
     {
         id: ElementEnum.ComboBox,
         title: 'ComboBox',
-        type: ELEMENT_TYPE,
+        type: GridObjectEnum.Element,
         icon_name: '',
         icon_class: '',
     },
     {
         id: ElementEnum.Table,
         title: 'Table',
-        type: ELEMENT_TYPE,
+        type: GridObjectEnum.Element,
         icon_name: '',
         icon_class: '',
     },
     {
         id: ElementEnum.TextArea,
         title: 'TextArea',
-        type: ELEMENT_TYPE,
+        type: GridObjectEnum.Element,
         icon_name: '',
         icon_class: '',
     },

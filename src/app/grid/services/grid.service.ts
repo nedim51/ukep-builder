@@ -20,31 +20,37 @@ export class GridService extends StateHistoryService<IGridState> {
     super(INITIAL_GRID_STATE)
   }
 
-  export() {
-    this.select(state => state).pipe(map(state => {
-      const keys = Object.keys(state);
-      let init: any = INITIAL_GRID_STATE;
+  /**
+   * Метод экспортирования JSON
+   */
+  export(): Observable<any> { //
+    return this.select(state => state).pipe(map(state => {
+      const keys: Array<keyof IGridState> = Object.keys(INITIAL_GRID_STATE) as Array<keyof IGridState>;
+      const init: any = INITIAL_GRID_STATE;
 
-      for(let key of keys) {
-        init[key] = state[key as keyof IGridState].map(item => {
-          switch(item.type) {
+      for (let key of keys) {
+        init[key] = state[key].map(item => {
+          switch (item.type) {
             case 'row': case 'element': return {
               id: item.id,
               parent_id: item.parent_id,
               index: item.index
             }
-            case 'column': 
-              const _item = item as IGridColumn
-            return {
-              id: _item.id,
-              parent_id: _item.parent_id,
-              class: _item.class,
-              index: _item.index
-            }
+            case 'column':
+              const _item = item as IGridColumn;
+
+              return {
+                id: _item.id,
+                parent_id: _item.parent_id,
+                class: _item.class,
+                index: _item.index
+              }
           }
         })
-      } return init;
-    })).subscribe(result => console.log(JSON.stringify(result)))
+      } 
+
+      /*return init; */return state;
+    }))
   }
 
   /**
@@ -235,35 +241,39 @@ export class GridService extends StateHistoryService<IGridState> {
     }
   }
   /**
-   * Удалить пустую строку
+   * Удалить пустую строку (вроде работает)
    */
   removeRow(row: IGridRow): void {
     const newRows = this.state.rows.filter(item => item.id !== row.id /* && item.parent_id !== row.parent_id*/);
-    let colsToUpdate = this.state.rows.filter(item => item.parent_id === row.parent_id && item.index > row.index);
+    let rowsToUpdate = this.state.rows.filter(item => item.parent_id === row.parent_id && item.index > row.index);
     // Если есть что обновлять, то обновим
     // Вроде работает, но пока что так
-    if(colsToUpdate.length > 0) {
-      this.updateIndex(0, colsToUpdate, 'remove'); 
+    if(rowsToUpdate.length > 0) {
+      this.updateIndex(0, rowsToUpdate, 'remove'); 
     }
 
     this.setState({
       rows: newRows
     })
   }
+
   removeColumn(col: IGridColumn): void {
-    const newColumns = this.state.cols
-      .filter(item => item.id !== col.id /* && item.parent_id !== col.parent_id*/);
-      
-    this.updateIndex(col.index - 1, newColumns, 'remove'); 
+    const newColumns = this.state.cols.filter(item => item.id !== col.id /* && item.parent_id !== col.parent_id*/);
+
+    this.updateIndex(0, newColumns, 'remove'); 
 
     this.setState({
       cols: newColumns
     })
   }
-  
+  /**
+   * Удалить элемент (пока что свои задачи выполняет)
+   */
   removeElement(element: IGridElement): void {
-    const newElements = this.state.elements
-      .filter(item => item.id !== element.id /* && item.parent_id !== element.parent_id*/);
+    const newElements = this.state.elements.filter(item => item.id !== element.id);
+    const elementsToUpdate = this.state.elements.filter(item => item.parent_id === element.parent_id && item.index > element.index);
+    
+    this.updateIndex(0, elementsToUpdate, 'remove'); 
 
     this.setState({
       elements: newElements
@@ -291,14 +301,14 @@ export class GridService extends StateHistoryService<IGridState> {
   removeRowColumns(row: IGridRow): void {
     this.removeColumns(row.id);
     this.removeRow(row);
+    const all = findChildrenRecursive(this.state, row.id);
+    all.rows.map(i => i.id);
+    all.cols.map(i => i.id);
+    all.elements.map(i => i.id);
   }
   /**
-   * Обновить значение класса у колонки 
+   * Добавить удалить класс у колонки (нужно доработать)
    */
-  setColumnClass(column: IGridColumn, className: string, append: boolean): void {
-    append === true ? this.appendColumnClass(column, className) : this.removeColumnClass(column, className)
-  }
-
   setColumnClass2(column: IGridColumn, classList: string): void {
     // Находим индекс колонки в текущем состоянии
     const columnIndex = this.state.cols.findIndex(item => item.id === column.id);
@@ -331,7 +341,15 @@ export class GridService extends StateHistoryService<IGridState> {
     })
   }
   /**
+   * Обновить значение класса у колонки 
+   * (уже не актуально использую reactive Forms)
+   */
+  setColumnClass(column: IGridColumn, className: string, append: boolean): void {
+    append === true ? this.appendColumnClass(column, className) : this.removeColumnClass(column, className)
+  }
+  /**
    * Добавить класс к колонке
+   * (уже не актуально использую reactive Forms)
    */
   appendColumnClass(column: IGridColumn, className: string): void {
     // Находим индекс колонки в текущем состоянии
@@ -366,6 +384,7 @@ export class GridService extends StateHistoryService<IGridState> {
   }
   /**
    * Удалить класс у колонки
+   * (уже не актуально использую reactive Forms)
    */
   removeColumnClass(column: IGridColumn, className: string): void {
     // Находим индекс колонки в текущем состоянии
@@ -688,3 +707,93 @@ export class GridService extends StateHistoryService<IGridState> {
     )
   }
 }
+
+export function findChildrenRecursive(tree: IGridState, targetId: number | null): IGridState {
+  const result: any = {
+    rows: [],
+    cols: [],
+    elements: [],
+  };
+
+  const findRecursive = (nodes: Array<IGridRow> | Array<IGridColumn> | Array<IGridElement>, parentId: number | null) => {
+    const children: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+    for (const node of nodes) {
+      if (node.parent_id === parentId) {
+        children.push(node);
+
+        const grandchildren = findRecursive(nodes, node.id);
+        children.push(...grandchildren);
+      }
+    }
+
+    return children;
+  }
+
+  let currentLevel: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+  for (const key in tree) {
+    const children = findRecursive(tree[key as keyof IGridState], targetId);
+    currentLevel.push(...children);
+    result[key] = children;
+  }
+
+  while (currentLevel.length > 0) {
+    const nextLevel: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+    for (const node of currentLevel) {
+      for (const key in tree) {
+        const grandchildren = findRecursive(tree[key as keyof IGridState], node.id);
+        nextLevel.push(...grandchildren);
+        result[key].push(...grandchildren);
+      }
+    }
+
+    currentLevel = nextLevel;
+  }
+
+  return result;
+}
+
+
+// export function findChildrenRecursive1(tree: IGridState, targetId: number | null): Array<IGridRow | IGridColumn | IGridElement> {
+//   const result: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+//   const findRecursive = (nodes: Array<IGridRow> | Array<IGridColumn> | Array<IGridElement>, parentId: number | null) => {
+//       const children: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+//       for (const node of nodes) {
+//           if (node.parent_id === parentId) {
+//               children.push(node);
+
+//               const grandchildren = findRecursive(nodes, node.id);
+//               children.push(...grandchildren);
+//           }
+//       }
+
+//       return children;
+//   }
+
+//   let currentLevel: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+//   for (const key in tree) {
+//       const children = findRecursive(tree[key as keyof IGridState], targetId);
+//       currentLevel.push(...children);
+//   }
+
+//   while (currentLevel.length > 0) {
+//       result.push(...currentLevel);
+//       const nextLevel: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+//       for (const node of currentLevel) {
+//           for (const key in tree) {
+//           const grandchildren = findRecursive(tree[key as keyof IGridState], node.id);
+//           nextLevel.push(...grandchildren);
+//           }
+//       }
+
+//       currentLevel = nextLevel;
+//   }
+
+//   return result;
+// }

@@ -151,3 +151,15 @@ export function quickSort(sortArray: number[], low: number, high: number): void 
     quickSort(sortArray, i, high);
   }
 }
+/**
+ * Создать и загрузить файл
+ */
+export function downloadFile(filename: string, data: any, type: string = 'application/json') {
+  const blob = new Blob([data], { type: type });
+  const elem = window.document.createElement('a');
+  elem.href = window.URL.createObjectURL(blob);
+  elem.download = filename;        
+  document.body.appendChild(elem);
+  elem.click();        
+  document.body.removeChild(elem);
+}

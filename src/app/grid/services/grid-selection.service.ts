@@ -63,7 +63,7 @@ export class GridSelectionService extends StateService<IGridSelection> {
 
             // Обрабатываем изменение состояния элементов, обязательно, потому что могут измениться свойства
             mergeMap(selected => selected ? this.gridState$.pipe(
-                map(state => this.findAllOccurrences(state, selected!.id)),
+                map(state => findAllOccurrences(state, selected!.id)),
                 map(selections => {
                     return {
                         rows: selections.filter(items => items.type === 'row') as IGridRows,
@@ -74,38 +74,6 @@ export class GridSelectionService extends StateService<IGridSelection> {
             ) : of({ rows: [], cols: [], elements: [] })
             )
         )
-    }
-
-    findAllOccurrences(tree: IGridState, targetId: number | null) {
-        const result: Array<IGridRow | IGridColumn | IGridElement> = [];
-
-        const findRecursive = (nodes: Array<IGridRow> | Array<IGridColumn> | Array<IGridElement>) => {
-            const occurrences: Array<IGridRow | IGridColumn | IGridElement> = [];
-    
-            for (const node of nodes) {
-                if (node.id === targetId) {
-                    occurrences.push(node);
-    
-                    const parentNodes = node.parent_id !== null ? this.findAllOccurrences(tree, node.parent_id) : [];
-    
-                    occurrences.unshift(...parentNodes);
-    
-                    return occurrences; // обрываем цикл !!!
-                }
-            }
-    
-            return occurrences;
-        }
-    
-        for (const key in tree) {
-            const found = findRecursive(tree[key as keyof IGridState]);
-    
-            if (found.length > 0) {
-                result.push(...found);
-            }
-        }
-    
-        return result;
     }
 
     typeToKey(type: IGridBase['type']): keyof IGridState {
@@ -123,3 +91,61 @@ export class GridSelectionService extends StateService<IGridSelection> {
     }
 }
 
+// Рекурсивно перебрать объект и построить дерево до корневого элемента
+export function findAllOccurrences(tree: IGridState, targetId: number | null) {
+    const result: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+    const findRecursive = (nodes: Array<IGridRow> | Array<IGridColumn> | Array<IGridElement>) => {
+        const occurrences: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+        for (const node of nodes) {
+            if (node.id === targetId) {
+                occurrences.push(node);
+
+                const parentNodes = node.parent_id !== null ? findAllOccurrences(tree, node.parent_id) : [];
+
+                occurrences.unshift(...parentNodes);
+
+                return occurrences; // обрываем цикл !!!
+            }
+        }
+
+        return occurrences;
+    }
+
+    for (const key in tree) {
+        const found = findRecursive(tree[key as keyof IGridState]);
+
+        if (found.length > 0) {
+            result.push(...found);
+        }
+    }
+
+    return result;
+}
+
+// export function findChildren(tree: IGridState, targetId: number | null): Array<IGridRow | IGridColumn | IGridElement> {
+//     const result: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+//     const findRecursive = (nodes: Array<IGridRow> | Array<IGridColumn> | Array<IGridElement>, parentId: number | null) => {
+//         const children: Array<IGridRow | IGridColumn | IGridElement> = [];
+
+//         for (const node of nodes) {
+//             if (node.parent_id === parentId) {
+//                 children.push(node);
+
+//                 const grandchildren = findChildren(tree, node.parent_id);
+//                 children.push(...grandchildren);
+//             }
+//         }
+
+//         return children;
+//     }
+
+//     for (const key in tree) {
+//         const children = findRecursive(tree[key as keyof IGridState], targetId);
+//         result.push(...children);
+//     }
+
+//     return result;
+// }
