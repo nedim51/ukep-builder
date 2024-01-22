@@ -299,12 +299,39 @@ export class GridService extends StateHistoryService<IGridState> {
   }
 
   removeRowColumns(row: IGridRow): void {
-    this.removeColumns(row.id);
-    this.removeRow(row);
-    const all = findChildrenRecursive(this.state, row.id);
-    all.rows.map(i => i.id);
-    all.cols.map(i => i.id);
-    all.elements.map(i => i.id);
+    // this.removeColumns(row.id);
+    // this.removeRow(row);
+
+    const childToRemove = findChildrenRecursive(this.state, row.id);
+    const keys: Array<keyof IGridState> = Object.keys(this.state) as Array<keyof IGridState>;
+    const result: IGridState = INITIAL_GRID_STATE;
+
+    for(let key of keys) {
+      for (let i = 0; i < this.state[key].length; i++) {
+        for (let j = 0; j < childToRemove[key].length; j++) {
+          if(this.state[key][i].id === childToRemove[key][j].id) {
+            
+          }
+        }
+      }
+    }
+
+
+
+
+    // for(let i = 0; i < this.state[])
+
+
+    //   this.state[key as unknown as keyof IGridState].filter(i => {
+    //     if(!all[key as unknown as keyof IGridState].map(i => i.id).includes(i.id)) {
+
+    //     }
+    //   })
+    // }
+
+    // all.rows.map(i => i.id);
+    // all.cols.map(i => i.id);
+    // all.elements.map(i => i.id);
   }
   /**
    * Добавить удалить класс у колонки (нужно доработать)
